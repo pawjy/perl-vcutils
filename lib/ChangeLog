@@ -1,0 +1,8 @@
+2004-01-25  Wakaba  <w@suika.fam.cx>
+
+	* ChangeLog: New file.
+	* RCSFormat.pm: Added documentation.
+
+2004-01-24  Wakaba  <w@suika.fam.cx>
+
+	* RCSFormat.pm: New module.
