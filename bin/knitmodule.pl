@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 use lib q#../lib#;
 use strict;
-our $VERSION=do{my @r=(q$Revision: 1.1 $=~/\d+/g);sprintf "%d."."%02d" x $#r,@r};
+our $VERSION=do{my @r=(q$Revision: 1.2 $=~/\d+/g);sprintf "%d."."%02d" x $#r,@r};
 require RCSFormat;
 require Getopt::Long;
 require IO::File;
@@ -265,7 +265,7 @@ is committed (as the latest version).
 
 =head1 BUGS
 
-= over 4
+=over 4
 
 =item *
 
@@ -275,6 +275,8 @@ existing branches.
 =item *
 
 C<--help> should display help message.
+
+=back
 
 =head1 SEE ALSO
 
@@ -289,4 +291,4 @@ modify it under the same terms as Perl itself.
 
 =cut
 
-# $Date: 2004/01/25 07:47:53 $
+# $Date: 2004/01/25 07:55:12 $
