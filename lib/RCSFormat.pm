@@ -12,7 +12,7 @@ RCS and CVS.  This module provides some low-level interface to RCS format.
 
 package RCSFormat;
 use strict;
-our $VERSION=do{my @r=(q$Revision: 1.2 $=~/\d+/g);sprintf "%d."."%02d" x $#r,@r};
+our $VERSION=do{my @r=(q$Revision: 1.3 $=~/\d+/g);sprintf "%d."."%02d" x $#r,@r};
 
 sub new ($;%) {
   my $self = bless {}, shift;
@@ -251,10 +251,18 @@ sub sort_by_revision ($@) {
     $_->[0]
   }
   sort {
-    my $r;
-    for my $i (0..$#{$a->[1]}) {
-      $r = $b->[1]->[$i] <=> $a->[1]->[$i];
-      return $r if $r;
+    if (@{$a->[1]} == 2 and @{$b->[1]} == 2) {
+      my $r;
+      for my $i (0..$#{$a->[1]}) {
+        $r = $b->[1]->[$i] <=> $a->[1]->[$i];
+        return $r if $r;
+      }
+    } else {
+      my $r;
+      for my $i (0..$#{$a->[1]}) {
+        $r = $a->[1]->[$i] <=> $b->[1]->[$i];
+        return $r if $r;
+      }
     }
     0;
   }
@@ -277,4 +285,4 @@ modify it under the same terms as Perl itself.
 
 =cut
 
-1; # $Date: 2007/08/14 09:52:34 $
+1; # $Date: 2007/08/14 11:22:49 $

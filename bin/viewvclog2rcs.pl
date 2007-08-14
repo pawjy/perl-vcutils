@@ -53,7 +53,7 @@ pos ($ent->{s}) = 0;
 REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
   my $rev = '';
   if ($ent->{s} =~ m!Revision!gc and
-      $ent->{s} =~ m!<a href="([^"]+)"\s*><b>([0-9.]+)</b></a>!gc) {
+      $ent->{s} =~ m!<a href="([^"]+)"[^<>]*><b>([0-9.]+)</b></a>!gc) {
     my $uri = $dom->create_uri_reference ($1)
         ->get_absolute_reference ($log_uri)->uri_reference;
     $rev = $2;
@@ -63,10 +63,7 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
       $text->{$rev} = $revent->{s};
     }
 
-    unless (defined $rcs->{admin}->{head}) {
-      $rcs->{admin}->{head} = $rev;      
-      $rcs->{deltatext}->{$rev}->{text} = $text->{$rev};
-    }
+    $rcs->{admin}->{head} ||= $rev;      
   }
 
   if ($ent->{s} =~ m!<i>\w+ (\w+)\s*(\d+)\s*(\d+):(\d+):(\d+) (\d+) UTC</i> \([^()]+\) by <i>([^<>]+)</i>!gc) {
@@ -84,9 +81,17 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
   if ($ent->{s} =~ m[\G<br>Branch:((?>(?!<(?>[bh]r|pre)).)+)]gcs) {
     my $b = $1;
     while ($b =~ m!><b>([^<>]+)</b></a>!gc) {
-      push @{$rcs->{delta}->{$rev}->{branches} ||= []}, $1
-          unless $1 eq 'MAIN';
+      my $branch = $1;
+      if ($branch ne 'MAIN') {
+        my $rev = $rev;
+        $rev =~ s/\.(\d+)\.\d+\z//;
+        push @{$rcs->{admin}->{symbols} ||= []}, [$branch => "$rev.0.$1"];
+      }
     }
+    $ent->{s} =~ m[(?=<(?>br|pre)>)]gc;
+  }
+
+  if ($ent->{s} =~ m[\G<br>Branch point]gcs) {
     $ent->{s} =~ m[(?=<(?>br|pre)>)]gc;
   }
 
@@ -94,15 +99,32 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
     my $b = $1;
     while ($b =~ m!><b>([^<>]+)</b></a>!gc) {
       my $rev = $branches->{$1} ? "$rev.0.".((++$branch_rev->{$rev})*2) : $rev;
-      push @{$rcs->{admin}->{symbols} ||= []}, [$1 => $rev]
-          unless $1 eq 'HEAD'; ## TODO
+      if ($1 eq 'HEAD') {
+        $rcs->{admin}->{head} = $rev;
+        $rcs->{deltatext}->{$rev}->{text} = $text->{$rev};
+      } else {
+        push @{$rcs->{admin}->{symbols} ||= []}, [$1 => $rev];
+      }
     }
     $ent->{s} =~ m[(?=<(?>br|pre)>)]gc; 
   }
 
+  if ($ent->{s} =~ m[\G<br>Branch point]gcs) {
+    $ent->{s} =~ m[(?=<(?>br|pre)>)]gc;
+  }
+
   if ($ent->{s} =~ m!\G<br>Changes since <b>([0-9.]+):!gc) {
-    $rcs->{delta}->{$rev}->{next} = $1;
-    $text_from->{$1} = $rev;
+    my $from_rev = $1;
+    if ($rev =~ /\A[0-9]+\.[0-9]+\z/) {
+      $rcs->{delta}->{$rev}->{next} = $from_rev;
+      $text_from->{$from_rev} = $rev;
+    } elsif ($from_rev =~ /\A[0-9]+\.[0-9]+\z/) {
+      push @{$rcs->{delta}->{$from_rev}->{branches} ||= []}, $rev;
+      $text_from->{$rev} = $from_rev;
+    } else {
+      $rcs->{delta}->{$from_rev}->{next} = $rev;
+      $text_from->{$rev} = $from_rev;
+    }
   }
 
   if ($ent->{s} =~ m!<pre>(.*?)</pre>!gcs) {
@@ -112,11 +134,22 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
   $rcs->{delta}->{$rev}->{state} = 'Exp';
 } # REV
 
+delete $text_from->{$rcs->{admin}->{head}};
+
+my %symbol;
+for (@{$rcs->{admin}->{symbols} || []}) {
+  $symbol{$_->[0]} = $_->[1];
+}
+$rcs->{admin}->{symbols} = [map {[$_ => $symbol{$_}]} keys %symbol];
+
+
 require File::Temp;
 require IPC::Open2;
 while (keys %$text_from) {
   my $rev = each %$text_from;
+  my $any;
   if (defined $text->{$text_from->{$rev}}) {
+    $any = 1;
     my $from_file = new File::Temp;
     binmode $from_file;
     $from_file->print ($text->{$text_from->{$rev}});
@@ -134,6 +167,7 @@ while (keys %$text_from) {
     $rcs->{deltatext}->{$rev}->{text} = <$diffin>;
     delete $text_from->{$rev};
   }
+  last unless $any;
 }
 
 print $rcs->stringify;

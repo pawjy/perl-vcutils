@@ -1,3 +1,15 @@
+2007-08-14  Wakaba  <wakaba@suika.fam.cx>
+
+	* RCSFormat.pm (sort_by_revision): Sort branch revisions
+	differently, for compatibility with RCS |co| command.
+
+2007-08-14  Wakaba  <wakaba@suika.fam.cx>
+
+	* RCSFormat.pm (stringify): Don't put spaces after |access|
+	attribute name if the attribute has empty value, for
+	textual compatibility with RCS.  Newlines are added/removed
+	for textual compatibility with RCS.
+
 2004-01-25  Wakaba  <w@suika.fam.cx>
 
 	* ChangeLog: New file.

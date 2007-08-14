@@ -1,5 +1,9 @@
 2007-08-14  Wakaba  <wakaba@suika.fam.cx>
 
+	* viewvclog2rcs.pl: Support for branches.
+
+2007-08-14  Wakaba  <wakaba@suika.fam.cx>
+
 	* viewvclog2rcs.pl: New file.
 
 2004-01-25  Wakaba  <w@suika.fam.cx>
