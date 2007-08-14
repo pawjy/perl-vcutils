@@ -12,7 +12,7 @@ RCS and CVS.  This module provides some low-level interface to RCS format.
 
 package RCSFormat;
 use strict;
-our $VERSION=do{my @r=(q$Revision: 1.1 $=~/\d+/g);sprintf "%d."."%02d" x $#r,@r};
+our $VERSION=do{my @r=(q$Revision: 1.2 $=~/\d+/g);sprintf "%d."."%02d" x $#r,@r};
 
 sub new ($;%) {
   my $self = bless {}, shift;
@@ -119,10 +119,14 @@ sub stringify ($;%) {
                                      min => 0, max => 1)
        .  ";\x0A";
   }
-  $s .= qq(access	)
-     .  $self->___stringify_value ($self->{admin}->{access}, type => 'id',
-                                   min => 0, max => -1)
-     .  ";\x0A";
+  if (defined $self->{admin}->{access}) {
+    $s .= qq(access	)
+       .  $self->___stringify_value ($self->{admin}->{access}, type => 'id',
+                                     min => 0, max => -1)
+       .  ";\x0A";
+  } else {
+    $s .= qq(access;\x0A);
+  }
   $s .= qq(symbols);
   for (@{$self->{admin}->{symbols}}) {
      $s .= "\x0A\t"
@@ -163,10 +167,11 @@ sub stringify ($;%) {
        .  $self->___stringify_value ($self->{admin}->{$_})
        .  ";\x0A";
   }
+  $s .= "\x0A";
   
   ## delta
   for my $rev ($self->sort_by_revision (keys %{$self->{delta}})) {
-    $s .= "\x0A\x0A$rev\x0A";
+    $s .= "\x0A$rev\x0A";
     $s .= qq(date	)
        .  $self->___stringify_value ($self->{delta}->{$rev}->{date}, type => 'num',
                                      min => 1, max => 1)
@@ -219,6 +224,7 @@ sub stringify ($;%) {
          .  ";\x0A";
     }
   }
+  $s .= "\x0A" if keys %{$self->{deltatext}} > 1;
   
   $s;
 }
@@ -271,4 +277,4 @@ modify it under the same terms as Perl itself.
 
 =cut
 
-1; # $Date: 2004/01/25 07:52:35 $
+1; # $Date: 2007/08/14 09:52:34 $
