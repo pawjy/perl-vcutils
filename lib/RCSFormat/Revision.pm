@@ -33,13 +33,19 @@ sub rawdata ($) {
   return $_[0]->{rcsformat}->{deltatext}->{$_[0]->{number}}->{text};
 } # rawdata
 
+
+sub _replace_keywords ($$) {
+  my $self = shift;
+  $_[0] =~ s{\$Date:[^\$]*\$}
+      {q{$Date: }.($self->date_as_rcs_formatted).q{ $}}ge;
+  $_[0] =~ s{\$Revision:[^\$]*\$}{q{$Revision: }.$self->number.q{ $}}ge;
+}
+
 sub data ($) {
   my $self = shift;
   
   my $rawdata = $self->rawdata;
-  $rawdata =~ s{\$\s*Date\b[^\$]*\s*\$}
-      {q{$Date: }.($self->date_as_rcs_formatted).q{ $}}ge;
-
+  $self->_replace_keywords ($rawdata);
   return $rawdata;
 } # data
 

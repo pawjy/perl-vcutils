@@ -58,6 +58,14 @@ sub _data_last_revision : Test(1) {
   is_f_content $rev1->data, $test_1_9_f;
 } # _data_last_revision
 
+sub _replace_keywords : Test(1) {
+  my $rcs = getrcs;
+  my $rev = $rcs->get_revision_by_number ('1.3');
+  my $s1 = q[$Revision: 1.2 $abc Revision: 1.5 $];
+  $rev->_replace_keywords ($s1);
+  is $s1, q[$Revision: 1.3 $abc Revision: 1.5 $];
+} # _replace_keywords
+
 __PACKAGE__->runtests;
 
 1;
