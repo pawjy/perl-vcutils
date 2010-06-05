@@ -1,0 +1,3 @@
+[submodule "modules/manakai"]
+	path = modules/manakai
+	url = http://suika.fam.cx/gate/git/bare/manakai.git
