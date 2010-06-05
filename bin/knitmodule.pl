@@ -1,7 +1,8 @@
 #!/usr/bin/perl 
-use lib q#../lib#;
 use strict;
-our $VERSION=do{my @r=(q$Revision: 1.2 $=~/\d+/g);sprintf "%d."."%02d" x $#r,@r};
+use Path::Class;
+use lib file (__FILE__)->dir->parent->subdir ('lib')->stringify;
+our $VERSION = '1.2';
 require RCSFormat;
 require Getopt::Long;
 require IO::File;
@@ -290,5 +291,3 @@ This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
 =cut
-
-# $Date: 2004/01/25 07:55:12 $

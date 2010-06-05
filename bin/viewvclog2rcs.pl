@@ -1,10 +1,9 @@
 #!/usr/bin/perl
 use strict;
-
-use lib qw[/home/httpd/html/www/markup/html/whatpm
-           /home/wakaba/work/manakai2/lib
-  ../lib
-];
+use Path::Class;
+use lib file (__FILE__)->dir->parent->subdir ('lib')->stringify;
+use lib file (__FILE__)->dir->parent->subdir ('modules/manakai/lib')->stringify;
+our $VERSION = '1.0';
 
 my $log_uri;
 
