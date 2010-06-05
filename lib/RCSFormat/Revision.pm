@@ -24,8 +24,23 @@ sub date_as_epoch ($) {
   return RCSFormat::Date::rcsdate_to_epoch ($_[0]->rawdate);
 } # date_as_epoch
 
+sub date_as_rcs_formatted ($) {
+  require RCSFormat::Date;
+  return RCSFormat::Date::epoch_to_rcs_formatted_date ($_[0]->date_as_epoch);
+} # date_as_rcs_formatted
+
 sub rawdata ($) {
   return $_[0]->{rcsformat}->{deltatext}->{$_[0]->{number}}->{text};
 } # rawdata
+
+sub data ($) {
+  my $self = shift;
+  
+  my $rawdata = $self->rawdata;
+  $rawdata =~ s{\$\s*Date\b[^\$]*\s*\$}
+      {q{$Date: }.($self->date_as_rcs_formatted).q{ $}}ge;
+
+  return $rawdata;
+} # data
 
 1;

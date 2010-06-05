@@ -29,13 +29,17 @@ sub _date : Test(2) {
   is $rev->date_as_epoch, '1180361097';
 } # _date
 
-sub _rawdata : Test(2) {
+sub _rawdata_last_revision : Test(1) {
   my $rcs = getrcs;
 
   my $rev1 = $rcs->get_revision_by_number ('1.9');
   my $rawdata1 = $rev1->rawdata;
   $rawdata1 =~ s[\$Date: 2007/08/11 13:54:55 \$][\$Date: 2007/11/11 04:18:27 \$];
   is_f_content $rawdata1, $test_1_9_f;
+} # _rawdata_last_revision
+
+sub _rawdata_old_revision : Test(1) {
+  my $rcs = getrcs;
 
   my $rev2 = $rcs->get_revision_by_number ('1.6');
   my $rawdata2 = $rev2->rawdata;
@@ -46,6 +50,13 @@ a164 1
 ## $Date: 2007/05/25 14:24:31 $
 ];
 } # _rawdata
+
+sub _data_last_revision : Test(1) {
+  my $rcs = getrcs;
+
+  my $rev1 = $rcs->get_revision_by_number ('1.9');
+  is_f_content $rev1->data, $test_1_9_f;
+} # _data_last_revision
 
 __PACKAGE__->runtests;
 
