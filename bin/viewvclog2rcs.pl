@@ -26,6 +26,15 @@ unless (defined $ent->{s}) {
 
 require RCSFormat;
 
+sub htunescape ($) {
+  my $s = shift;
+  $s =~ s!<[^<>]+>!!g;
+  $s =~ s/&lt;/</g;
+  $s =~ s/&gt;/>/g;
+  $s =~ s/&amp;/&/g;
+  return $s;
+} # htunescape
+
 my $rcs = new RCSFormat;
 $rcs->{admin}->{strict} = 1;
 $rcs->{admin}->{comment} = '# ';
@@ -53,9 +62,11 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
   my $rev = '';
   if ($ent->{s} =~ m!Revision!gc and
       $ent->{s} =~ m!<a href="([^"]+)"[^<>]*><b>([0-9.]+)</b></a>!gc) {
-    my $uri = $dom->create_uri_reference ($1)
-        ->get_absolute_reference ($log_uri)->uri_reference;
     $rev = $2;
+    my $uri = $dom->create_uri_reference (htunescape $1)
+        ->get_absolute_reference ($log_uri)->uri_reference;
+
+    $uri =~ s[&content-type=text/vnd.viewcvs-markup$][&content-type=text/plain];
 
     my $revent = get_remote_entity ($uri);
     if (defined $revent->{s}) {
@@ -171,15 +182,6 @@ while (keys %$text_from) {
 
 print $rcs->stringify;
 
-sub htunescape ($) {
-  my $s = shift;
-  $s =~ s!<[^<>]+>!!g;
-  $s =~ s/&lt;/</g;
-  $s =~ s/&gt;/>/g;
-  $s =~ s/&amp;/&/g;
-  return $s;
-} # htunescape
-
 sub get_remote_entity ($) {
   my $request_uri = $_[0];
   my $r = {};
@@ -229,6 +231,7 @@ EOH
     $ua->protocols_allowed ([qw/http/]);
     $ua->max_size (1000_000);
     my $req = HTTP::Request->new (GET => $request_uri);
+  warn "<$request_uri>...\n";
     my $res = $ua->request ($req);
     ## TODO: 401 sets |is_success| true.
     if ($res->is_success) {
