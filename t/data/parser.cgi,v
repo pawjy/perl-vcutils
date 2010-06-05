@@ -1,0 +1,444 @@
+head	1.9;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.9
+date	2007.11.11.04.18.27;	author wakaba;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2007.08.11.13.54.55;	author wakaba;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2007.05.28.14.04.57;	author wakaba;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2007.05.27.11.16.02;	author wakaba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2007.05.25.14.24.31;	author wakaba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2007.05.20.08.14.48;	author wakaba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2007.05.01.11.05.04;	author wakaba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2007.05.01.10.27.06;	author wakaba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2007.05.01.09.25.31;	author wakaba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@++ ChangeLog	11 Nov 2007 04:18:16 -0000
+2007-11-11  Wakaba  <wakaba@@suika.fam.cx>
+
+	* parser.cgi: Use |Whatpm::HTML::Serializer| to serialize
+	an HTML DOM.
+@
+text
+@#!/usr/bin/perl
+use strict;
+
+use lib qw[/home/httpd/html/www/markup/html/whatpm
+           /home/wakaba/work/manakai2/lib];
+use CGI::Carp qw[fatalsToBrowser];
+use Time::HiRes qw/time/;
+
+use Message::CGI::HTTP;
+my $http = Message::CGI::HTTP->new;
+
+## TODO: _charset_
+
+my $mode = $http->get_meta_variable ('PATH_INFO');
+## TODO: decode unreserved characters
+
+if ($mode eq '/html' or $mode eq '/test') {
+  require Encode;
+  require Whatpm::HTML;
+  require Whatpm::NanoDOM;
+
+  my $s = $http->get_parameter ('s');
+  if (length $s > 1000_000) {
+    print STDOUT "Status: 400 Document Too Long\nContent-Type: text/plain; charset=us-ascii\n\nToo long";
+    exit;
+  }
+
+  my $time1 = time;
+  $s = Encode::decode ('utf-8', $s);
+  my $time2 = time;
+  my %time = (decode => $time2 - $time1);
+  my $char_length = length $s;
+  
+  print STDOUT "Content-Type: text/plain; charset=utf-8\n\n";
+
+  print STDOUT "#errors\n";
+
+  my $onerror = sub {
+    my (%opt) = @@_;
+    print STDOUT "$opt{line},$opt{column},$opt{type}\n";
+  };
+
+  $time1 = time;
+  my $doc = Whatpm::HTML->parse_string
+      ($s => Whatpm::NanoDOM::Document->new, $onerror);
+  $time2 = time;
+  $time{parse} = $time2 - $time1;
+
+  print "#document\n";
+
+  my $out;
+  $time1 = time;
+  if ($mode eq '/html') {
+    require Whatpm::HTML::Serializer;
+    $out = Whatpm::HTML::Serializer->get_inner_html ($doc);
+  } else { # test
+    $out = test_serialize ($doc);
+  }
+  $time2 = time;
+  $time{serialize} = $time2 - $time1;
+  print STDOUT Encode::encode ('utf-8', $$out);
+  print STDOUT "\n";
+
+  if ($http->get_parameter ('dom5')) {
+    require Whatpm::ContentChecker;
+    print STDOUT "#domerrors\n";
+    $time1 = time;
+    Whatpm::ContentChecker->check_document ($doc, sub {
+      my %opt = @@_;
+      print STDOUT get_node_path ($opt{node}) . ';' . $opt{type} . "\n";
+    });
+    $time2 = time;
+    $time{check} = $time2 - $time1;
+  }
+
+  print STDOUT "#log\n";
+  print STDOUT "byte->char\t", $time{decode}, "s\n";
+  print STDOUT "html5->dom5\t", $time{parse}, "s\n";
+  print STDOUT "dom5->serialize\t", $time{serialize}, "s\n";
+  print STDOUT "dom5 check\t", $time{check}, "s\n" if defined $time{check};
+  for (qw/decode parse serialize check/) {
+    next unless defined $time{$_};
+    open my $file, '>>', ".$_.txt" or die ".$_.txt: $!";
+    print $file $char_length, "\t", $time{$_}, "\n";
+  }
+} else {
+  print STDOUT "Status: 404 Not Found\nContent-Type: text/plain; charset=us-ascii\n\n404";
+}
+
+exit;
+
+sub test_serialize ($) {
+  my $node = shift;
+  my $r = '';
+
+  my @@node = map { [$_, ''] } @@{$node->child_nodes};
+  while (@@node) {
+    my $child = shift @@node;
+    my $nt = $child->[0]->node_type;
+    if ($nt == $child->[0]->ELEMENT_NODE) {
+      $r .= '| ' . $child->[1] . '<' . $child->[0]->tag_name . ">\x0A"; ## ISSUE: case?
+
+      for my $attr (sort {$a->[0] cmp $b->[0]} map { [$_->name, $_->value] }
+                    @@{$child->[0]->attributes}) {
+        $r .= '| ' . $child->[1] . '  ' . $attr->[0] . '="'; ## ISSUE: case?
+        $r .= $attr->[1] . '"' . "\x0A";
+      }
+      
+      unshift @@node,
+        map { [$_, $child->[1] . '  '] } @@{$child->[0]->child_nodes};
+    } elsif ($nt == $child->[0]->TEXT_NODE) {
+      $r .= '| ' . $child->[1] . '"' . $child->[0]->data . '"' . "\x0A";
+    } elsif ($nt == $child->[0]->COMMENT_NODE) {
+      $r .= '| ' . $child->[1] . '<!-- ' . $child->[0]->data . " -->\x0A";
+    } elsif ($nt == $child->[0]->DOCUMENT_TYPE_NODE) {
+      $r .= '| ' . $child->[1] . '<!DOCTYPE ' . $child->[0]->name . ">\x0A";
+    } else {
+      $r .= '| ' . $child->[1] . $child->[0]->node_type . "\x0A"; # error
+    }
+  }
+  
+  return \$r;
+} # test_serialize
+
+sub get_node_path ($) {
+  my $node = shift;
+  my @@r;
+  while (defined $node) {
+    my $rs;
+    if ($node->node_type == 1) {
+      $rs = $node->manakai_local_name;
+      $node = $node->parent_node;
+    } elsif ($node->node_type == 2) {
+      $rs = '@@' . $node->manakai_local_name;
+      $node = $node->owner_element;
+    } elsif ($node->node_type == 3) {
+      $rs = '"' . $node->data . '"';
+      $node = $node->parent_node;
+    } elsif ($node->node_type == 9) {
+      $rs = '';
+      $node = $node->parent_node;
+    } else {
+      $rs = '#' . $node->node_type;
+      $node = $node->parent_node;
+    }
+    unshift @@r, $rs;
+  }
+  return join '/', @@r;
+} # get_node_path
+
+=head1 AUTHOR
+
+Wakaba <w@@suika.fam.cx>.
+
+=head1 LICENSE
+
+Copyright 2007 Wakaba <w@@suika.fam.cx>
+
+This library is free software; you can redistribute it
+and/or modify it under the same terms as Perl itself.
+
+=cut
+
+## $Date: 2007/08/11 13:54:55 $
+@
+
+
+1.8
+log
+@++ ChangeLog	11 Aug 2007 13:54:20 -0000
+2007-08-11  Wakaba  <wakaba@@suika.fam.cx>
+
+	* cc.cgi, parser-manakai.cgi, parser.cgi: Use |Message::CGI::HTTP|
+	instead of |SuikaWiki::Input::HTTP|.
+
+2007-08-05  Wakaba  <wakaba@@suika.fam.cx>
+
+	* cc-interface.en.html: IMT |application/atom+xml| is added.
+	Link to |cc-todo| is added.
+
+2007-07-24  Wakaba  <wakaba@@suika.fam.cx>
+
+	* error-description.xml: Description for "after body", "bare etago",
+	and "bogus end tag" are added.
+@
+text
+@d54 2
+a55 1
+    $out = Whatpm::HTML->get_inner_html ($doc);
+d164 1
+a164 1
+## $Date: 2007/05/28 14:04:57 $
+@
+
+
+1.7
+log
+@++ ChangeLog	28 May 2007 14:04:52 -0000
+2007-05-28  Wakaba  <wakaba@@suika.fam.cx>
+
+	* parser.cgi: Log elapsed time to external files.
+
+	* time.plt: New file.
+@
+text
+@d5 1
+a5 1
+           /home/wakaba/public_html/-temp/wiki/lib];
+d9 2
+a10 3
+use SuikaWiki::Input::HTTP; ## TODO: Use some better CGI module
+
+my $http = SuikaWiki::Input::HTTP->new;
+d14 1
+a14 1
+my $mode = $http->meta_variable ('PATH_INFO');
+d22 1
+a22 1
+  my $s = $http->parameter ('s');
+d63 1
+a63 1
+  if ($http->parameter ('dom5')) {
+d163 1
+a163 1
+## $Date: 2007/05/27 11:16:02 $
+@
+
+
+1.6
+log
+@++ ChangeLog	27 May 2007 11:15:58 -0000
+	* parser.cgi: Output how long each process takes.
+	Document element testing is moved to the |Whatpm::ContentChecker|
+	module.
+
+2007-05-27  Wakaba  <wakaba@@suika.fam.cx>
+@
+text
+@d33 1
+d81 5
+d164 1
+a164 1
+## $Date: 2007/05/25 14:24:31 $
+@
+
+
+1.5
+log
+@++ ChangeLog	25 May 2007 14:24:27 -0000
+2007-05-25  Wakaba  <wakaba@@suika.fam.cx>
+
+	* parser.cgi: Use CGI::Carp.
+@
+text
+@d7 1
+d29 1
+d31 3
+a33 1
+
+d43 1
+d46 2
+d52 1
+d58 2
+d66 2
+a67 11
+    my $docel = $doc->document_element;
+    my $docel_nsuri = $docel->namespace_uri;
+    if (defined $docel_nsuri and 
+        $docel_nsuri eq q<http://www.w3.org/1999/xhtml> and
+        $docel->manakai_local_name eq 'html') {
+      #
+    } else {
+      print STDOUT get_node_path ($docel) . ";element not allowed\n";
+    }
+    my $cc = Whatpm::ContentChecker->new;
+    $cc->check_element ($docel, sub {
+d71 2
+d74 6
+d158 1
+a158 1
+## $Date: 2007/05/20 08:14:48 $
+@
+
+
+1.4
+log
+@++ ChangeLog	20 May 2007 08:14:29 -0000
+2007-05-19  Wakaba  <wakaba@@suika.fam.cx>
+
+	* parser-interface.en.html: A checkbox to
+	enable DOM5 HTML conformance checking is added.
+
+	* parser.cgi: Check DOM5 HTML conformance
+	if |dom5| parameter is specified.
+@
+text
+@d6 1
+d149 1
+a149 1
+## $Date: 2007/05/19 03:49:58 $
+@
+
+
+1.3
+log
+@++ ChangeLog	1 May 2007 11:04:56 -0000
+	* parser.cgi: Module names are updated.
+
+	* parser-interface.en.html: Link to Whatpm introduction
+	is added.
+
+2007-05-01  Wakaba  <wakaba@@suika.fam.cx>
+@
+text
+@d34 2
+a35 1
+    print STDOUT "0,0,", $_[0], "\n";
+d50 20
+d108 41
+@
+
+
+1.2
+log
+@++ ChangeLog	1 May 2007 10:26:58 -0000
+	* parser-interface.en.html: New document.
+
+	* parser.cgi: Test-result-format mode is added.
+
+2007-05-01  Wakaba  <wakaba@@suika.fam.cx>
+@
+text
+@d18 2
+a19 2
+  require What::HTML;
+  require What::NanoDOM;
+d37 2
+a38 2
+  my $doc = What::HTML->parse_string
+      ($s => What::NanoDOM::Document->new, $onerror);
+d44 1
+a44 1
+    $out = What::HTML->get_inner_html ($doc);
+@
+
+
+1.1
+log
+@++ ChangeLog	1 May 2007 09:25:27 -0000
+	* parser.cgi: New file.
+
+	* .htaccess: New file.
+@
+text
+@d4 2
+a5 1
+use lib qw[.. /home/wakaba/public_html/-temp/wiki/lib];
+d16 1
+a16 1
+if ($mode eq '/html' or $mode eq '/error-and-html') {
+d31 3
+a33 1
+  my $onerror = $mode eq '/error-and-html' ? sub {
+d35 1
+a35 1
+  } : sub { };
+d40 7
+a46 2
+  if ($mode eq '/error-and-html') {
+    print "--\n";
+d48 1
+a48 3
+
+  my $html = What::HTML->get_inner_html ($doc);
+  print STDOUT Encode::encode ('utf-8', $$html);
+d52 35
+@
+
