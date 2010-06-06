@@ -8,10 +8,14 @@ our $VERSION = '1.0';
 my $log_uri;
 
 use Getopt::Long;
+use Pod::Usage;
 GetOptions (
   'log-uri=s' => \$log_uri,
 );
-die unless defined $log_uri;
+pod2usage ({
+  -input => file (__FILE__)->dir->file ('viewvclog2rcs.pod')->stringify,
+  -verbose => 1,
+}) unless defined $log_uri;
 
 my $diff_command = 'diff';
 my $diff_options = ['--rcs', '-a'];
@@ -288,3 +292,12 @@ sub redirect_ok {
   }
   return 1;
 } # redirect_ok
+
+=head1 LICENSE
+
+Copyright 2007-2010 Wakaba <w@suika.fam.cx>.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

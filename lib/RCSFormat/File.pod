@@ -1,0 +1,110 @@
+=head1 NAME
+
+RCSFormat::File - Object Oriented Interface to an RCS File
+
+=head1 SYNOPSIS
+
+  use RCSFormat::File;
+  
+  $rcs = RCSFormat::File->new_from_string_ref (\$rcs_file_content);
+  
+  $rcs->revision_numbers->each (sub { print "Revision $_\n" });
+  
+  $rev1 = $rcs->get_revision_by_number ('1.2');
+  $rev2 = $rcs->get_revision_by_number ('1.5');
+  
+  $diff = $rcs->get_unified_diff_between ($rev1 => $rev2);
+
+=head1 DESCRIPTION
+
+The module C<RCSFormat::File> provides an object-oriented interface to
+RCS files, in conjunction with L<RCSFormat::Revision> representing
+revisions encoded in RCS files.  They are built on the top of
+L<RCSFormat>'s low-level encapsulation of RCS files.
+
+=head1 METHODS
+
+=over 4
+
+=item $file = RCSFormat::File->new_from_stringref (\$rcs_file_content)
+
+Returns a new instance of C<RCSFormat::File> with the given RCS file.
+
+=item [$value =] $file->file_name ([$new_value])
+
+Gets or sets the name of the RCS file represented by the object.  Note
+that the RCS file itself does not encode its own file name.  The file
+name set by this method is used when a unified diff is generated.
+
+=item $list = $file->revision_numbers
+
+Returns the list of revision numbers.  The returned list is an
+instance of L<List::Rubyish>.  Revision numbers are sorted in some
+stable order.
+
+=item $list = $file->revision_numbers_sorted_by_date
+
+Return the list of revision numbers, like the C<revision_numbers>
+method.  This method returns the nubmers sorted by the date of the
+revisions, in descending order.
+
+=item $rev = $file->get_revision_by_number ($revision_number)
+
+Return the object representing a specific revision identified by the
+argument.  The object is an instance of L<RCSFormat::Revision>.  If
+there is no revision specified by the argument, an C<undef> value is
+returned instead.
+
+=item $arrayref = $file->find_route_to_revision ($revision_number)
+
+In RCS file, only a revision encodes the data in the original byte
+stream - data of all the other revisions are only encoded in delta
+from another revision's data, which might also be delta.
+
+This method returns the "route" to the specified revision, along which
+you have to travel to obtain the original data.  The returned value is
+a reference to array containing a series of revision numbers.  The
+first item in the array is the entry point; its data is encoded in the
+RCS file in the original form.  Subsequent revisions are deltas from
+previous revisions in the array.  The last item in the array is always
+equal to the revision number given as the argument.
+
+If the specified revision is not found in the RCS file, the method
+returns a reference to the empty array.
+
+=item $revision_number = $file->get_prev_revision_number_of ($revision_number)
+
+Returns the revision number of the revision specified by the argument.
+For example, '1.3' would be returned if the argument is '1.4'.
+
+If the speicified revision is the first revision, or if the specified
+revision is not found in the RCS file, the method returns an C<undef>
+value.
+
+=item $diff = $file->get_unified_diff_between ($rev1, $rev2)
+
+Returns the unified diff from revision $rev1 to revision $rev2.  Both
+$rev1 and $rev2 have to be L<RCSFormat::Revision> objects or C<undef>.
+If C<undef> is specified, a diff between empty data and the other
+revision is returned.
+
+=back
+
+=head1 SEE ALSO
+
+L<RCSFormat>.
+
+L<RCSFormat::Revision>.
+
+=head1 AUTHOR
+
+Wakaba <w@suika.fam.cx>.
+
+=head1 LICENSE
+
+Copyright 2010 Wakaba <w@suika.fam.cx>.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

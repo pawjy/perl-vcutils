@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RCSFormat::Converter::Atom - RCS to Atom Converter</title>
+<link rel="stylesheet" href="http://suika.fam.cx/www/style/html/pod.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body>
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#functions">FUNCTIONS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>RCSFormat::Converter::Atom - RCS to Atom Converter</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use RCSFormat::File;
+  use RCSFormat::Converter::Atom;
+  
+  $rcs = RCSFormat::File-&gt;...;
+  
+  $atom_feed_doc = rcs_to_atom_feed $rcs;
+  print $atom_feed_doc-&gt;inner_html;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module, <code>RCSFormat::Converter::Atom</code>, provides a function that
+generates an Atom Feed Document from the given RCS file object.  The
+feed contains the author and date of the revisions contained in the
+RCS file, as well as HTML marked-up commit logs and unified diffs
+between the revisions and their previous revisions.  It would be
+useful to follow updates of RCS- or CVS-version controled files using
+your favorite feed reader.</p>
+<p>
+</p>
+<hr />
+<h1><a name="functions">FUNCTIONS</a></h1>
+<dl>
+<dt><strong><a name="_doc" class="item">$doc = rcs_to_atom_feed $rcs</a></strong></dt>
+
+<dd>
+<p>This function generates an Atom Feed Document from the RCS file given
+as the argument.  The argument <code>$rcs</code> must be an instance of
+<a href="../../RCSFormat/File.html">the RCSFormat::File manpage</a>.  It returns an <code>AtomDocument</code> object.  Please
+consult manakai's documentation or DOM specifications.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../RCSFormat/File.html">the RCSFormat::File manpage</a>.</p>
+<p>manakai.  <a href="../../Message/DOM/Document.html">the Message::DOM::Document manpage</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>Copyright 2010 Wakaba &lt;<a href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>&gt;.  All rights reserved.</p>
+<p>This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+
+</body>
+
+</html>

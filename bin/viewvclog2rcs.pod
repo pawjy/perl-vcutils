@@ -1,0 +1,39 @@
+=head1 NAME
+
+viewvclog2rcs - ViewVC's Commit Log HTML To RCS File Converter
+
+=head1 SYNOPSIS
+
+  perl bin/viewvclog2rcs.pl --log-uri http://example/viewvc/path/to/file
+
+=head1 DESCRIPTION
+
+The C<viewvclog2rcs> script reconstructs an RCS file from ViewVC (or
+ViewCVS)'s commit log HTML page of a CVS version controlled file.
+
+=head1 OPTIONS
+
+=over 4
+
+=item --log-uri=I<url>
+
+The URL of the commig log HTML page of ViewVC (or ViewCVS).
+
+=back
+
+=head1 SEE ALSO
+
+ViewVC <http://viewvc.org/>.
+
+=head1 AUTHOR
+
+Wakaba <w@suika.fam.cx>.
+
+=head1 LICENSE
+
+Copyright 2007-2010 Wakaba <w@suika.fam.cx>.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

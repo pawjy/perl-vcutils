@@ -1,0 +1,55 @@
+=head1 NAME
+
+RCSFormat::Converter::Atom - RCS to Atom Converter
+
+=head1 SYNOPSIS
+
+  use RCSFormat::File;
+  use RCSFormat::Converter::Atom;
+  
+  $rcs = RCSFormat::File->...;
+  
+  $atom_feed_doc = rcs_to_atom_feed $rcs;
+  print $atom_feed_doc->inner_html;
+
+=head1 DESCRIPTION
+
+This module, C<RCSFormat::Converter::Atom>, provides a function that
+generates an Atom Feed Document from the given RCS file object.  The
+feed contains the author and date of the revisions contained in the
+RCS file, as well as HTML marked-up commit logs and unified diffs
+between the revisions and their previous revisions.  It would be
+useful to follow updates of RCS- or CVS-version controled files using
+your favorite feed reader.
+
+=head1 FUNCTIONS
+
+=over 4
+
+=item $doc = rcs_to_atom_feed $rcs
+
+This function generates an Atom Feed Document from the RCS file given
+as the argument.  The argument C<$rcs> must be an instance of
+L<RCSFormat::File>.  It returns an C<AtomDocument> object.  Please
+consult manakai's documentation or DOM specifications.
+
+=back
+
+=head1 SEE ALSO
+
+L<RCSFormat::File>.
+
+manakai.  L<Message::DOM::Document>.
+
+=head1 AUTHOR
+
+Wakaba <w@suika.fam.cx>.
+
+=head1 LICENSE
+
+Copyright 2010 Wakaba <w@suika.fam.cx>.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

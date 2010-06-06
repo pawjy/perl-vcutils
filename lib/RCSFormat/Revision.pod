@@ -1,0 +1,73 @@
+=head1 NAME
+
+RCSFormat::Revision - Object Oriented Interface to a Revision in RCS File
+
+=head1 SYNOPSIS
+
+  use RCSFormat::File;
+  
+  $rcs = RCSFormat::File->...;
+  $rev = $rcs->get_revision_by_number ('1.2');
+  
+  print $rev->author, "\n";
+  print localtime $rev->time_as_epoch, "\n";
+  print $rev->data;
+
+=head1 DESCRIPTION
+
+The module C<RCSFormat::Revision> represents a revision encoded in an
+RCS file.  In conjunction with L<RCSFormat::File>, it provides an
+objected-oriented interface to RCS files.  They are built on the top
+of L<RCSFormat>'s low-level encapsulation of RCS files.
+
+=head1 METHODS
+
+=over 4
+
+=item $number = $rev->number
+
+Returns the revision number of the revision.
+
+=item $number = $rev->date_as_epoch
+
+Returns the date of the revision, in Unix time_t format.
+
+=item $number = $rev->date_as_rcs_formatted
+
+Returns the date of the revision, in the format used by RCS's $Date:$
+keyword substitutions.
+
+=item $bytes = $rev->log
+
+Returns the commig log of the revision.
+
+=item $bytes = $rev->data
+
+Returns the file data of the revision.  Although the data that is
+included in the RCS file for this revision might only be delta from
+another revision, this method always returns the complete file data of
+the revision.
+
+BUG: Keyword substitutions are always happen.  Binary data are not
+supported yet.
+
+=back
+
+=head1 SEE ALSO
+
+L<RCSFormat>.
+
+L<RCSFormat::File>.
+
+=head1 AUTHOR
+
+Wakaba <w@suika.fam.cx>.
+
+=head1 LICENSE
+
+Copyright 2010 Wakaba <w@suika.fam.cx>.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
