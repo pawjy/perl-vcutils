@@ -30,11 +30,47 @@ sub is_f_content ($$;$) {
 sub _revisions_simple : Test(2) {
   my $rcs = getrcs;
 
-  my $revs = $rcs->revisions;
+  my $revs = $rcs->revision_numbers;
   isa_ok $revs, 'List::Rubyish';
 
   eq_or_diff $revs->to_a, [qw(1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1)];
-} # _revisions
+} # _revisions_simple
+
+sub _revisions_branched : Test(2) {
+  my $rcs = getrcs 2;
+
+  my $revs = $rcs->revision_numbers;
+  isa_ok $revs, 'List::Rubyish';
+
+  eq_or_diff $revs->to_a, [qw(
+    1.61
+    1.60 1.59 1.58 1.57 1.56 1.55 1.54 1.53 1.52 1.51
+    1.50 1.49 1.48 1.47 1.46 1.45 1.44 1.43 1.42 1.41
+    1.40 1.39 1.38 1.37 1.36 1.35 1.34 1.33 1.32 1.31
+    1.30 1.29 1.28 1.27 1.26 1.25 1.24 1.23 1.22 1.21
+    1.20 1.19 1.18 1.17 1.16 1.15 1.14 1.13 1.12 1.11
+    1.10 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1
+    1.58.6.1 1.58.8.1
+    1.54.2.1
+    1.1.1.1
+  )];
+} # _revisions_branched
+
+sub _revisions_branched_2 : Test(2) {
+  my $rcs = getrcs 3;
+
+  my $revs = $rcs->revision_numbers;
+  isa_ok $revs, 'List::Rubyish';
+
+  eq_or_diff $revs->to_a, [qw(
+    1.45 1.44 1.43 1.42 1.41
+    1.40 1.39 1.38 1.37 1.36 1.35 1.34 1.33 1.32 1.31
+    1.30 1.29 1.28 1.27 1.26 1.25 1.24 1.23 1.22 1.21
+    1.20 1.19 1.18 1.17 1.16 1.15 1.14 1.13 1.12 1.11
+    1.10 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1
+    1.34.2.1 1.34.2.2
+  )];
+} # _revisions_branched_2
 
 sub _get_revision_by_number : Test(3) {
   my $rcs = getrcs;

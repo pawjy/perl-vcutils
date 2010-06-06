@@ -27,14 +27,14 @@ sub file_name ($) {
   return $_[0]->{file_name};
 } # file_name
 
-sub revisions ($) {
+sub revision_numbers ($) {
   my $self = shift;
   my $rcs = $self->{rcsformat};
 
   require List::Rubyish;
-  return $self->{revisions} ||= List::Rubyish->new
+  return $self->{revision_numbers} ||= List::Rubyish->new
       ([$rcs->sort_by_revision (keys %{$rcs->{delta}})]);
-} # revisions
+} # revision_numbers
 
 sub get_revision_by_number ($$) {
   my ($self, $revnum) = @_;
