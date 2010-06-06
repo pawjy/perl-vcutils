@@ -1,19 +1,19 @@
 head	1.5;
 access;
 symbols
-	yamt-nfs-mp-base3:1.4
-	jym-xensuspend:1.4.0.2
-	jym-xensuspend-base:1.5
-	jym-xensuspend-nbase:1.5
-	jymxensuspend-base:1.5
-	matt-premerge-20091211:1.5
-	rmind-uvmplock-base:1.5
-	yamt-nfs-mp-base4:1.5
-	yamt-nfs-mp-base5:1.5
-	yamt-nfs-mp-base6:1.5
-	yamt-nfs-mp-base7:1.5
+	yamt-nfs-mp-base9:1.5
 	yamt-nfs-mp-base8:1.5
-	yamt-nfs-mp-base9:1.5;
+	yamt-nfs-mp-base7:1.5
+	yamt-nfs-mp-base6:1.5
+	yamt-nfs-mp-base5:1.5
+	yamt-nfs-mp-base4:1.5
+	rmind-uvmplock-base:1.5
+	matt-premerge-20091211:1.5
+	jymxensuspend-base:1.5
+	jym-xensuspend-nbase:1.5
+	jym-xensuspend-base:1.5
+	jym-xensuspend:1.4.0.2
+	yamt-nfs-mp-base3:1.4;
 locks; strict;
 comment	@# @;
 expand	@b@;

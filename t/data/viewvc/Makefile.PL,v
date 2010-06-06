@@ -1,8 +1,8 @@
 head	1.3;
 access;
 symbols
-	release-3-0-0:1.3
-	suikawiki3-redirect:1.3;
+	suikawiki3-redirect:1.3
+	release-3-0-0:1.3;
 locks; strict;
 comment	@# @;
 expand	@b@;
