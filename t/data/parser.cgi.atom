@@ -1,0 +1,507 @@
+<feed xml:lang="" xmlns="http://www.w3.org/2005/Atom" xmlns:html="http://www.w3.org/1999/xhtml"><id>file:///parser.cgi</id><title>parser.cgi</title><updated>2007-11-11T04:18:27Z</updated><link href="" rel="self" type="application/atom+xml"></link><entry xml:lang=""><id>file:///parser.cgi?revision=1.9</id><title>r1.9</title><updated>2007-11-11T04:18:27Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	11 Nov 2007 04:18:16 -0000
+2007-11-11  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+
+	* parser.cgi: Use |Whatpm::HTML::Serializer| to serialize
+	an HTML DOM.
+</html:pre><html:pre class="diff">--- parser.cgi r1.8	Sat Aug 11 22:54:55 2007
++++ parser.cgi r1.9	Sun Nov 11 13:18:27 2007
+@@ -51,7 +51,8 @@
+   my $out;
+   $time1 = time;
+   if ($mode eq '/html') {
+-    $out = Whatpm::HTML-&gt;get_inner_html ($doc);
++    require Whatpm::HTML::Serializer;
++    $out = Whatpm::HTML::Serializer-&gt;get_inner_html ($doc);
+   } else { # test
+     $out = test_serialize ($doc);
+   }
+@@ -160,4 +161,4 @@
+ 
+ =cut
+ 
+-## $Date: 2007/08/11 13:54:55 $
++## $Date: 2007/11/11 04:18:27 $
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.8</id><title>r1.8</title><updated>2007-08-11T13:54:55Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	11 Aug 2007 13:54:20 -0000
+2007-08-11  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+
+	* cc.cgi, parser-manakai.cgi, parser.cgi: Use |Message::CGI::HTTP|
+	instead of |SuikaWiki::Input::HTTP|.
+
+2007-08-05  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+
+	* cc-interface.en.html: IMT |application/atom+xml| is added.
+	Link to |cc-todo| is added.
+
+2007-07-24  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+
+	* error-description.xml: Description for &quot;after body&quot;, &quot;bare etago&quot;,
+	and &quot;bogus end tag&quot; are added.
+</html:pre><html:pre class="diff">--- parser.cgi r1.7	Mon May 28 23:04:57 2007
++++ parser.cgi r1.8	Sat Aug 11 22:54:55 2007
+@@ -2,17 +2,16 @@
+ use strict;
+ 
+ use lib qw[/home/httpd/html/www/markup/html/whatpm
+-           /home/wakaba/public_html/-temp/wiki/lib];
++           /home/wakaba/work/manakai2/lib];
+ use CGI::Carp qw[fatalsToBrowser];
+ use Time::HiRes qw/time/;
+ 
+-use SuikaWiki::Input::HTTP; ## TODO: Use some better CGI module
++use Message::CGI::HTTP;
++my $http = Message::CGI::HTTP-&gt;new;
+ 
+-my $http = SuikaWiki::Input::HTTP-&gt;new;
+-
+ ## TODO: _charset_
+ 
+-my $mode = $http-&gt;meta_variable ('PATH_INFO');
++my $mode = $http-&gt;get_meta_variable ('PATH_INFO');
+ ## TODO: decode unreserved characters
+ 
+ if ($mode eq '/html' or $mode eq '/test') {
+@@ -20,7 +19,7 @@
+   require Whatpm::HTML;
+   require Whatpm::NanoDOM;
+ 
+-  my $s = $http-&gt;parameter ('s');
++  my $s = $http-&gt;get_parameter ('s');
+   if (length $s &gt; 1000_000) {
+     print STDOUT &quot;Status: 400 Document Too Long\nContent-Type: text/plain; charset=us-ascii\n\nToo long&quot;;
+     exit;
+@@ -61,7 +60,7 @@
+   print STDOUT Encode::encode ('utf-8', $$out);
+   print STDOUT &quot;\n&quot;;
+ 
+-  if ($http-&gt;parameter ('dom5')) {
++  if ($http-&gt;get_parameter ('dom5')) {
+     require Whatpm::ContentChecker;
+     print STDOUT &quot;#domerrors\n&quot;;
+     $time1 = time;
+@@ -161,4 +160,4 @@
+ 
+ =cut
+ 
+-## $Date: 2007/05/28 14:04:57 $
++## $Date: 2007/08/11 13:54:55 $
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.7</id><title>r1.7</title><updated>2007-05-28T14:04:57Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	28 May 2007 14:04:52 -0000
+2007-05-28  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+
+	* parser.cgi: Log elapsed time to external files.
+
+	* time.plt: New file.
+</html:pre><html:pre class="diff">--- parser.cgi r1.6	Sun May 27 20:16:02 2007
++++ parser.cgi r1.7	Mon May 28 23:04:57 2007
+@@ -30,6 +30,7 @@
+   $s = Encode::decode ('utf-8', $s);
+   my $time2 = time;
+   my %time = (decode =&gt; $time2 - $time1);
++  my $char_length = length $s;
+   
+   print STDOUT &quot;Content-Type: text/plain; charset=utf-8\n\n&quot;;
+ 
+@@ -77,6 +78,11 @@
+   print STDOUT &quot;html5-&gt;dom5\t&quot;, $time{parse}, &quot;s\n&quot;;
+   print STDOUT &quot;dom5-&gt;serialize\t&quot;, $time{serialize}, &quot;s\n&quot;;
+   print STDOUT &quot;dom5 check\t&quot;, $time{check}, &quot;s\n&quot; if defined $time{check};
++  for (qw/decode parse serialize check/) {
++    next unless defined $time{$_};
++    open my $file, '&gt;&gt;', &quot;.$_.txt&quot; or die &quot;.$_.txt: $!&quot;;
++    print $file $char_length, &quot;\t&quot;, $time{$_}, &quot;\n&quot;;
++  }
+ } else {
+   print STDOUT &quot;Status: 404 Not Found\nContent-Type: text/plain; charset=us-ascii\n\n404&quot;;
+ }
+@@ -155,4 +161,4 @@
+ 
+ =cut
+ 
+-## $Date: 2007/05/27 11:16:02 $
++## $Date: 2007/05/28 14:04:57 $
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.6</id><title>r1.6</title><updated>2007-05-27T11:16:02Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	27 May 2007 11:15:58 -0000
+	* parser.cgi: Output how long each process takes.
+	Document element testing is moved to the |Whatpm::ContentChecker|
+	module.
+
+2007-05-27  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+</html:pre><html:pre class="diff">--- parser.cgi r1.5	Fri May 25 23:24:31 2007
++++ parser.cgi r1.6	Sun May 27 20:16:02 2007
+@@ -4,6 +4,7 @@
+ use lib qw[/home/httpd/html/www/markup/html/whatpm
+            /home/wakaba/public_html/-temp/wiki/lib];
+ use CGI::Carp qw[fatalsToBrowser];
++use Time::HiRes qw/time/;
+ 
+ use SuikaWiki::Input::HTTP; ## TODO: Use some better CGI module
+ 
+@@ -25,8 +26,11 @@
+     exit;
+   }
+ 
++  my $time1 = time;
+   $s = Encode::decode ('utf-8', $s);
+-
++  my $time2 = time;
++  my %time = (decode =&gt; $time2 - $time1);
++  
+   print STDOUT &quot;Content-Type: text/plain; charset=utf-8\n\n&quot;;
+ 
+   print STDOUT &quot;#errors\n&quot;;
+@@ -36,38 +40,43 @@
+     print STDOUT &quot;$opt{line},$opt{column},$opt{type}\n&quot;;
+   };
+ 
++  $time1 = time;
+   my $doc = Whatpm::HTML-&gt;parse_string
+       ($s =&gt; Whatpm::NanoDOM::Document-&gt;new, $onerror);
++  $time2 = time;
++  $time{parse} = $time2 - $time1;
+ 
+   print &quot;#document\n&quot;;
+ 
+   my $out;
++  $time1 = time;
+   if ($mode eq '/html') {
+     $out = Whatpm::HTML-&gt;get_inner_html ($doc);
+   } else { # test
+     $out = test_serialize ($doc);
+   }
++  $time2 = time;
++  $time{serialize} = $time2 - $time1;
+   print STDOUT Encode::encode ('utf-8', $$out);
+   print STDOUT &quot;\n&quot;;
+ 
+   if ($http-&gt;parameter ('dom5')) {
+     require Whatpm::ContentChecker;
+     print STDOUT &quot;#domerrors\n&quot;;
+-    my $docel = $doc-&gt;document_element;
+-    my $docel_nsuri = $docel-&gt;namespace_uri;
+-    if (defined $docel_nsuri and 
+-        $docel_nsuri eq q&lt;http://www.w3.org/1999/xhtml&gt; and
+-        $docel-&gt;manakai_local_name eq 'html') {
+-      #
+-    } else {
+-      print STDOUT get_node_path ($docel) . &quot;;element not allowed\n&quot;;
+-    }
+-    my $cc = Whatpm::ContentChecker-&gt;new;
+-    $cc-&gt;check_element ($docel, sub {
++    $time1 = time;
++    Whatpm::ContentChecker-&gt;check_document ($doc, sub {
+       my %opt = @_;
+       print STDOUT get_node_path ($opt{node}) . ';' . $opt{type} . &quot;\n&quot;;
+     });
++    $time2 = time;
++    $time{check} = $time2 - $time1;
+   }
++
++  print STDOUT &quot;#log\n&quot;;
++  print STDOUT &quot;byte-&gt;char\t&quot;, $time{decode}, &quot;s\n&quot;;
++  print STDOUT &quot;html5-&gt;dom5\t&quot;, $time{parse}, &quot;s\n&quot;;
++  print STDOUT &quot;dom5-&gt;serialize\t&quot;, $time{serialize}, &quot;s\n&quot;;
++  print STDOUT &quot;dom5 check\t&quot;, $time{check}, &quot;s\n&quot; if defined $time{check};
+ } else {
+   print STDOUT &quot;Status: 404 Not Found\nContent-Type: text/plain; charset=us-ascii\n\n404&quot;;
+ }
+@@ -146,4 +155,4 @@
+ 
+ =cut
+ 
+-## $Date: 2007/05/25 14:24:31 $
++## $Date: 2007/05/27 11:16:02 $
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.5</id><title>r1.5</title><updated>2007-05-25T14:24:31Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	25 May 2007 14:24:27 -0000
+2007-05-25  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+
+	* parser.cgi: Use CGI::Carp.
+</html:pre><html:pre class="diff">--- parser.cgi r1.4	Sun May 20 17:14:48 2007
++++ parser.cgi r1.5	Fri May 25 23:24:31 2007
+@@ -3,6 +3,7 @@
+ 
+ use lib qw[/home/httpd/html/www/markup/html/whatpm
+            /home/wakaba/public_html/-temp/wiki/lib];
++use CGI::Carp qw[fatalsToBrowser];
+ 
+ use SuikaWiki::Input::HTTP; ## TODO: Use some better CGI module
+ 
+@@ -145,4 +146,4 @@
+ 
+ =cut
+ 
+-## $Date: 2007/05/20 08:14:48 $
++## $Date: 2007/05/25 14:24:31 $
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.4</id><title>r1.4</title><updated>2007-05-20T08:14:48Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	20 May 2007 08:14:29 -0000
+2007-05-19  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+
+	* parser-interface.en.html: A checkbox to
+	enable DOM5 HTML conformance checking is added.
+
+	* parser.cgi: Check DOM5 HTML conformance
+	if |dom5| parameter is specified.
+</html:pre><html:pre class="diff">--- parser.cgi r1.3	Tue May  1 20:05:04 2007
++++ parser.cgi r1.4	Sun May 20 17:14:48 2007
+@@ -31,7 +31,8 @@
+   print STDOUT &quot;#errors\n&quot;;
+ 
+   my $onerror = sub {
+-    print STDOUT &quot;0,0,&quot;, $_[0], &quot;\n&quot;;
++    my (%opt) = @_;
++    print STDOUT &quot;$opt{line},$opt{column},$opt{type}\n&quot;;
+   };
+ 
+   my $doc = Whatpm::HTML-&gt;parse_string
+@@ -46,6 +47,26 @@
+     $out = test_serialize ($doc);
+   }
+   print STDOUT Encode::encode ('utf-8', $$out);
++  print STDOUT &quot;\n&quot;;
++
++  if ($http-&gt;parameter ('dom5')) {
++    require Whatpm::ContentChecker;
++    print STDOUT &quot;#domerrors\n&quot;;
++    my $docel = $doc-&gt;document_element;
++    my $docel_nsuri = $docel-&gt;namespace_uri;
++    if (defined $docel_nsuri and 
++        $docel_nsuri eq q&lt;http://www.w3.org/1999/xhtml&gt; and
++        $docel-&gt;manakai_local_name eq 'html') {
++      #
++    } else {
++      print STDOUT get_node_path ($docel) . &quot;;element not allowed\n&quot;;
++    }
++    my $cc = Whatpm::ContentChecker-&gt;new;
++    $cc-&gt;check_element ($docel, sub {
++      my %opt = @_;
++      print STDOUT get_node_path ($opt{node}) . ';' . $opt{type} . &quot;\n&quot;;
++    });
++  }
+ } else {
+   print STDOUT &quot;Status: 404 Not Found\nContent-Type: text/plain; charset=us-ascii\n\n404&quot;;
+ }
+@@ -84,3 +105,44 @@
+   
+   return \$r;
+ } # test_serialize
++
++sub get_node_path ($) {
++  my $node = shift;
++  my @r;
++  while (defined $node) {
++    my $rs;
++    if ($node-&gt;node_type == 1) {
++      $rs = $node-&gt;manakai_local_name;
++      $node = $node-&gt;parent_node;
++    } elsif ($node-&gt;node_type == 2) {
++      $rs = '@' . $node-&gt;manakai_local_name;
++      $node = $node-&gt;owner_element;
++    } elsif ($node-&gt;node_type == 3) {
++      $rs = '&quot;' . $node-&gt;data . '&quot;';
++      $node = $node-&gt;parent_node;
++    } elsif ($node-&gt;node_type == 9) {
++      $rs = '';
++      $node = $node-&gt;parent_node;
++    } else {
++      $rs = '#' . $node-&gt;node_type;
++      $node = $node-&gt;parent_node;
++    }
++    unshift @r, $rs;
++  }
++  return join '/', @r;
++} # get_node_path
++
++=head1 AUTHOR
++
++Wakaba &lt;w@suika.fam.cx&gt;.
++
++=head1 LICENSE
++
++Copyright 2007 Wakaba &lt;w@suika.fam.cx&gt;
++
++This library is free software; you can redistribute it
++and/or modify it under the same terms as Perl itself.
++
++=cut
++
++## $Date: 2007/05/20 08:14:48 $
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.3</id><title>r1.3</title><updated>2007-05-01T11:05:04Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 11:04:56 -0000
+	* parser.cgi: Module names are updated.
+
+	* parser-interface.en.html: Link to Whatpm introduction
+	is added.
+
+2007-05-01  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+</html:pre><html:pre class="diff">--- parser.cgi r1.2	Tue May  1 19:27:06 2007
++++ parser.cgi r1.3	Tue May  1 20:05:04 2007
+@@ -15,8 +15,8 @@
+ 
+ if ($mode eq '/html' or $mode eq '/test') {
+   require Encode;
+-  require What::HTML;
+-  require What::NanoDOM;
++  require Whatpm::HTML;
++  require Whatpm::NanoDOM;
+ 
+   my $s = $http-&gt;parameter ('s');
+   if (length $s &gt; 1000_000) {
+@@ -34,14 +34,14 @@
+     print STDOUT &quot;0,0,&quot;, $_[0], &quot;\n&quot;;
+   };
+ 
+-  my $doc = What::HTML-&gt;parse_string
+-      ($s =&gt; What::NanoDOM::Document-&gt;new, $onerror);
++  my $doc = Whatpm::HTML-&gt;parse_string
++      ($s =&gt; Whatpm::NanoDOM::Document-&gt;new, $onerror);
+ 
+   print &quot;#document\n&quot;;
+ 
+   my $out;
+   if ($mode eq '/html') {
+-    $out = What::HTML-&gt;get_inner_html ($doc);
++    $out = Whatpm::HTML-&gt;get_inner_html ($doc);
+   } else { # test
+     $out = test_serialize ($doc);
+   }
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.2</id><title>r1.2</title><updated>2007-05-01T10:27:06Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 10:26:58 -0000
+	* parser-interface.en.html: New document.
+
+	* parser.cgi: Test-result-format mode is added.
+
+2007-05-01  Wakaba  &lt;wakaba@suika.fam.cx&gt;
+</html:pre><html:pre class="diff">--- parser.cgi r1.1	Tue May  1 18:25:31 2007
++++ parser.cgi r1.2	Tue May  1 19:27:06 2007
+@@ -1,7 +1,8 @@
+ #!/usr/bin/perl
+ use strict;
+ 
+-use lib qw[.. /home/wakaba/public_html/-temp/wiki/lib];
++use lib qw[/home/httpd/html/www/markup/html/whatpm
++           /home/wakaba/public_html/-temp/wiki/lib];
+ 
+ use SuikaWiki::Input::HTTP; ## TODO: Use some better CGI module
+ 
+@@ -12,7 +13,7 @@
+ my $mode = $http-&gt;meta_variable ('PATH_INFO');
+ ## TODO: decode unreserved characters
+ 
+-if ($mode eq '/html' or $mode eq '/error-and-html') {
++if ($mode eq '/html' or $mode eq '/test') {
+   require Encode;
+   require What::HTML;
+   require What::NanoDOM;
+@@ -27,19 +28,59 @@
+ 
+   print STDOUT &quot;Content-Type: text/plain; charset=utf-8\n\n&quot;;
+ 
+-  my $onerror = $mode eq '/error-and-html' ? sub {
++  print STDOUT &quot;#errors\n&quot;;
++
++  my $onerror = sub {
+     print STDOUT &quot;0,0,&quot;, $_[0], &quot;\n&quot;;
+-  } : sub { };
++  };
+ 
+   my $doc = What::HTML-&gt;parse_string
+       ($s =&gt; What::NanoDOM::Document-&gt;new, $onerror);
+ 
+-  if ($mode eq '/error-and-html') {
+-    print &quot;--\n&quot;;
+-  }
++  print &quot;#document\n&quot;;
+ 
+-  my $html = What::HTML-&gt;get_inner_html ($doc);
+-  print STDOUT Encode::encode ('utf-8', $$html);
++  my $out;
++  if ($mode eq '/html') {
++    $out = What::HTML-&gt;get_inner_html ($doc);
++  } else { # test
++    $out = test_serialize ($doc);
++  }
++  print STDOUT Encode::encode ('utf-8', $$out);
+ } else {
+   print STDOUT &quot;Status: 404 Not Found\nContent-Type: text/plain; charset=us-ascii\n\n404&quot;;
+ }
++
++exit;
++
++sub test_serialize ($) {
++  my $node = shift;
++  my $r = '';
++
++  my @node = map { [$_, ''] } @{$node-&gt;child_nodes};
++  while (@node) {
++    my $child = shift @node;
++    my $nt = $child-&gt;[0]-&gt;node_type;
++    if ($nt == $child-&gt;[0]-&gt;ELEMENT_NODE) {
++      $r .= '| ' . $child-&gt;[1] . '&lt;' . $child-&gt;[0]-&gt;tag_name . &quot;&gt;\x0A&quot;; ## ISSUE: case?
++
++      for my $attr (sort {$a-&gt;[0] cmp $b-&gt;[0]} map { [$_-&gt;name, $_-&gt;value] }
++                    @{$child-&gt;[0]-&gt;attributes}) {
++        $r .= '| ' . $child-&gt;[1] . '  ' . $attr-&gt;[0] . '=&quot;'; ## ISSUE: case?
++        $r .= $attr-&gt;[1] . '&quot;' . &quot;\x0A&quot;;
++      }
++      
++      unshift @node,
++        map { [$_, $child-&gt;[1] . '  '] } @{$child-&gt;[0]-&gt;child_nodes};
++    } elsif ($nt == $child-&gt;[0]-&gt;TEXT_NODE) {
++      $r .= '| ' . $child-&gt;[1] . '&quot;' . $child-&gt;[0]-&gt;data . '&quot;' . &quot;\x0A&quot;;
++    } elsif ($nt == $child-&gt;[0]-&gt;COMMENT_NODE) {
++      $r .= '| ' . $child-&gt;[1] . '&lt;!-- ' . $child-&gt;[0]-&gt;data . &quot; --&gt;\x0A&quot;;
++    } elsif ($nt == $child-&gt;[0]-&gt;DOCUMENT_TYPE_NODE) {
++      $r .= '| ' . $child-&gt;[1] . '&lt;!DOCTYPE ' . $child-&gt;[0]-&gt;name . &quot;&gt;\x0A&quot;;
++    } else {
++      $r .= '| ' . $child-&gt;[1] . $child-&gt;[0]-&gt;node_type . &quot;\x0A&quot;; # error
++    }
++  }
++  
++  return \$r;
++} # test_serialize
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.1</id><title>r1.1</title><updated>2007-05-01T09:25:31Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 09:25:27 -0000
+	* parser.cgi: New file.
+
+	* .htaccess: New file.
+</html:pre><html:pre class="diff">--- parser.cgi r0
++++ parser.cgi r1.1	Tue May  1 18:25:31 2007
+@@ -0,0 +1,45 @@
++#!/usr/bin/perl
++use strict;
++
++use lib qw[.. /home/wakaba/public_html/-temp/wiki/lib];
++
++use SuikaWiki::Input::HTTP; ## TODO: Use some better CGI module
++
++my $http = SuikaWiki::Input::HTTP-&gt;new;
++
++## TODO: _charset_
++
++my $mode = $http-&gt;meta_variable ('PATH_INFO');
++## TODO: decode unreserved characters
++
++if ($mode eq '/html' or $mode eq '/error-and-html') {
++  require Encode;
++  require What::HTML;
++  require What::NanoDOM;
++
++  my $s = $http-&gt;parameter ('s');
++  if (length $s &gt; 1000_000) {
++    print STDOUT &quot;Status: 400 Document Too Long\nContent-Type: text/plain; charset=us-ascii\n\nToo long&quot;;
++    exit;
++  }
++
++  $s = Encode::decode ('utf-8', $s);
++
++  print STDOUT &quot;Content-Type: text/plain; charset=utf-8\n\n&quot;;
++
++  my $onerror = $mode eq '/error-and-html' ? sub {
++    print STDOUT &quot;0,0,&quot;, $_[0], &quot;\n&quot;;
++  } : sub { };
++
++  my $doc = What::HTML-&gt;parse_string
++      ($s =&gt; What::NanoDOM::Document-&gt;new, $onerror);
++
++  if ($mode eq '/error-and-html') {
++    print &quot;--\n&quot;;
++  }
++
++  my $html = What::HTML-&gt;get_inner_html ($doc);
++  print STDOUT Encode::encode ('utf-8', $$html);
++} else {
++  print STDOUT &quot;Status: 404 Not Found\nContent-Type: text/plain; charset=us-ascii\n\n404&quot;;
++}
+</html:pre></html:div></content></entry></feed>
