@@ -114,19 +114,17 @@ sub get_prev_revision_number_of ($$) {
   return $rcs->{prev_revision_number}->{$next_rev}; # or undef
 } # get_prev_revision_number_of
 
-sub get_unified_diff_by_numbers ($$$) {
-  my ($self, $revnum1, $revnum2) = @_;
+sub get_unified_diff_between ($$$) {
+  my ($self, $rev1, $rev2) = @_;
 
   my $file_name = $self->file_name;
   $file_name = defined $file_name ? $file_name . ' ' : '';
   
-  my $name1 = $file_name . 'r' . $revnum1;
-  my $rev1 = $self->get_revision_by_number ($revnum1);
+  my $name1 = $file_name . 'r' . ($rev1 ? $rev1->number : '0');
   my $data1 = $rev1 ? $rev1->data : '';
   my $mtime1 = $rev1 ? $rev1->date_as_epoch : undef;
 
-  my $name2 = $file_name . 'r' . $revnum2;
-  my $rev2 = $self->get_revision_by_number ($revnum2);
+  my $name2 = $file_name . 'r' . ($rev2 ? $rev2->number : '0');
   my $data2 = $rev2 ? $rev2->data : '';
   my $mtime2 = $rev2 ? $rev2->date_as_epoch : undef;
 
@@ -136,6 +134,6 @@ sub get_unified_diff_by_numbers ($$$) {
         FILENAME_A => $name1, FILENAME_B => $name2,
         MTIME_A => $mtime1, MTIME_B => $mtime2,
       });
-} # get_unified_diff_by_numbers
+} # get_unified_diff_between
 
 1;

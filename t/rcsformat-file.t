@@ -215,10 +215,12 @@ sub _unified_diff : Test(2) {
   my $rcs = getrcs;
   $rcs->file_name ('parser.cgi');
 
-  my $diff = $rcs->get_unified_diff_by_numbers (1.5, 1.6);
+  my $rev1 = $rcs->get_revision_by_number (1.5);
+  my $rev2 = $rcs->get_revision_by_number (1.6);
+  my $diff = $rcs->get_unified_diff_between ($rev1, $rev2);
   is_f_content $diff, $test_f_diff;
 
-  my $diff2 = $rcs->get_unified_diff_by_numbers (30.2, 1.23);
+  my $diff2 = $rcs->get_unified_diff_between (undef, undef);
   is $diff2, '';
 } # _unified_diff
 
