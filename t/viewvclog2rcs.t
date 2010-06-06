@@ -18,6 +18,15 @@ sub _cvsweb_freebsd : Test(1) {
   eq_or_diff $rcs, scalar $testdata_d->file ('snprintb.c,v')->slurp;
 }
 
+sub _viewcvs_0_9_2 : Test(1) {
+  ## <http://suika.fam.cx/gate/cvs/messaging/manakai/lib/Message/Makefile>
+
+  my $testdata_d = $data_d->subdir ('viewcvs');
+  my $log_f = $testdata_d->file ('Makefile');
+  my $rcs = `perl $v2r_f --log-uri $log_f --original-base-url http://suika.fam.cx/gate/cvs/*checkout*/messaging/manakai/lib/Message/Makefile`;
+  eq_or_diff $rcs, scalar $testdata_d->file ('Makefile,v')->slurp;
+}
+
 sub _viewvc_xhtml : Test(1) {
   ## <http://suika.fam.cx/gate/cvs/melon/pub/suikawiki/script/Makefile.PL>
 

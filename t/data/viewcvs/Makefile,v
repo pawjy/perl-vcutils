@@ -1,0 +1,564 @@
+head	1.8;
+access;
+symbols
+	manakai-release-0-4-0:1.8
+	manakai-release-0-3-2:1.6
+	manakai-release-0-3-1:1.6
+	manakai-200612:1.6
+	branch-suikawiki-1:1.1.0.6
+	experimental-xml-parser-200401:1.1.0.4
+	stable:1.1.0.2
+	msg-0-1:1.1
+	before-dis2-200411:1.1;
+locks; strict;
+comment	@# @;
+expand	@b@;
+
+
+1.8
+date	2007.08.11.13.37.09;	author wakaba;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2007.07.29.08.04.40;	author wakaba;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2006.03.31.16.44.23;	author wakaba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.03.10.10.52.02;	author wakaba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.02.26.14.32.38;	author wakaba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2005.09.24.11.57.19;	author wakaba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.09.22.14.25.46;	author wakaba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.05.26.01.20.10;	author wakaba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@++ manakai/lib/Message/ChangeLog	11 Aug 2007 13:36:49 -0000
+2007-08-11  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: New directory |CGI| is added.
+
+2007-08-11  Wakaba  <wakaba@@suika.fam.cx>
+
+	* CGI/: New directory.
+
+++ manakai/lib/Message/CGI/ChangeLog	11 Aug 2007 13:33:26 -0000
+	* Makefile: New file.
+
+	* HTTP.pm: Reformed for manakai.
+
+2007-08-11  Wakaba  <wakaba@@suika.fam.cx>
+@
+text
+@CD = cd
+MAKE = make
+RM = rm
+RMALL = $(RM) -fv
+
+PM_SUFFIX = .pm
+
+all:
+	$(CD) Util && $(MAKE) all
+	$(CD) Markup && $(MAKE) all
+	$(CD) DOM && $(MAKE) all
+	$(CD) URI && $(MAKE) all
+	$(CD) CGI && $(MAKE) all
+
+clean:
+	$(RMALL) *.BAK .*.BAK *~ .*~
+	$(CD) Body && $(MAKE) clean
+	$(CD) Field && $(MAKE) clean
+	$(CD) MIME && $(MAKE) clean
+	$(CD) Util && $(MAKE) clean
+	$(CD) Markup && $(MAKE) clean
+	$(CD) DOM && $(MAKE) clean
+	$(CD) URI && $(MAKE) clean
+	$(CD) CGI && $(MAKE) clean
+
+distclean:
+	$(RMALL) *.BAK .*.BAK *~ .*~
+	$(CD) Body && $(MAKE) distclean
+	$(CD) Field && $(MAKE) distclean
+	$(CD) MIME && $(MAKE) distclean
+	$(CD) Util && $(MAKE) distclean
+	$(CD) Markup && $(MAKE) distclean
+	$(CD) DOM && $(MAKE) distclean
+	$(CD) URI && $(MAKE) distclean
+	$(CD) CGI && $(MAKE) distclean
+
+## $Date: 2007/08/11 13:37:09 $
+## License: Public Domain.
+@
+
+
+1.7
+log
+@++ ChangeLog	29 Jul 2007 08:02:27 -0000
+2007-07-29  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile.PL: Updated.
+
+++ manakai/lib/ChangeLog	29 Jul 2007 08:03:11 -0000
+	* Makefile: No longer recurse into |manakai| and the
+	AutoLoad module.
+
+2007-07-29  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/Message/ChangeLog	29 Jul 2007 08:03:25 -0000
+2007-07-29  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (all): Special rule for |Util| is removed.
+
+	* Charset/: Removed.
+
+++ manakai/lib/Message/DOM/ChangeLog	29 Jul 2007 07:51:50 -0000
+	* Text.pm: |Message::DOM::Traversal, an obsolete module,
+	was referenced.
+
+2007-07-29  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/Message/Util/ChangeLog	29 Jul 2007 08:03:51 -0000
+	* Makefile: Rules for DIS are removed.
+
+2007-07-29  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/t/ChangeLog	29 Jul 2007 08:04:33 -0000
+2007-07-29  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: Rules for DIS tests are removed.
+@
+text
+@d13 1
+d24 1
+a24 9
+
+clean-db:
+#	$(CD) Body && $(MAKE) clean-db
+#	$(CD) Field && $(MAKE) clean-db
+#	$(CD) MIME && $(MAKE) clean-db
+	$(CD) Util && $(MAKE) clean-db
+	$(CD) Markup && $(MAKE) clean-db
+	$(CD) DOM && $(MAKE) clean-db
+	$(CD) URI && $(MAKE) clean-db
+d35 1
+d37 1
+a37 1
+## $Date: 2007/07/29 08:04:40 $
+@
+
+
+1.6
+log
+@++ manakai/lib/Message/ChangeLog	31 Mar 2006 15:51:53 -0000
+2006-03-31  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (clean-db): New rule.
+
+++ manakai/lib/Message/Markup/ChangeLog	31 Mar 2006 15:53:04 -0000
+2006-03-31  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (clean-db): New rule.
+
+++ manakai/lib/Message/Util/ChangeLog	31 Mar 2006 15:59:50 -0000
+	* Makefile (clean-db): New rule.
+
+	* Grove.dis (onunload): New internal property.
+	(collectGarbage): Invoke the |mg:onunload| code if available.
+
+2006-03-31  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/Message/DOM/ChangeLog	31 Mar 2006 15:58:33 -0000
+2006-04-01  Wakaba  <wakaba@@suika.fam.cx>
+
+	* TreeCore.dis (setIdAttribute, setIdAttributeNS, setIdAttributeNode):
+	Reimplemented.
+	(isId): Setter is added.
+	(Element.normalize): Definition copied from the |MDOM:Tree|
+	module.
+
+2006-03-31  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (clean-db): New rule.
+
+	* TreeCore.dis (setUserData): Schedule to invoke
+	the user data handler when the node is removed
+	from the memory.
+	(setAttribute, setAttributeNS): Set the [attribute type]
+	if DTD attribute definition is available.
+	(CharacterData members): Definitions copied from
+	the |MDOM:Tree| module.
+
+++ manakai/lib/Message/URI/ChangeLog	31 Mar 2006 15:54:48 -0000
+2006-04-01  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (clean-db): New rule.
+
+++ manakai/lib/Message/Charset/ChangeLog	31 Mar 2006 15:54:37 -0000
+2006-04-01  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (clean-db): New rule.
+
+++ manakai/lib/manakai/ChangeLog	31 Mar 2006 15:53:40 -0000
+2006-03-31  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (clean-db): New rule.
+
+++ manakai/lib/ChangeLog	31 Mar 2006 15:51:40 -0000
+2006-03-31  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (clean-db): New rule.
+@
+text
+@d9 1
+a9 1
+	$(CD) Util && $(MAKE) .discore-all$(PM_SUFFIX) all
+a12 1
+	$(CD) Charset && $(MAKE) all
+a22 1
+	$(CD) Charset && $(MAKE) clean
+a31 1
+	$(CD) Charset && $(MAKE) clean-db
+a41 1
+	$(CD) Charset && $(MAKE) distclean
+d43 1
+a43 1
+## $Date: 2006/03/31 16:44:23 $
+@
+
+
+1.5
+log
+@++ manakai/lib/Message/ChangeLog	10 Mar 2006 10:43:42 -0000
+2006-03-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: Directories |URI| and |Charset| are added.
+
+	* Charset/: New directory.
+
+++ manakai/lib/Message/Util/ChangeLog	10 Mar 2006 10:51:06 -0000
+2006-03-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* PerlCode.dis (stringify): Inserts new line after |COMMA|s
+	in lists (hash literals and array literals --- "lists" theirselves
+	are excluded since they are usually not so long).
+
+	* DIS.dis (loadResource): Don't throw error
+	if an alias is alreadt defined for same URI.  Registers
+	aliases from |srinfo| to the database. By these
+	fixes aliases defined in another module from the canonical
+	resource name's module can live even after the canonical's
+	module is updated.
+
+++ manakai/lib/Message/DOM/ChangeLog	10 Mar 2006 10:44:35 -0000
+2006-03-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* DOMCore.dis, DOMXML.dis, XDoctype.dis (manakaiAppendText): New
+	method.
+
+	* XMLParser.dis: Don't create adjacent text nodes.
+
+++ manakai/lib/Message/URI/ChangeLog	10 Mar 2006 10:47:21 -0000
+2006-03-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Generic.dis (MURI:): Typos are fixed.
+
+++ manakai/lib/manakai/ChangeLog	10 Mar 2006 10:51:43 -0000
+2006-03-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* dis-catalog: New |Message::Charset| namespace is added.
+@
+text
+@d26 10
+d47 1
+a47 1
+## $Date: 2006/03/10 10:52:02 $
+@
+
+
+1.4
+log
+@++ manakai/t/ChangeLog	26 Feb 2006 14:32:29 -0000
+	* Makefile (distclean): New rule.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/bin/ChangeLog	26 Feb 2006 14:18:44 -0000
+	* daf.pl: Request for |fe:GenericLS| feature was missing.
+	Sets the |pc:preserve-line-break| parameter for test
+	code as |dac2test.pl| had been.
+
+	* dac.pl, dac2pm.pl, dac2test.pl: Removed.
+
+	* disc.pl, cdis2pm.pl, cdis2rdf.pl: Removed.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/Message/ChangeLog	26 Feb 2006 14:19:17 -0000
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (distclean): New rule.
+
+++ manakai/lib/Message/Body/ChangeLog	26 Feb 2006 14:19:35 -0000
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (distclean): New rule.
+
+++ manakai/lib/Message/Field/ChangeLog	26 Feb 2006 14:24:08 -0000
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (distclean): New rule.
+
+++ manakai/lib/Message/MIME/ChangeLog	26 Feb 2006 14:24:31 -0000
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (distclean): New rule.
+
+++ manakai/lib/Message/Markup/ChangeLog	26 Feb 2006 14:24:49 -0000
+	* Makefile (distclean): New rule.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/Message/Util/ChangeLog	26 Feb 2006 14:27:24 -0000
+	* PerlCode.dis (PerlStringLiteral.stringify): If some character
+	are escaped, the string should have been quoted by |QUOTATION MARK|.
+
+	* Makefile (.discore-all.pm): The parameter for |DIS/DPG.dis|
+	module was misplaced.
+	(distclean): New rule.
+	(clean): Cleans subdirectories, too.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/Message/Util/DIS/ChangeLog	26 Feb 2006 14:31:14 -0000
+	* Perl.dis (plUpdate): Reads |dis:DefaultFor| property
+	from the source if it is not available from the module
+	in the database, i.e. the |readProperties| method
+	is not performed for the module.
+	(getPerlInterfaceMemberCode): Renamed
+	from |getPerlErrorInterfaceMemberCode|.
+	(DISLang:Const.getPerlInterfaceMemberCode): New
+	method implementation.  Constants defined in interfaces
+	were not reflected to the generated Perl module code
+	since the split of |plGeneratePerlModule| method.
+
+	* DPG.dis (Require): Reference to |DIS:Perl| module was missing.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/Message/DOM/ChangeLog	26 Feb 2006 14:21:51 -0000
+	* SimpleLS.dis (Require): Reference to the |MDOM:Tree|
+	module was missing.
+
+	* ManakaiDOMLS2003.dis: Some property names was incorrect.
+
+	* Makefile (distclean): New rule.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+	* DOMLS.dis: Removed from the CVS repository, since
+	it has been no longer required to make the |daf| system
+	itself.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/manakai/ChangeLog	26 Feb 2006 14:32:09 -0000
+	* Makefile (distclean): New rule.
+
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+++ manakai/lib/ChangeLog	26 Feb 2006 14:19:00 -0000
+2006-02-26  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile (distclean): New rule.
+@
+text
+@d12 2
+d23 2
+d34 2
+d37 1
+a37 1
+## $Date: 2006/02/26 14:32:38 $
+@
+
+
+1.3
+log
+@++ manakai/bin/ChangeLog	24 Sep 2005 10:49:30 -0000
+	(dac_load_module_file): Allow "|" as qname prefix separator.
+++ manakai/lib/Message/Markup/ChangeLog	24 Sep 2005 11:11:32 -0000
+2005-09-24  Wakaba  <wakaba@@suika.fam.cx>
+
+	* SuikaWikiConfig21.dis: Use "disPerl:H" instead
+	of "disPerl:Q" for hash keys.
+	(expandQName): Removed the "g" option from the "s///",
+	which was very serious and difficult bug.
+
+++ manakai/lib/Message/Util/ChangeLog	24 Sep 2005 11:01:40 -0000
+2005-09-24  Wakaba  <wakaba@@suika.fam.cx>
+
+	* ManakaiNode.dis (mn:node, mn:nodeID, mn:treeID): New
+	properties.
+	(mn:stemName, mn:refName): New properties.
+
+	* Makefile (.discore-all.pm): New rule to create dis-related
+	Perl module files at once.
+
+	* DIS.dis (PERL_HASH_KEY_ALREADY_DEFINED_ERR): New error code.
+	(hashKeyName, hashKeyScope, anotherURI): New error parameters.
+
+	* ManakaiNode.dis, DIS.dis, PerlCode.dis: Use "disPerl:H" instead
+	of "disPerl:Q" for hash keys.
+
+++ manakai/lib/Message/Util/Error/ChangeLog	24 Sep 2005 10:58:31 -0000
+2005-09-24  Wakaba  <wakaba@@suika.fam.cx>
+
+	* ManakaiNode.dis: Use "disPerl:H" instead
+	of "disPerl:Q" for hash keys.
+
+++ manakai/lib/Message/Util/DIS/ChangeLog	24 Sep 2005 11:06:19 -0000
+2005-09-24  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Perl.dis (plCodeFragment): Takes hash key name
+	from the database for "mn:node" and "DOMCore:read-only",
+	where they were hardcoded.  For GetProp and SetProp
+	dis tree element instructions, hash key name
+	is shorten if shorter version is defined by "DISPerl:propHashKey"
+	property of the corresponding resource in the database.
+	(plAddHashKey): New method to check hash key name dupulication.
+	(dp:plHashKey): New property.
+
+	* Perl.dis, DNLite.dis, DISDoc.dis, DISDump.dis:
+	Use "disPerl:H" instead of "disPerl:Q" for hash keys.
+
+++ manakai/lib/Message/DOM/ChangeLog	24 Sep 2005 10:55:11 -0000
+2005-09-24  Wakaba  <wakaba@@suika.fam.cx>
+
+	* DOMMain.dis (MDOM:): Reintroduced for "ManakaiDOM:ManakaiDOM1"
+	and "ManakaiDOM:ManakaiDOM2".
+
+	* DOMFeature.dis, DOMMain.dis, DOMCore.dis, DOMXML.dis,
+	DOMLS.dis, SimpleLS.dis, GenericLS.dis: Use disPerl:H
+	instead of disPerl:Q for internal property hash keys.
+
+	* DOMFeature.dis, DOMCore.dis, DOMXML.dis: Missing property
+	definitions added.
+
+	* DOMCore.dis (DOMCore:TextNode, DOMCore:DocumentFragmentNode):
+	New resources.
+
+	* DOMXML.dis (DOMXML:EntityNode, DOMXML:EntityReferenceNode): New
+	resources.
+
+++ manakai/lib/manakai/ChangeLog	24 Sep 2005 11:08:14 -0000
+2005-09-24  Wakaba  <wakaba@@suika.fam.cx>
+
+	* XML.dis: The "DISPerl:propHashKey" property
+	added to properties.  Now the module depends on the DISPerl
+	module.
+
+	* DISPerl.dis (DISPerl:propHashKey): New property.
+@
+text
+@d3 2
+a4 1
+RMV = rm -fv
+d14 1
+a14 1
+	$(RMV) *.BAK .*.BAK *~ .*~
+d22 10
+a31 1
+## $Date: 2005/09/24 11:57:19 $
+@
+
+
+1.2
+log
+@++ manakai/lib/Message/ChangeLog	22 Sep 2005 12:48:57 -0000
+2005-09-22  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: Rules to build subdirectories added.
+
+++ manakai/lib/Message/Markup/ChangeLog	22 Sep 2005 12:52:49 -0000
+2005-09-22  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: DAC_SUFFIX changed to ".dad".
+
+++ manakai/lib/Message/Util/ChangeLog	22 Sep 2005 12:52:57 -0000
+	* Makefile: DAC_SUFFIX changed to ".dad".
+
+++ manakai/lib/Message/DOM/ChangeLog	22 Sep 2005 12:52:41 -0000
+2005-09-22  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: DAC_SUFFIX changed to ".dad".
+
+++ manakai/lib/manakai/ChangeLog	22 Sep 2005 12:53:54 -0000
+2005-09-22  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: DAC_SUFFIX changed to ".dad".
+
+++ manakai/lib/ChangeLog	22 Sep 2005 12:48:26 -0000
+2005-09-22  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile: Old "bootstrap" rules all removed.
+@
+text
+@d5 2
+d8 1
+a8 1
+	$(CD) Util && $(MAKE) all
+d21 1
+a21 1
+## $Date: 2005/09/22 14:25:46 $
+@
+
+
+1.1
+log
+@2002-05-26  wakaba <w@@suika.fam.cx>
+
+	* Header.pm (url_mailto_safe): Removed.
+	(Moved to Message::Header::RFC822.)
+	
+	* Makefile: New file.
+@
+text
+@d1 3
+d5 4
+a8 1
+RMV = rm -fv
+d12 9
+a20 3
+	cd Body && make clean
+	cd Field && make clean
+	cd MIME && make clean
+@
+

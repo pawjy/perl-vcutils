@@ -233,7 +233,7 @@ sub get_remote_entity ($) {
   my $r = {};
 
   if ($request_uri =~ /^file:/) {
-    $request_uri =~ s{\?rev=([0-9.]+)&content-type=[^&]+$}{.$1};
+    $request_uri =~ s{\?rev=([0-9.]+)(?>&content-type=[^&]+)?$}{.$1};
     $request_uri =~ s{\?revision=([0-9.]+)&content-type=[^&]+&view=co$}{.$1};
   }
 
