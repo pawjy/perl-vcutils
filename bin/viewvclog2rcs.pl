@@ -36,6 +36,7 @@ sub htunescape ($) {
   $s =~ s/&lt;/</g;
   $s =~ s/&gt;/>/g;
   $s =~ s/&amp;/&/g;
+  $s =~ s/&quot;/\x22/g;
   return $s;
 } # htunescape
 
