@@ -62,25 +62,27 @@ if ($ent->{s} =~ m[View only Branch]gc) {
 
 pos ($ent->{s}) = 0;
 
-REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
+REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!gc) {
   my $rev = '';
   if ($ent->{s} =~ m!Revision!gc and
-      $ent->{s} =~ m!<a href="([^"]+)"[^<>]*><b>([0-9.]+)</b></a>!gc) {
+      $ent->{s} =~ m!<[aA] (?>href|HREF)="([^"]+)"[^<>]*><[bB]>([0-9.]+)</[bB]></[aA]>!gc) {
     $rev = $2;
     my $uri = $dom->create_uri_reference (htunescape $1)
         ->get_absolute_reference ($log_uri)->uri_reference;
 
-    $uri =~ s[&content-type=text/vnd.viewcvs-markup$][&content-type=text/plain];
+    $uri =~ s[&content-type=text/(?>x-cvsweb|vnd\.viewcvs)-markup$][&content-type=text/plain];
 
     my $revent = get_remote_entity ($uri);
     if (defined $revent->{s}) {
       $text->{$rev} = $revent->{s};
+    } else {
+      warn "<$uri>: $revent->{error_status_text}";
     }
 
     $rcs->{admin}->{head} ||= $rev;      
   }
 
-  if ($ent->{s} =~ m!<i>\w+ (\w+)\s*(\d+)\s*(\d+):(\d+):(\d+) (\d+) UTC</i> \([^()]+\) by <i>([^<>]+)</i>!gc) {
+  if ($ent->{s} =~ m!<[iI]>\w+ (\w+)\s*(\d+)\s*(\d+):(\d+):(\d+) (\d+) UTC</[iI]> \([^()]+\) by <[iI]>([^<>]+)</[iI]>!gc) {
     $rcs->{delta}->{$rev}->{date} = sprintf '%02d.%02d.%02d.%02d.%02d.%02d',
         $6, {
           Jan => '01', Feb => '02', Mar => '03', Apr => '04',
@@ -90,11 +92,11 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
     $rcs->{delta}->{$rev}->{author} = $7;
   }
 
-  $ent->{s} =~ m[(?=<(?>br|pre)>)]gc;
+  $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
 
-  if ($ent->{s} =~ m[\G<br>Branch:((?>(?!<(?>[bh]r|pre)).)+)]gcs) {
+  if ($ent->{s} =~ m[\G<br>Branch:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
-    while ($b =~ m!><b>([^<>]+)</b></a>!gc) {
+    while ($b =~ m!><[bB]>([^<>]+)</[bB]></[aA]>!gc) {
       my $branch = $1;
       if ($branch ne 'MAIN') {
         my $rev = $rev;
@@ -102,16 +104,16 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
         push @{$rcs->{admin}->{symbols} ||= []}, [$branch => "$rev.0.$1"];
       }
     }
-    $ent->{s} =~ m[(?=<(?>br|pre)>)]gc;
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
   }
 
-  if ($ent->{s} =~ m[\G<br>Branch point]gcs) {
-    $ent->{s} =~ m[(?=<(?>br|pre)>)]gc;
+  if ($ent->{s} =~ m[\G<(?>br|BR)>Branch point]gcs) {
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
   }
 
-  if ($ent->{s} =~ m[\G<br>CVS Tags:((?>(?!<(?>[bh]r|pre)).)+)]gcs) {
+  if ($ent->{s} =~ m[\G<(?>br|BR)>CVS Tags:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
-    while ($b =~ m!><b>([^<>]+)</b></a>!gc) {
+    while ($b =~ m!><[bB]>([^<>]+)</[bB]></[aA]>!gc) {
       my $rev = $branches->{$1} ? "$rev.0.".((++$branch_rev->{$rev})*2) : $rev;
       if ($1 eq 'HEAD') {
         $rcs->{admin}->{head} = $rev;
@@ -120,14 +122,14 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
         push @{$rcs->{admin}->{symbols} ||= []}, [$1 => $rev];
       }
     }
-    $ent->{s} =~ m[(?=<(?>br|pre)>)]gc; 
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc; 
   }
 
-  if ($ent->{s} =~ m[\G<br>Branch point]gcs) {
-    $ent->{s} =~ m[(?=<(?>br|pre)>)]gc;
+  if ($ent->{s} =~ m[\G<(?>br|BR)>Branch point]gcs) {
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
   }
 
-  if ($ent->{s} =~ m!\G<br>Changes since <b>([0-9.]+):!gc) {
+  if ($ent->{s} =~ m!\G<(?>br|BR)>Changes since <[bB]>([0-9.]+):!gc) {
     my $from_rev = $1;
     if ($rev =~ /\A[0-9]+\.[0-9]+\z/) {
       $rcs->{delta}->{$rev}->{next} = $from_rev;
@@ -141,7 +143,7 @@ REV: while ($ent->{s} =~ m!<hr size=1 noshade>!gc) {
     }
   }
 
-  if ($ent->{s} =~ m!<pre>(.*?)</pre>!gcs) {
+  if ($ent->{s} =~ m!<(?>pre|PRE)>(.*?)</(?>pre|PRE)>!gcs) {
     $rcs->{deltatext}->{$rev}->{log} = htunescape ($1);
   }
 
