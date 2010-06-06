@@ -11,9 +11,18 @@ sub new ($$$) {
   }, $class;
 } # new
 
+sub file ($) {
+  require RCSFormat::File;
+  return RCSFormat::File->new_from_rcsformat ($_[0]->{rcsformat});
+} # file
+
 sub number ($) {
   return $_[0]->{number};
 } # number
+
+sub next_revision_number ($) {
+  return $_[0]->{rcsformat}->{delta}->{$_[0]->{number}}->{next};
+} # next_revision_number
 
 sub rawdate ($) {
   return $_[0]->{rcsformat}->{delta}->{$_[0]->{number}}->{date};
@@ -33,7 +42,6 @@ sub rawdata ($) {
   return $_[0]->{rcsformat}->{deltatext}->{$_[0]->{number}}->{text};
 } # rawdata
 
-
 sub _replace_keywords ($$) {
   my $self = shift;
   $_[0] =~ s{\$Date:[^\$]*\$}
@@ -44,9 +52,20 @@ sub _replace_keywords ($$) {
 sub data ($) {
   my $self = shift;
   
-  my $rawdata = $self->rawdata;
-  $self->_replace_keywords ($rawdata);
-  return $rawdata;
+  my $route = $self->file->find_route_to_revision ($self->number);
+  return undef unless @$route;
+
+  my $rcs = $self->{rcsformat};
+  my $data = $rcs->{deltatext}->{shift @$route}->{text};
+
+  require RCSFormat::Diff;
+  while (@$route) {
+    my $diff = $rcs->{deltatext}->{shift @$route}->{text};
+    RCSFormat::Diff::apply_rcs_diff (\$data, \$diff);
+  }
+
+  $self->_replace_keywords ($data);
+  return $data;
 } # data
 
 1;

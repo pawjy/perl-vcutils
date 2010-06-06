@@ -10,7 +10,10 @@ use RCSFormat::File;
 
 my $data_d = file (__FILE__)->dir->subdir ('data');
 my $test_f = $data_d->file ('parser.cgi,v');
+my $test_1_1_f = $data_d->file ('parser.cgi.1.1');
 my $test_1_6_f = $data_d->file ('parser.cgi.1.6');
+my $test_1_7_f = $data_d->file ('parser.cgi.1.7');
+my $test_1_8_f = $data_d->file ('parser.cgi.1.8');
 my $test_1_9_f = $data_d->file ('parser.cgi.1.9');
 
 sub getrcs (;$) {
@@ -57,6 +60,22 @@ sub _data_last_revision : Test(1) {
   my $rev1 = $rcs->get_revision_by_number ('1.9');
   is_f_content $rev1->data, $test_1_9_f;
 } # _data_last_revision
+
+sub _data_old_revision : Test(4) {
+  my $rcs = getrcs;
+  
+  my $rev1 = $rcs->get_revision_by_number (1.8);
+  is_f_content $rev1->data, $test_1_8_f;
+  
+  my $rev3 = $rcs->get_revision_by_number (1.6);
+  is_f_content $rev3->data, $test_1_6_f;
+  
+  my $rev2 = $rcs->get_revision_by_number (1.7);
+  is_f_content $rev2->data, $test_1_7_f;
+  
+  my $rev4 = $rcs->get_revision_by_number (1.1);
+  is_f_content $rev4->data, $test_1_1_f;
+} # _data_old_revision
 
 sub _replace_keywords : Test(1) {
   my $rcs = getrcs;

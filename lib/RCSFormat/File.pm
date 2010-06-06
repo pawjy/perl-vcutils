@@ -15,6 +15,11 @@ sub new_from_stringref ($$) {
   return $self;
 } # new_from_stringref
 
+sub new_from_rcsformat ($$) {
+  #my ($class, $rcsformat) = @_;
+  return bless {rcsformat => $_[1]}, $_[0];
+} # new_from_rcsformat
+
 sub revisions ($) {
   my $self = shift;
   my $rcs = $self->{rcsformat};
