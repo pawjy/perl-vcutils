@@ -35,3 +35,12 @@ sub epoch_to_rcs_formatted_date ($) {
 } # epoch_to_rcs_formatted_date
 
 1;
+
+=head1 LICENSE
+
+Copyright 2010 Wakaba <w@suika.fam.cx>.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
