@@ -128,7 +128,7 @@ sub stringify ($;%) {
     $s .= qq(access;\x0A);
   }
   $s .= qq(symbols);
-  for (@{$self->{admin}->{symbols}}) {
+  for (sort {$a->[1] cmp $b->[1] || $a->[0] cmp $b->[0]} @{$self->{admin}->{symbols}}) {
      $s .= "\x0A\t"
         .  $self->___stringify_value ($_->[0], type => 'sym',
                                       min => 1, max => 1)
