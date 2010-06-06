@@ -48,6 +48,12 @@ standalone files.</span>
 <span lang=en>Reconstruct an RCS file from HTML pages found in remote
 <a href="http://viewvc.org/">ViewVC</a> repository.</span>
 
+<dt><a href="../bin/rcs2atom.html"><code>rcs2atom</code></a>
+
+<dd data-lang-container>
+
+<span lang=en>Generate an Atom Feed Document from an RCS file.</span>
+
 </dl>
 
 </div>
