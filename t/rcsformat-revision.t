@@ -54,20 +54,23 @@ a164 1
 ];
 } # _rawdata
 
-sub _data_last_revision : Test(1) {
+sub _data_last_revision : Test(2) {
   my $rcs = getrcs;
 
   my $rev1 = $rcs->get_revision_by_number ('1.9');
   is_f_content $rev1->data, $test_1_9_f;
+  is_f_content $rev1->data, $test_1_9_f;
 } # _data_last_revision
 
-sub _data_old_revision : Test(4) {
+sub _data_old_revision : Test(6) {
   my $rcs = getrcs;
   
   my $rev1 = $rcs->get_revision_by_number (1.8);
   is_f_content $rev1->data, $test_1_8_f;
+  is_f_content $rev1->data, $test_1_8_f;
   
   my $rev3 = $rcs->get_revision_by_number (1.6);
+  is_f_content $rev3->data, $test_1_6_f;
   is_f_content $rev3->data, $test_1_6_f;
   
   my $rev2 = $rcs->get_revision_by_number (1.7);

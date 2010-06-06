@@ -51,21 +51,22 @@ sub _replace_keywords ($$) {
 
 sub data ($) {
   my $self = shift;
+  return $self->{data} if exists $self->{data};
   
   my $route = $self->file->find_route_to_revision ($self->number);
-  return undef unless @$route;
+  return $self->{data} = undef unless @$route;
 
   my $rcs = $self->{rcsformat};
-  my $data = $rcs->{deltatext}->{shift @$route}->{text};
+  $self->{data} = $rcs->{deltatext}->{shift @$route}->{text};
 
   require RCSFormat::Diff;
   while (@$route) {
     my $diff = $rcs->{deltatext}->{shift @$route}->{text};
-    RCSFormat::Diff::apply_rcs_diff (\$data, \$diff);
+    RCSFormat::Diff::apply_rcs_diff (\($self->{data}), \$diff);
   }
 
-  $self->_replace_keywords ($data);
-  return $data;
+  $self->_replace_keywords ($self->{data});
+  return $self->{data};
 } # data
 
 1;
