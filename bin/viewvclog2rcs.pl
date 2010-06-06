@@ -6,11 +6,13 @@ use lib file (__FILE__)->dir->parent->subdir ('modules/manakai/lib')->stringify;
 our $VERSION = '1.0';
 
 my $log_uri;
+my $original_base_url;
 
 use Getopt::Long;
 use Pod::Usage;
 GetOptions (
   'log-uri=s' => \$log_uri,
+  'original-base-url=s' => \$original_base_url,
 );
 pod2usage ({
   -input => file (__FILE__)->dir->file ('viewvclog2rcs.pod')->stringify,
@@ -78,15 +80,25 @@ if ($ent->{s} =~ m[View only Branch]gc) {
 
 pos ($ent->{s}) = 0;
 
-REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!gc) {
+REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)>|/>\s*<a name="rev)!gc) {
   my $rev = '';
   if ($ent->{s} =~ m!Revision!gc and
-      $ent->{s} =~ m!<[aA] (?>href|HREF)="([^"]+)"[^<>]*><[bB]>([0-9.]+)</[bB]></[aA]>!gc) {
+      $ent->{s} =~ m!<[aA] (?>href|HREF)="([^"]+)"[^<>]*>(?:<[bB]>)?([0-9.]+|view)(?:</[bB]>)?</[aA]>!gc) {
     $rev = $2;
-    my $uri = $dom->create_uri_reference (htunescape $1)
-        ->get_absolute_reference ($log_uri)->uri_reference;
-
+    my $uri = htunescape $1;
+    if ($rev eq 'view' and $uri =~ /\?revision=([0-9.]+)\b/) {
+      $rev = $1;
+    }
     $uri =~ s[&content-type=text/(?>x-cvsweb|vnd\.viewcvs)-markup$][&content-type=text/plain];
+    $uri =~ s[&view=markup$][&content-type=text/plain&view=co];
+
+    if (defined $original_base_url) {
+      $uri = $dom->create_uri_reference ($uri)
+          ->get_relative_reference ($original_base_url)->uri_reference;
+    }
+
+    $uri = $dom->create_uri_reference ($uri)
+        ->get_absolute_reference ($log_uri)->uri_reference;
 
     my $revent = get_remote_entity ($uri);
     if (defined $revent->{s}) {
@@ -98,7 +110,7 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
     #$rcs->{admin}->{head} ||= $rev;      
   }
 
-  if ($ent->{s} =~ m!<[iI]>\w+ (\w+)\s*(\d+)\s*(\d+):(\d+):(\d+) (\d+) UTC</[iI]> \([^()]+\) by <[iI]>([^<>]+)</[iI]>!gc) {
+  if ($ent->{s} =~ m!<(?>i|I|em)>\w+ (\w+)\s*(\d+)\s*(\d+):(\d+):(\d+) (\d+) UTC</(?>i|I|em)>\s*\([^()]+\)\s*by <(?>i|I|em)>([^<>]+)</(?>i|I|em)>!gc) {
     $rcs->{delta}->{$rev}->{date} = sprintf '%02d.%02d.%02d.%02d.%02d.%02d',
         $6, {
           Jan => '01', Feb => '02', Mar => '03', Apr => '04',
@@ -108,11 +120,11 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
     $rcs->{delta}->{$rev}->{author} = $7;
   }
 
-  $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
+  $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
 
-  if ($ent->{s} =~ m[\G<br>Branch:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
+  if ($ent->{s} =~ m[\G<br(?> /)?>Branch:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
-    while ($b =~ m!(?:><[bB]>|<[bB]><[Aa] (?>href|HREF)="[^"]+">)([^<>]+)</[bBaA]>\s*</[aAbB]>!gc) {
+    while ($b =~ m!(?:><(?>b|B|strong)>|<[bB]><[Aa] (?>href|HREF)="[^"]+">)([^<>]+)</(?>[bBaA]|strong)>!gc) {
       my $branch = $1;
       if ($branch ne $default_branch) {
         my $rev = $rev;
@@ -122,16 +134,16 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
         $rcs->{admin}->{head} ||= $rev;
       }
     }
-    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
   }
 
-  if ($ent->{s} =~ m[\G<(?>br|BR)>Branch point]gcs) {
-    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>Branch point]gc) {
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
   }
 
-  if ($ent->{s} =~ m[\G<(?>br|BR)>CVS Tags:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>CVS Tags:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
-    while ($b =~ m!(?:><[bB]>|<[aA] (?:href|HREF)="[^"]+">)([^<>]+)</[bBaA]>!gc) {
+    while ($b =~ m!(?:><(?>b|B|strong)>|<[aA] (?:href|HREF)="[^"]+">)([^<>]+)</(?>[bBaA]|strong)>!gc) {
       my $rev = $branches->{$1} ? "$rev.0.".((++$branch_rev->{$rev})*2) : $rev;
       if ($1 eq 'HEAD') {
         $rcs->{admin}->{head} = $rev;
@@ -140,14 +152,16 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
         push @{$rcs->{admin}->{symbols} ||= []}, [$1 => $rev];
       }
     }
-    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc; 
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc; 
   }
 
-  if ($ent->{s} =~ m[\G<(?>br|BR)>Branch point]gcs) {
-    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>Branch point]gcs) {
+    ## We ignore "branch point" since it is not possible to restore
+    ## branch tag's revision number.
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
   }
 
-  if ($ent->{s} =~ m!\G<(?>br|BR)>Changes since <[bB]>([0-9.]+):!gc) {
+  if ($ent->{s} =~ m!\G<(?>br|BR)(?> /)?>Changes since <(?>b|B|strong)>([0-9.]+):!gc) {
     my $from_rev = $1;
     if ($rev =~ /\A[0-9]+\.[0-9]+\z/) {
       $rcs->{delta}->{$rev}->{next} = $from_rev;
@@ -161,8 +175,10 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
     }
   }
 
-  if ($ent->{s} =~ m!<(?>pre|PRE)>(.*?)</(?>pre|PRE)>!gcs) {
+  if ($ent->{s} =~ m!<(?>pre|PRE)(?> class="vc_log")?>(.*?)</(?>pre|PRE)>!gcs) {
     $rcs->{deltatext}->{$rev}->{log} = htunescape ($1);
+  } else {
+    $rcs->{deltatext}->{$rev}->{log} = '';
   }
 
   $rcs->{delta}->{$rev}->{state} = 'Exp';
@@ -217,7 +233,8 @@ sub get_remote_entity ($) {
   my $r = {};
 
   if ($request_uri =~ /^file:/) {
-    $request_uri =~ s{\?rev=([0-9.]+)&content-type=[^&]+$}{.$1}g;
+    $request_uri =~ s{\?rev=([0-9.]+)&content-type=[^&]+$}{.$1};
+    $request_uri =~ s{\?revision=([0-9.]+)&content-type=[^&]+&view=co$}{.$1};
   }
 
     my $uri = $dom->create_uri_reference ($request_uri);

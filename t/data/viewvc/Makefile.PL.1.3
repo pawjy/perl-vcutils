@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+use strict;
+use ExtUtils::MakeMaker;
+WriteMakefile (
+    NAME         => 'SuikaWiki',
+    DISTNAME     => 'suikawiki3',      
+    VERSION_FROM => 'lib/suikawiki.pl',
+    PREREQ_PM    => {
+                   ## Standard Modules, so you maybe have them...
+                     'Carp' => 0,
+                     'CGI::Carp' => 0,
+                     'Digest::MD5' => 0,
+                     'FindBin' => 0,
+                     'Storable' => 0,
+                     'Test' => 0,
+                   ## Non-standard modules
+                     'BerkleyDB' => 0,
+                     'Jcode' => 0,  ## Available at <http://openlab.jp/Jcode/>
+                     'MLDBM' => 0,
+         ## manakai <http://suika.fam.cx/~wakaba/-temp/wiki/wiki?manakai>
+         ## modules also required.
+                    },
+    dist         => {COMPRESS => 'gzip', SUFFIX => '.gz'},
+    AUTHOR       => q(Wakaba <w@suika.fam.cx>),
+);

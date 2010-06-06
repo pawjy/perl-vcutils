@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+use strict;
+use ExtUtils::MakeMaker;
+WriteMakefile (
+    NAME         => 'SuikaWiki',
+    DISTNAME     => 'suikawiki',      
+    VERSION_FROM => 'lib/suikawiki.pl',
+    PREREQ_PM    => {
+                     'Carp' => 0,
+                     'Message::Markup::XML::Node' => 0,
+                     'Message::Util::Formatter::Node' => 0,
+                     'Message::Util::Error' => 0,
+                     'Test' => 0,
+# Encode
+# Jcode
+                     },
+    dist         => {COMPRESS => 'gzip', SUFFIX => '.gz'},
+    AUTHOR       => q(Wakaba <w@suika.fam.cx>),
+);
