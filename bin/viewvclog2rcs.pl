@@ -23,6 +23,12 @@ my $diff_options = ['--rcs', '-a'];
 require Message::DOM::DOMImplementation;
 my $dom = 'Message::DOM::DOMImplementation';
 
+if ($log_uri !~ m[^[^/:]+:]) {
+  use Cwd;
+  my $base_url = 'file://' . dir (getcwd)->absolute . '/';
+  $log_uri = $dom->create_uri_reference ($log_uri)
+      ->get_absolute_reference ($base_url)->uri_reference;
+}
 my $ent = get_remote_entity ($log_uri);
 unless (defined $ent->{s}) {
   die "<$log_uri>: $ent->{error_status_text}";
@@ -210,9 +216,14 @@ sub get_remote_entity ($) {
   my $request_uri = $_[0];
   my $r = {};
 
+  if ($request_uri =~ /^file:/) {
+    $request_uri =~ s{\?rev=([0-9.]+)&content-type=[^&]+$}{.$1}g;
+  }
+
     my $uri = $dom->create_uri_reference ($request_uri);
     unless ({
              http => 1,
+             file => 1,
             }->{lc $uri->uri_scheme}) {
       return {uri => $request_uri, request_uri => $request_uri,
               error_status_text => 'URI scheme not allowed'};
@@ -241,9 +252,11 @@ Deny ipv4=255.255.255.255/32
 Deny ipv6=0::0/0
 Allow host=*
 EOH
-    unless ($host_permit->check ($uri->uri_host, $uri->uri_port || 80)) {
-      return {uri => $request_uri, request_uri => $request_uri,
-              error_status_text => 'Connection to the host is forbidden'};
+    if (lc $uri->uri_scheme eq 'http') {
+      unless ($host_permit->check ($uri->uri_host, $uri->uri_port || 80)) {
+        return {uri => $request_uri, request_uri => $request_uri,
+                error_status_text => 'Connection to the host is forbidden'};
+      }
     }
 
     require LWP::UserAgent;
@@ -252,7 +265,7 @@ EOH
     $ua->{wdcc_host_permit} = $host_permit;
     $ua->agent ('Mozilla'); ## TODO: for now.
     $ua->parse_head (0);
-    $ua->protocols_allowed ([qw/http/]);
+    $ua->protocols_allowed ([qw/http file/]);
     $ua->max_size (1000_000);
     my $req = HTTP::Request->new (GET => $request_uri);
   warn "<$request_uri>...\n";
