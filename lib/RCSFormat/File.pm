@@ -36,6 +36,17 @@ sub revision_numbers ($) {
       ([$rcs->sort_by_revision (keys %{$rcs->{delta}})]);
 } # revision_numbers
 
+sub revision_numbers_sorted_by_date ($) {
+  my $self = shift;
+  my $rcs = $self->{rcsformat};
+
+  require List::Rubyish;
+  return List::Rubyish->new ([keys %{$rcs->{delta}}])
+      ->map (sub { [$rcs->{delta}->{$_}->{date}, $_] })
+      ->sort (sub { $_[1]->[0] cmp $_[0]->[0] }) ## Y10K buggy!!!
+      ->map (sub { $_->[1] });
+} # revision_numbers_sorted_by_date
+
 sub get_revision_by_number ($$) {
   my ($self, $revnum) = @_;
   my $rcs = $self->{rcsformat};
