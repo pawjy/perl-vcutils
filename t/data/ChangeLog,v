@@ -1,0 +1,1053 @@
+head	1.45;
+access;
+symbols
+	helowiki-melon-20091010:1.43.0.6
+	helowiki-2005:1.43.0.4
+	helowiki:1.43.0.2
+	suikawiki3-redirect:1.45
+	paragraph-200404:1.42.0.2
+	release-3-0-0:1.43
+	branch-suikawiki-1:1.34.0.2
+	branch-1-6:1.2.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.45
+date	2008.11.10.15.05.30;	author wakaba;	state Exp;
+branches;
+next	1.44;
+
+1.44
+date	2008.11.10.13.49.05;	author wakaba;	state Exp;
+branches;
+next	1.43;
+
+1.43
+date	2004.04.30.05.57.32;	author wakaba;	state Exp;
+branches;
+next	1.42;
+
+1.42
+date	2004.03.13.03.34.21;	author wakaba;	state Exp;
+branches;
+next	1.41;
+
+1.41
+date	2004.03.12.04.54.19;	author wakaba;	state Exp;
+branches;
+next	1.40;
+
+1.40
+date	2004.03.11.08.06.26;	author wakaba;	state Exp;
+branches;
+next	1.39;
+
+1.39
+date	2004.02.01.12.40.51;	author wakaba;	state Exp;
+branches;
+next	1.38;
+
+1.38
+date	2004.02.01.12.33.27;	author wakaba;	state Exp;
+branches;
+next	1.37;
+
+1.37
+date	2003.12.04.06.01.02;	author wakaba;	state Exp;
+branches;
+next	1.36;
+
+1.36
+date	2003.11.27.05.31.05;	author wakaba;	state Exp;
+branches;
+next	1.35;
+
+1.35
+date	2003.10.25.02.22.06;	author wakaba;	state Exp;
+branches;
+next	1.34;
+
+1.34
+date	2003.07.17.23.59.12;	author w;	state Exp;
+branches
+	1.34.2.1;
+next	1.33;
+
+1.33
+date	2003.04.03.01.09.31;	author wakaba;	state Exp;
+branches;
+next	1.32;
+
+1.32
+date	2003.03.27.06.25.01;	author wakaba;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2003.01.26.02.30.24;	author w;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2003.01.12.09.15.06;	author w;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2003.01.04.03.32.55;	author w;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2003.01.03.08.25.31;	author w;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2003.01.02.12.14.15;	author w;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2003.01.01.11.51.10;	author w;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2003.01.01.11.48.28;	author w;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2003.01.01.01.29.04;	author w;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2002.12.30.03.20.06;	author wakaba;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2002.12.25.02.04.11;	author wakaba;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2002.12.19.08.39.30;	author wakaba;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2002.12.19.08.27.23;	author wakaba;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2002.12.18.13.08.39;	author wakaba;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2002.12.15.06.08.33;	author wakaba;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2002.12.13.06.17.44;	author wakaba;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2002.12.10.07.27.38;	author wakaba;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2002.12.05.04.32.27;	author wakaba;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2002.12.04.12.00.42;	author wakaba;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2002.12.03.09.34.42;	author wakaba;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2002.12.01.04.37.55;	author wakaba;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2002.11.14.10.22.19;	author wakaba;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2002.10.21.06.28.02;	author wakaba;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2002.10.17.07.56.58;	author wakaba;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2002.10.07.12.50.51;	author wakaba;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2002.09.28.09.43.07;	author wakaba;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2002.08.30.04.31.11;	author wakaba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2002.08.18.04.14.35;	author wakaba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2002.06.02.06.20.42;	author wakaba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.06.02.06.19.43;	author wakaba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.03.24.00.51.52;	author wakaba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.02.04.13.19.08;	author wakaba;	state Exp;
+branches;
+next	;
+
+1.34.2.1
+date	2003.10.05.10.25.33;	author wakaba;	state Exp;
+branches;
+next	1.34.2.2;
+
+1.34.2.2
+date	2004.10.26.08.28.08;	author wakaba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.45
+log
+@2008-11-10  Wakaba  <wakaba@@suika.fam.cx>
+
+        * wiki.cgi: Support for the _charset_=utf-8 parameter, which is
+        necessary for <http://suika.fam.cx/gate/2005/sw/>.
+@
+text
+@2008-11-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* wiki.cgi: Support for the _charset_=utf-8 parameter, which is
+	necessary for <http://suika.fam.cx/gate/2005/sw/>.
+
+2008-11-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* wiki.cgi: Changed to redirector to the SuikaWiki4 URL.
+
+2004-04-30  Wakaba  <w@@suika.fam.cx>
+
+	* .htaccess: Do AddType to .cgi file.
+
+2004-03-12  Wakaba  <wakaba@@suika.fam.cx>
+
+	* tool/: Removed.
+
+	* wiki.cgi: Load suikawiki-config.ph on this stage.
+
+2004-03-11  Wakaba  <wakaba@@suika.fam.cx>
+
+	* INSTALL: New.
+
+2004-03-10  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile.PL: Some module added.
+
+2004-02-01  Wakaba  <wakaba@@suika.fam.cx>
+
+	* Makefile.PL: Updated.
+
+	* wiki.cgi: Don't require 'suikawiki-config.ph' directly.
+
+2003-12-04  Wakaba  <wakaba@@suika.fam.cx>
+
+	* .cvsignore: New file.
+	* MANIFEST.SKIP: New file.
+
+2003-12-03  Wakaba <w@@suika.fam.cx>
+
+	* Makefile.PL: New script.
+
+2003-11-27  Wakaba  <wakaba@@suika.fam.cx>
+
+	* wiki.cgi: Change $0.
+
+2003-10-25  Wakaba  <wakaba@@suika.fam.cx>
+
+	* .htaccess (ErrorDocument): Removed.
+
+	* 500.ja.html.jis, 500.ja.xhtml.jis: Removed.
+
+2003-05-10  Wakaba  <w@@offweb.ddo.jp>
+
+	* misc/: New directory.
+
+2003-04-03  Wakaba  <w@@offweb.ddo.jp>
+
+	* wiki.cgi (%VERSION): Removed. (Moved to wikidata/suikawiki-config.ph.)
+
+2003-03-27  Wakaba  <w@@offweb.ddo.jp>
+
+	* 500.ja.*.jis: Updated.
+
+2003-01-26  Wakaba  <w@@cube.wakaba.ssm>
+
+	* wiki.cgi: Almost all part is moved to lib/suikawiki.pl.
+
+2003-01-26  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi ($use_exists): Removed.
+	(%command_do): read -> default.
+	(%UA): Don't my but do our.
+	(mode=read): Changed to mode=default unless necessary.
+	(do_view): Read cookie when 'default' mode.
+	(do_view): Mosaic Netscape 0.9 support:-)
+	(print_header): Likewise.
+	(get_search_result): Cache the result.
+	(%SearchResult, %SubjectLine): Moved from semi-global to my'ed,
+	with the support of SuikaWiki::Plugin->cache.
+	(make_custom_form): \%option: new argument.
+	(init_form): Set to 'default' mode if no mode is specified.
+	(is_exist_page, __get_database): Removed.
+	(SuikaWiki::Plugin->cache): New.
+
+2003-01-12  Wakaba  <w@@suika.fam.cx>
+
+	* script/: New directory.
+	* wiki.cgi ((main)): binmode STDOUT and STDIN.
+	(%page_command): Removed.
+	(%command_do): Many modes are removed and 'read' is revised from '\&do_read'
+	to '\&do_view'.
+	(do_read, do_output_css): Removed.
+	(do_view): Merged with &do_read and &do_output_css.
+	(do_adminchangepassword, valid_password): Don't use &print_message and/or &print_error.
+	(do_random_jump): Don't prepend scheme and server name.
+	(print_error, print_message): Removed.
+	(print_header): Don't print HTML header directory.
+	(_navigate_links, make_navigate_links): Removed.
+	(convert_format): Use &SuikaWiki::Plugin::format_converter.
+	(make_custom_form): Give page name to plugins.
+	(make_custom_form): Output INPUT element with XML style (net).
+	(edit_form): Likewise.
+	(init_form): Don't check %page_command.
+	(open_db): die if failed, instead of &print_error.
+	(is_editable): Don't allow SP (U+0020).
+	(do_rss): Removed.
+	(SuikaWiki::Plugin): push $plugin_directory to @@INC.
+	(SuikaWiki::Plugin::user_agent_name): New.
+	(SuikaWiki::Plugin::magic_and_content): Bug fix.
+	(SuikaWiki::Plugin::format_converter): New.
+
+2003-01-04  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (do_read, do_TEXT_CSS, do_edit, do_adminchangepassword, do_write, print_message): Don't call print_content and print_footer.
+	(print_header): Don't output body element.
+	(print_navigate_links, print_footer, print_content): Removed.
+	(_navigate_links, convert_format): New.
+	(make_wikilink): $option{latest}: New option.
+	(editform): Don't output WikiEditHelp.
+	(armor_name, unarmor_name, do_diff): Removed.
+	(SuikaWiki::Plugin::magic_and_content, SuikaWiki::Plugin::formatter): New.
+	(pod:SEE ALSO): New.
+
+2003-01-03  Wakaba  <w@@suika.fam.cx>
+
+	* tool/: New directory.
+	* tool/ywinfo2meta.pl: New script.
+	* wiki.cgi (do_edit, do_adminedit, print_editform, do_map, %infobase, get_info, set_info, __set_database, conflict): Removed.
+	(do_view, _compatible_options): New.
+	(#?SuikaWiki/0.9 interactive="yes"): New option.
+	(text_to_html): Toc code is revised.
+	(init_form): Don't allow [\x00-\x1F\x7F] in WikiPage name.
+	(open_db, close_db): Revised.
+	(wiki::dummy): New package.
+	(%SuikaWiki::Plugin::Index, SuikaWiki::Plugin::new_index): New.
+	(wiki::map): Removed.
+
+2003-01-02  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (do_adminchangepasswordform): Removed.
+	(do_index): Likewise.
+
+2003-01-01  Wakaba  <w@@suika.fam.cx>
+
+	* default/: New directory.
+	* WalWiki/, SuikaWiki/: Removed.
+	* lib/: New directory.
+
+	* wiki.cgi: Remove configurations.
+	* readme.txt, readme_en.txt, readme_ja.txt, readme_ja.wal.txt: Removed.
+	* convert.cgi: Removed.
+	* 500.ja.html, 500.ja,xhtml: Removed.
+	* 500.ja.html.jis, 500.ja.xhtml.jis: New documents.
+	* .htaccess: Updated.
+
+2002-12-30  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (print_header, do_output_css): Output expires: header field
+	if necessary.
+	(SuikaWiki::Plugin::make_info_html): Removed.
+	(do_create, do_search, print_search_form): Removed.
+
+2002-12-25  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi: Clean up.
+	* WalWiki/lib/Yuki/RSS.pm: dc:* support.
+
+2002-12-24  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi: Clean up.
+
+2002-12-20  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi: SuikaWikiConst/1.0 is implemented.
+
+2002-12-19  Wakaba  <w@@suika.fam.cx>
+
+	* .htaccess: Updated.
+
+	* 500.ja.html, 500.ja.xhtml: New files.
+
+2002-12-18  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (add): Bug fix ('g' -> 'ge' in option of s).
+
+2002-12-15  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (make_navigate_links): Add two jumps, one lucky.
+
+2002-12-13  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (do_index): Record referer, user-agent and
+	output referer and see also.
+
+2002-12-10  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (do_write): 'after_edit_cmd' support.
+	(print_editform): Likewise.
+	(print_navigate_links): Give 'wiki-cmd' class to 'View' and 'Edit'.
+
+2002-12-08  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (print_navigate_link_elements): New.
+
+2002-12-06  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (print_header): Downgrade for Infomosaic and M$IE 2
+	is implemented.
+
+2002-12-05  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (make_custom_form): Form controls are to be disabled
+	if WikiPage is read only.
+	(SuikaWiki::Plugin::make_info_page): New.
+	(print_header): Downgrade if $UA =~ Mozilla/[34]\..
+
+2002-12-04  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (make_custom_form): "target form" support.
+	(do_wikiform): Likewise.
+
+2002-12-03  Wakaba  <w@@suika.fam.cx>
+
+	* wiki.cgi (update_recent_changes): Don't output buggy '#?' magic line. 
+	(get_new_anchor_index): New function.
+	(do_comment): Use get_new_anchor_index.
+	(do_wikiform): New procedure.
+	(print_header): Output Refresh: field body with meta element, too,
+	to avoid bug(?) of early web browser implemention.
+	(mycmd=wikiform): New command.  See <IW:SuikaWiki:WikiForm> for detail.
+
+2002-12-01  Wakaba <wakaba@@woody.wakaba.ssm>
+
+	* wiki.cgi: 
+	- ($UA): New variable.
+	- Output meta element with Content-Type (with 'x-' charset name)
+	if $UA =~ Mozilla/1 or Mozilla/2.
+	- Downgrade syntax of Refresh field to regacy syntax if
+	$UA =~ Mozilla/1 or Mozilla/2 or Opera.
+	- (wiki::useragent::add): Dont save bare [\x81-\cFF].
+
+2002-11-14  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: InterWiki is implemented.
+
+2002-10-21  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi:
+	- Better support of random jump.
+	- Output Last-Modified: field if possible.
+	- Output ROBOTS -> NOINDEX as meta element if necessary.
+	- Don't output summary of its own page within title element
+	and page title (h1 element).
+	- Simplify of navigation links and footer.
+	- Add See Also and Referers to TOC.
+	- Bug fix of [INS/DEL/PRE[ treatment.
+	- Support of obsoleted="yes" attribute of wiki page.
+	- >>\d+ support in name of comment.
+
+2002-10-17  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Updated.  See 
+	<http://suika.fam.cx/~wakaba/-temp/wiki/wiki?%A4%B3%A4%CEwiki%A4%CE%C6%C8%BC%AB%B3%C8%C4%A5#anchor-1>.
+
+2002-10-07  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi:
+	- Output Last-Modified:.
+	- Record and output referer information.
+
+2002-09-28  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi:
+	- Intoduce text/css mode.
+	- Anchorize news: URIs.
+	- (armor_name): Bug fix of not anchorizing traditional Wiki name.
+	- Indenting heading 3-5 in TOC.
+	- Multi-comment support.
+	- (print_footer): Embed #comment.
+	- (print_editform): Use NewPageTemplate when new page.
+	* wiki-style.css: Removed.
+
+2002-08-29  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Fix cross site problem, syncing with
+	WalWiki 2.0.3.wal1 (WikiAntenna is not merged).
+
+2002-06-18  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Fix cross site scripting problems.
+
+2002-06-02  wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Sync with WalWiki 2.0.beta.1.wal.1.
+	* wiki-style.css: New file.
+
+2002-03-24  wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi (inline): 
+	- Ignore LinkLikeThis style anchor.
+	- Allow [[space including anchor]].
+	(make_link): Likewise.  Gets rid of angle branckets
+	before make anchor.
+
+2002-02-02  wakaba <wakaba@@suika.fam.cx>
+
+	* wiki.cgi: New file.
+	* ChangeLog: Likewise.
+@
+
+
+1.44
+log
+@2008-11-10  Wakaba  <wakaba@@suika.fam.cx>
+
+        * wiki.cgi: Changed to redirector to the SuikaWiki4 URL.
+@
+text
+@d3 5
+@
+
+
+1.43
+log
+@Do AddType to .cgi file.
+@
+text
+@d1 4
+@
+
+
+1.42
+log
+@New Makefile using difffl.pl
+@
+text
+@d1 4
+@
+
+
+1.41
+log
+@Load suikawiki-config on this stage
+@
+text
+@d3 2
+@
+
+
+1.40
+log
+@*** empty log message ***
+@
+text
+@d1 4
+@
+
+
+1.39
+log
+@Updated
+@
+text
+@d1 8
+@
+
+
+1.38
+log
+@Don't require 'suikawiki-config.ph' directly
+@
+text
+@d3 2
+@
+
+
+1.37
+log
+@New files
+@
+text
+@d1 4
+@
+
+
+1.36
+log
+@Change $0
+@
+text
+@d1 9
+@
+
+
+1.35
+log
+@ErrorDocument removed
+@
+text
+@d1 4
+@
+
+
+1.34
+log
+@*** empty log message ***
+@
+text
+@d1 6
+@
+
+
+1.34.2.1
+log
+@Backport latest version
+@
+text
+@a0 4
+2003-08-06  Wakaba  <wakaba@@suika.fam.cx>
+
+	* wiki.cgi ($SuikaWiki::VERSION): New.
+
+@
+
+
+1.34.2.2
+log
+@Unknown
+@
+text
+@a0 4
+2003-11-27  Wakaba  <wakaba@@suika.fam.cx>
+
+	* wiki.cgi: Change $0.
+
+@
+
+
+1.33
+log
+@*** empty log message ***
+@
+text
+@d1 4
+@
+
+
+1.32
+log
+@Updated
+@
+text
+@d1 4
+@
+
+
+1.31
+log
+@Mosaic Netscape 0.9 support
+@
+text
+@d1 8
+@
+
+
+1.30
+log
+@Most of do_* are integred
+@
+text
+@d1 17
+@
+
+
+1.29
+log
+@Fix to more customizable
+@
+text
+@d1 27
+@
+
+
+1.28
+log
+@Many builtin functions are removed and implemented as plugin modules
+@
+text
+@d1 12
+@
+
+
+1.27
+log
+@do_index: Removed.
+@
+text
+@d1 15
+a15 1
+2002-01-02  Wakaba  <w@@suika.fam.cx>
+@
+
+
+1.26
+log
+@*** empty log message ***
+@
+text
+@d1 5
+@
+
+
+1.25
+log
+@*** empty log message ***
+@
+text
+@d4 2
+@
+
+
+1.24
+log
+@Obsoleted YukiWiki/WalWiki files are removed.
+@
+text
+@d3 2
+@
+
+
+1.23
+log
+@Don't specialize SearchPage, CreatePage and WikiPluginInfo.
+@
+text
+@d1 9
+@
+
+
+1.22
+log
+@*** empty log message ***
+@
+text
+@d1 7
+@
+
+
+1.21
+log
+@*** empty log message ***
+@
+text
+@d1 13
+@
+
+
+1.20
+log
+@500.*: New files.
+@
+text
+@d3 2
+@
+
+
+1.19
+log
+@*** empty log message ***
+@
+text
+@d1 4
+@
+
+
+1.18
+log
+@(make_navigate_links): Add two jumps, one lucky.
+@
+text
+@d1 4
+@
+
+
+1.17
+log
+@*** empty log message ***
+@
+text
+@d1 4
+@
+
+
+1.16
+log
+@*** empty log message ***
+@
+text
+@d1 5
+d10 1
+@
+
+
+1.15
+log
+@*** empty log message ***
+@
+text
+@d1 14
+d20 1
+@
+
+
+1.14
+log
+@*** empty log message ***
+@
+text
+@d1 6
+@
+
+
+1.13
+log
+@*** empty log message ***
+@
+text
+@d1 5
+@
+
+
+1.12
+log
+@*** empty log message ***
+@
+text
+@d1 10
+@
+
+
+1.11
+log
+@2002-11-14  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: InterWiki is implemented.
+@
+text
+@d1 10
+@
+
+
+1.10
+log
+@2002-10-21  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi:
+	- Better support of random jump.
+	- Output Last-Modified: field if possible.
+	- Output ROBOTS -> NOINDEX as meta element if necessary.
+	- Don't output summary of its own page within title element
+	and page title (h1 element).
+	- Simplify of navigation links and footer.
+	- Add See Also and Referers to TOC.
+	- Bug fix of [INS/DEL/PRE[ treatment.
+	- Support of obsoleted="yes" attribute of wiki page.
+	- >>\d+ support in name of comment.
+@
+text
+@d1 4
+@
+
+
+1.9
+log
+@2002-10-17  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Updated.  See 
+	<http://suika.fam.cx/~wakaba/-temp/wiki/wiki?%A4%B3%A4%CEwiki%A4%CE%C6%C8%BC%AB%B3%C8%C4%A5#anchor-1>.
+@
+text
+@d1 14
+@
+
+
+1.8
+log
+@2002-10-07  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi:
+	- Output Last-Modified:.
+	- Record and output referer information.
+@
+text
+@d1 5
+@
+
+
+1.7
+log
+@2002-09-28  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi:
+	- Intoduce text/css mode.
+	- Anchorize news: URIs.
+	- (armor_name): Bug fix of not anchorizing traditional Wiki name.
+	- Indenting heading 3-5 in TOC.
+	- Multi-comment support.
+	- (print_footer): Embed #comment.
+	- (print_editform): Use NewPageTemplate when new page.
+	* wiki-style.css: Removed.
+@
+text
+@d1 6
+@
+
+
+1.6
+log
+@2002-08-29  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Fix cross site problem, syncing with
+	WalWiki 2.0.3.wal1 (WikiAntenna is not merged).
+@
+text
+@d1 12
+@
+
+
+1.5
+log
+@2002-06-18  Wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Fix cross site scripting problems.
+@
+text
+@d1 5
+@
+
+
+1.4
+log
+@2002-06-02  wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Sync with WalWiki 2.0.beta.1.wal.1.
+	* wiki-style.css: New file.
+@
+text
+@d1 4
+@
+
+
+1.3
+log
+@2002-06-02  wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi: Sync with WalWiki 2.0.beta.1.wal.1.
+@
+text
+@d4 1
+@
+
+
+1.2
+log
+@2002-03-24  wakaba <w@@suika.fam.cx>
+
+	* wiki.cgi (inline): 
+	- Ignore LinkLikeThis style anchor.
+	- Allow [[space including anchor]].
+	(make_link): Likewise.  Gets rid of angle branckets
+	before make anchor.
+@
+text
+@d1 4
+@
+
+
+1.1
+log
+@2002-02-02  wakaba <wakaba@@suika.fam.cx>
+
+	* wiki.cgi: New file.
+	* ChangeLog: Likewise.
+@
+text
+@d1 8
+@
+

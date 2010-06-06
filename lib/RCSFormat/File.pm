@@ -36,4 +36,38 @@ sub get_revision_by_number ($$) {
   }
 } # get_revision_by_number
 
+sub _traverse_revision_routes ($) {
+  my $self = shift;
+  my $rcs = $self->{rcsformat};
+  return if $rcs->{routes_to_revisions};
+
+  my $routes = {};
+
+  my @s;
+  push @s, [$rcs->{admin}->{head}, []];
+  while (@s) {
+    my $s = shift @s;
+    my $rev = $s->[0] or next;
+    next if $routes->{$rev};
+
+    $routes->{$rev} = [@{$s->[1]}, $rev];
+
+    my $delta = $rcs->{delta}->{$rev};
+    if ($delta) {
+      push @s, [$delta->{next}, $routes->{$rev}];
+      push @s, [$_, $routes->{$rev}] for @{$delta->{branches} or []};
+    }
+  }
+
+  $rcs->{routes_to_revisions} = $routes;
+}
+
+sub find_route_to_revision ($$) {
+  my $self = shift;
+  my $rcs = $self->{rcsformat};
+
+  $self->_traverse_revision_routes;
+  return $rcs->{routes_to_revisions}->{$_[0]} || [];
+} # find_route_to_revision
+
 1;
