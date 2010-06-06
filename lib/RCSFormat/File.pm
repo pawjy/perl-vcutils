@@ -65,9 +65,10 @@ sub _traverse_revision_routes ($) {
   return if $rcs->{routes_to_revisions};
 
   my $routes = {};
+  my $prev = {};
 
   my @s;
-  push @s, [$rcs->{admin}->{head}, []];
+  push @s, [$rcs->{admin}->{head}, [], 0];
   while (@s) {
     my $s = shift @s;
     my $rev = $s->[0] or next;
@@ -77,12 +78,24 @@ sub _traverse_revision_routes ($) {
 
     my $delta = $rcs->{delta}->{$rev};
     if ($delta) {
-      push @s, [$delta->{next}, $routes->{$rev}];
-      push @s, [$_, $routes->{$rev}] for @{$delta->{branches} or []};
+      if ($delta->{next}) {
+        push @s, [$delta->{next}, $routes->{$rev}, $s->[2]];
+        if ($s->[2]) { ## In branch
+          $prev->{$delta->{next}} = $rev;
+        } else {
+          $prev->{$rev} = $delta->{next};
+        }
+      }
+
+      for (@{$delta->{branches} or []}) {
+        push @s, [$_, $routes->{$rev}, 1];
+        $prev->{$_} = $rev;
+      }
     }
   }
 
   $rcs->{routes_to_revisions} = $routes;
+  $rcs->{prev_revision_number} = $prev;
 }
 
 sub find_route_to_revision ($$) {
@@ -92,6 +105,14 @@ sub find_route_to_revision ($$) {
   $self->_traverse_revision_routes;
   return $rcs->{routes_to_revisions}->{$_[0]} || [];
 } # find_route_to_revision
+
+sub get_prev_revision_number_of ($$) {
+  my ($self, $next_rev) = @_;
+  my $rcs = $self->{rcsformat};
+
+  $self->_traverse_revision_routes;
+  return $rcs->{prev_revision_number}->{$next_rev}; # or undef
+} # get_prev_revision_number_of
 
 sub get_unified_diff_by_numbers ($$$) {
   my ($self, $revnum1, $revnum2) = @_;
