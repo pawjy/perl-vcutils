@@ -168,6 +168,49 @@ sub _find_route_3 : Test(3) {
   eq_or_diff $rcs->find_route_to_revision ('1.34.2.3'), [];
 } # _find_route_3
 
+sub _get_prev_1 : Test(6) {
+  my $rcs1 = getrcs;
+  is $rcs1->get_prev_revision_number_of (1.9), '1.8';
+  is $rcs1->get_prev_revision_number_of (1.3), '1.2';
+  is $rcs1->get_prev_revision_number_of (1.2), '1.1';
+  is $rcs1->get_prev_revision_number_of (1.1), undef;
+  is $rcs1->get_prev_revision_number_of (1.14), undef;
+  is $rcs1->get_prev_revision_number_of ('abc'), undef;
+} # _get_prev_1
+
+sub _get_prev_2 : Test(12) {
+  my $rcs1 = getrcs 2;
+  is $rcs1->get_prev_revision_number_of (1.61), '1.60';
+  is $rcs1->get_prev_revision_number_of ('1.60'), '1.59';
+  is $rcs1->get_prev_revision_number_of (1.9), '1.8';
+  is $rcs1->get_prev_revision_number_of (1.3), '1.2';
+  is $rcs1->get_prev_revision_number_of (1.2), '1.1';
+  is $rcs1->get_prev_revision_number_of (1.1), undef;
+  is $rcs1->get_prev_revision_number_of (1.1401), undef;
+  is $rcs1->get_prev_revision_number_of ('abc'), undef;
+  is $rcs1->get_prev_revision_number_of ('1.54'), '1.53';
+  is $rcs1->get_prev_revision_number_of ('1.54.2.1'), '1.54';
+  is $rcs1->get_prev_revision_number_of ('1.54.2.2'), undef;
+  is $rcs1->get_prev_revision_number_of ('1.1.1.1'), '1.1';
+} # _get_prev_2
+
+sub _get_prev_3 : Test(13) {
+  my $rcs1 = getrcs 3;
+  is $rcs1->get_prev_revision_number_of (1.39), '1.38';
+  is $rcs1->get_prev_revision_number_of (1.9), '1.8';
+  is $rcs1->get_prev_revision_number_of (1.3), '1.2';
+  is $rcs1->get_prev_revision_number_of (1.2), '1.1';
+  is $rcs1->get_prev_revision_number_of (1.1), undef;
+  is $rcs1->get_prev_revision_number_of (1.1401), undef;
+  is $rcs1->get_prev_revision_number_of ('abc'), undef;
+  is $rcs1->get_prev_revision_number_of ('1.14'), '1.13';
+  is $rcs1->get_prev_revision_number_of ('1.54.2.1'), undef;
+  is $rcs1->get_prev_revision_number_of ('1.54.2.2'), undef;
+  is $rcs1->get_prev_revision_number_of ('1.34.2.1'), '1.34';
+  is $rcs1->get_prev_revision_number_of ('1.34.2.2'), '1.34.2.1';
+  is $rcs1->get_prev_revision_number_of ('1.34.2.3'), undef;
+} # _get_prev_3
+
 sub _unified_diff : Test(2) {
   my $rcs = getrcs;
   $rcs->file_name ('parser.cgi');
