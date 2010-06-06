@@ -1,4 +1,4 @@
-<feed xml:lang="" xmlns="http://www.w3.org/2005/Atom" xmlns:html="http://www.w3.org/1999/xhtml"><id>file:///parser.cgi</id><title>parser.cgi</title><updated>2007-11-11T04:18:27Z</updated><link href="" rel="self" type="application/atom+xml"></link><entry xml:lang=""><id>file:///parser.cgi?revision=1.9</id><title>r1.9</title><updated>2007-11-11T04:18:27Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	11 Nov 2007 04:18:16 -0000
+<feed xml:lang="" xmlns="http://www.w3.org/2005/Atom" xmlns:html="http://www.w3.org/1999/xhtml"><id>file:///parser.cgi</id><title>parser.cgi</title><updated>2007-11-11T04:18:27Z</updated><link href="" rel="self" type="application/atom+xml"></link><entry xml:lang=""><id>file:///parser.cgi?revision=1.9</id><title>parser.cgi r1.9</title><updated>2007-11-11T04:18:27Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	11 Nov 2007 04:18:16 -0000
 2007-11-11  Wakaba  &lt;wakaba@suika.fam.cx&gt;
 
 	* parser.cgi: Use |Whatpm::HTML::Serializer| to serialize
@@ -21,7 +21,7 @@
  
 -## $Date: 2007/08/11 13:54:55 $
 +## $Date: 2007/11/11 04:18:27 $
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.8</id><title>r1.8</title><updated>2007-08-11T13:54:55Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	11 Aug 2007 13:54:20 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.8</id><title>parser.cgi r1.8</title><updated>2007-08-11T13:54:55Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	11 Aug 2007 13:54:20 -0000
 2007-08-11  Wakaba  &lt;wakaba@suika.fam.cx&gt;
 
 	* cc.cgi, parser-manakai.cgi, parser.cgi: Use |Message::CGI::HTTP|
@@ -84,7 +84,7 @@
  
 -## $Date: 2007/05/28 14:04:57 $
 +## $Date: 2007/08/11 13:54:55 $
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.7</id><title>r1.7</title><updated>2007-05-28T14:04:57Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	28 May 2007 14:04:52 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.7</id><title>parser.cgi r1.7</title><updated>2007-05-28T14:04:57Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	28 May 2007 14:04:52 -0000
 2007-05-28  Wakaba  &lt;wakaba@suika.fam.cx&gt;
 
 	* parser.cgi: Log elapsed time to external files.
@@ -118,7 +118,7 @@
  
 -## $Date: 2007/05/27 11:16:02 $
 +## $Date: 2007/05/28 14:04:57 $
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.6</id><title>r1.6</title><updated>2007-05-27T11:16:02Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	27 May 2007 11:15:58 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.6</id><title>parser.cgi r1.6</title><updated>2007-05-27T11:16:02Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	27 May 2007 11:15:58 -0000
 	* parser.cgi: Output how long each process takes.
 	Document element testing is moved to the |Whatpm::ContentChecker|
 	module.
@@ -208,7 +208,7 @@
  
 -## $Date: 2007/05/25 14:24:31 $
 +## $Date: 2007/05/27 11:16:02 $
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.5</id><title>r1.5</title><updated>2007-05-25T14:24:31Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	25 May 2007 14:24:27 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.5</id><title>parser.cgi r1.5</title><updated>2007-05-25T14:24:31Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	25 May 2007 14:24:27 -0000
 2007-05-25  Wakaba  &lt;wakaba@suika.fam.cx&gt;
 
 	* parser.cgi: Use CGI::Carp.
@@ -228,7 +228,7 @@
  
 -## $Date: 2007/05/20 08:14:48 $
 +## $Date: 2007/05/25 14:24:31 $
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.4</id><title>r1.4</title><updated>2007-05-20T08:14:48Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	20 May 2007 08:14:29 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.4</id><title>parser.cgi r1.4</title><updated>2007-05-20T08:14:48Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	20 May 2007 08:14:29 -0000
 2007-05-19  Wakaba  &lt;wakaba@suika.fam.cx&gt;
 
 	* parser-interface.en.html: A checkbox to
@@ -320,7 +320,7 @@
 +=cut
 +
 +## $Date: 2007/05/20 08:14:48 $
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.3</id><title>r1.3</title><updated>2007-05-01T11:05:04Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 11:04:56 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.3</id><title>parser.cgi r1.3</title><updated>2007-05-01T11:05:04Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 11:04:56 -0000
 	* parser.cgi: Module names are updated.
 
 	* parser-interface.en.html: Link to Whatpm introduction
@@ -358,7 +358,7 @@
    } else { # test
      $out = test_serialize ($doc);
    }
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.2</id><title>r1.2</title><updated>2007-05-01T10:27:06Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 10:26:58 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.2</id><title>parser.cgi r1.2</title><updated>2007-05-01T10:27:06Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 10:26:58 -0000
 	* parser-interface.en.html: New document.
 
 	* parser.cgi: Test-result-format mode is added.
@@ -452,7 +452,7 @@
 +  
 +  return \$r;
 +} # test_serialize
-</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.1</id><title>r1.1</title><updated>2007-05-01T09:25:31Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 09:25:27 -0000
+</html:pre></html:div></content></entry><entry xml:lang=""><id>file:///parser.cgi?revision=1.1</id><title>parser.cgi r1.1</title><updated>2007-05-01T09:25:31Z</updated><author><name>wakaba</name></author><content type="xhtml"><html:div><html:pre class="log">++ ChangeLog	1 May 2007 09:25:27 -0000
 	* parser.cgi: New file.
 
 	* .htaccess: New file.

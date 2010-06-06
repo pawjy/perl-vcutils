@@ -34,12 +34,14 @@ sub rcs_to_atom_feed ($) {
   $link->href ('');
   $feed->append_child ($link);
 
+  my $title_prefix = $title;
+  $title_prefix .= ' ' if length $title_prefix;
   my $updated;
   my $num_to_rev = {};
   $rcs->revision_numbers_sorted_by_date->reverse->each (sub {
     my $rev = $num_to_rev->{$_} ||= $rcs->get_revision_by_number ($_);
     my $id = $id . '?revision=' . $rev->number;
-    my $title = 'r' . $rev->number;
+    my $title = $title_prefix . 'r' . $rev->number;
     my $entry = $feed->add_new_entry ($id, $title, '');
 
     my $author = $doc->create_element_ns (ATOM_NS, 'author');
