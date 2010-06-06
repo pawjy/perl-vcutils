@@ -42,6 +42,10 @@ sub author ($) {
   return $_[0]->{rcsformat}->{delta}->{$_[0]->{number}}->{author};
 } # author
 
+sub log ($) {
+  return $_[0]->{rcsformat}->{deltatext}->{$_[0]->{number}}->{log};
+} # log
+
 sub rawdata ($) {
   return $_[0]->{rcsformat}->{deltatext}->{$_[0]->{number}}->{text};
 } # rawdata

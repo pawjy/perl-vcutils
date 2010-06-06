@@ -50,6 +50,16 @@ sub _author : Test(2) {
   is $rev2->author, 'hero';
 } # _date
 
+sub _log : Test(2) {
+  my $rcs = getrcs 2;
+  
+  my $rev = $rcs->get_revision_by_number ('1.7');
+  eq_or_diff $rev->log, qq[*** empty log message ***\n];
+  
+  my $rev2 = $rcs->get_revision_by_number ('1.27');
+  eq_or_diff $rev2->log, qq[2002-10-07  Wakaba <w\@suika.fam.cx>\x0D\x0A\x0D\x0A\t* wiki.cgi:\x0D\x0A\t- Output Last-Modified:.\x0D\x0A\t- Record and output referer information.\x0A];
+} # _log
+
 sub _rawdata_last_revision : Test(1) {
   my $rcs = getrcs;
 
