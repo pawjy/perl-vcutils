@@ -15,9 +15,17 @@ my $test_1_6_f = $data_d->file ('parser.cgi.1.6');
 my $test_1_7_f = $data_d->file ('parser.cgi.1.7');
 my $test_1_8_f = $data_d->file ('parser.cgi.1.8');
 my $test_1_9_f = $data_d->file ('parser.cgi.1.9');
+my $test2_f = file (__FILE__)->dir->subdir ('data')->file ('wiki.cgi,v');
+my $test3_f = file (__FILE__)->dir->subdir ('data')->file ('ChangeLog,v');
 
 sub getrcs (;$) {
-  return RCSFormat::File->new_from_stringref (\ scalar $test_f->slurp);
+  if ($_[0] and $_[0] == 2) {
+    return RCSFormat::File->new_from_stringref (\ scalar $test2_f->slurp);
+  } elsif ($_[0] and $_[0] == 3) {
+    return RCSFormat::File->new_from_stringref (\ scalar $test3_f->slurp);
+  } else {
+    return RCSFormat::File->new_from_stringref (\ scalar $test_f->slurp);
+  }
 } # getrcs
 
 sub is_f_content ($$;$) {
@@ -30,6 +38,16 @@ sub _date : Test(2) {
 
   is $rev->rawdate, '2007.05.28.14.04.57';
   is $rev->date_as_epoch, '1180361097';
+} # _date
+
+sub _author : Test(2) {
+  my $rcs = getrcs 2;
+  
+  my $rev = $rcs->get_revision_by_number ('1.7');
+  is $rev->author, 'wakaba';
+  
+  my $rev2 = $rcs->get_revision_by_number ('1.58.6.1');
+  is $rev2->author, 'hero';
 } # _date
 
 sub _rawdata_last_revision : Test(1) {

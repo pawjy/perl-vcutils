@@ -38,6 +38,10 @@ sub date_as_rcs_formatted ($) {
   return RCSFormat::Date::epoch_to_rcs_formatted_date ($_[0]->date_as_epoch);
 } # date_as_rcs_formatted
 
+sub author ($) {
+  return $_[0]->{rcsformat}->{delta}->{$_[0]->{number}}->{author};
+} # author
+
 sub rawdata ($) {
   return $_[0]->{rcsformat}->{deltatext}->{$_[0]->{number}}->{text};
 } # rawdata
