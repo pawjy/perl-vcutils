@@ -1,0 +1,10 @@
+IndexIgnore *.tmp
+
+Options -ExecCGI
+
+## These are willful violations to MIME type specs.
+AddType text/pod .pod
+AddType text/perl .pm .pl .t
+AddCharset utf-8 .pod .pm .pl .t
+
+## License: Public Domain.
