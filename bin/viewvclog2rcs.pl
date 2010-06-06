@@ -51,6 +51,15 @@ my $text_from = {};
 #  $info->{file_path} = htunescape ($1);
 #}
 
+my $default_branch = 'MAIN';
+if ($ent->{s} =~ m[<[Pp]>\s*Default branch: ([\w_-]+)<(?>br|BR)>]gc) {
+  $default_branch = $1;
+
+  #if ($ent->{s} =~ m[\G\s*Current tag: ([\w_-]+)<(?>br|BR)>]gc) {
+  #  
+  #}
+}
+
 my $branches = {};
 my $branch_rev = {};
 if ($ent->{s} =~ m[View only Branch]gc) {
@@ -79,7 +88,7 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
       warn "<$uri>: $revent->{error_status_text}";
     }
 
-    $rcs->{admin}->{head} ||= $rev;      
+    #$rcs->{admin}->{head} ||= $rev;      
   }
 
   if ($ent->{s} =~ m!<[iI]>\w+ (\w+)\s*(\d+)\s*(\d+):(\d+):(\d+) (\d+) UTC</[iI]> \([^()]+\) by <[iI]>([^<>]+)</[iI]>!gc) {
@@ -96,12 +105,14 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
 
   if ($ent->{s} =~ m[\G<br>Branch:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
-    while ($b =~ m!><[bB]>([^<>]+)</[bB]></[aA]>!gc) {
+    while ($b =~ m!(?:><[bB]>|<[bB]><[Aa] (?>href|HREF)="[^"]+">)([^<>]+)</[bBaA]>\s*</[aAbB]>!gc) {
       my $branch = $1;
-      if ($branch ne 'MAIN') {
+      if ($branch ne $default_branch) {
         my $rev = $rev;
         $rev =~ s/\.(\d+)\.\d+\z//;
         push @{$rcs->{admin}->{symbols} ||= []}, [$branch => "$rev.0.$1"];
+      } else {
+        $rcs->{admin}->{head} ||= $rev;
       }
     }
     $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)>)]gc;
@@ -113,7 +124,7 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>size|SIZE)="?1"? (?>noshade|NOSHADE)>!g
 
   if ($ent->{s} =~ m[\G<(?>br|BR)>CVS Tags:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
-    while ($b =~ m!><[bB]>([^<>]+)</[bB]></[aA]>!gc) {
+    while ($b =~ m!(?:><[bB]>|<[aA] (?:href|HREF)="[^"]+">)([^<>]+)</[bBaA]>!gc) {
       my $rev = $branches->{$1} ? "$rev.0.".((++$branch_rev->{$rev})*2) : $rev;
       if ($1 eq 'HEAD') {
         $rcs->{admin}->{head} = $rev;
