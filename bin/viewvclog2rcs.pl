@@ -122,7 +122,7 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
 
   $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
 
-  if ($ent->{s} =~ m[\G<br(?> /)?>Branch:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>Branch:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
     while ($b =~ m!(?:><(?>b|B|strong)>|<[bB]><[Aa] (?>href|HREF)="[^"]+">)([^<>]+)</(?>[bBaA]|strong)>!gc) {
       my $branch = $1;
