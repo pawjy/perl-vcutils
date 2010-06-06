@@ -9,6 +9,7 @@ use base qw(Test::Class);
 use RCSFormat::File;
 
 my $test_f = file (__FILE__)->dir->subdir ('data')->file ('parser.cgi,v');
+my $test_f_diff = file (__FILE__)->dir->subdir ('data')->file ('parser.cgi.diff-1.5-1.6');
 my $test2_f = file (__FILE__)->dir->subdir ('data')->file ('wiki.cgi,v');
 my $test3_f = file (__FILE__)->dir->subdir ('data')->file ('ChangeLog,v');
 
@@ -21,6 +22,10 @@ sub getrcs (;$) {
     return RCSFormat::File->new_from_stringref (\ scalar $test_f->slurp);
   }
 } # getrcs
+
+sub is_f_content ($$;$) {
+  eq_or_diff $_[0], scalar $_[1]->slurp, $_[2];
+} # is_f_content
 
 sub _revisions_simple : Test(2) {
   my $rcs = getrcs;
@@ -89,6 +94,17 @@ sub _find_route_3 : Test(3) {
   eq_or_diff $rcs->find_route_to_revision ('1.34.0.2'), [];
   eq_or_diff $rcs->find_route_to_revision ('1.34.2.3'), [];
 } # _find_route_3
+
+sub _unified_diff : Test(2) {
+  my $rcs = getrcs;
+  $rcs->file_name ('parser.cgi');
+
+  my $diff = $rcs->get_unified_diff_by_numbers (1.5, 1.6);
+  is_f_content $diff, $test_f_diff;
+
+  my $diff2 = $rcs->get_unified_diff_by_numbers (30.2, 1.23);
+  is $diff2, '';
+} # _unified_diff
 
 __PACKAGE__->runtests;
 

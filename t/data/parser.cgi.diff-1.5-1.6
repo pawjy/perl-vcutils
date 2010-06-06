@@ -1,0 +1,84 @@
+--- parser.cgi r1.5	Fri May 25 23:24:31 2007
++++ parser.cgi r1.6	Sun May 27 20:16:02 2007
+@@ -4,6 +4,7 @@
+ use lib qw[/home/httpd/html/www/markup/html/whatpm
+            /home/wakaba/public_html/-temp/wiki/lib];
+ use CGI::Carp qw[fatalsToBrowser];
++use Time::HiRes qw/time/;
+ 
+ use SuikaWiki::Input::HTTP; ## TODO: Use some better CGI module
+ 
+@@ -25,8 +26,11 @@
+     exit;
+   }
+ 
++  my $time1 = time;
+   $s = Encode::decode ('utf-8', $s);
+-
++  my $time2 = time;
++  my %time = (decode => $time2 - $time1);
++  
+   print STDOUT "Content-Type: text/plain; charset=utf-8\n\n";
+ 
+   print STDOUT "#errors\n";
+@@ -36,38 +40,43 @@
+     print STDOUT "$opt{line},$opt{column},$opt{type}\n";
+   };
+ 
++  $time1 = time;
+   my $doc = Whatpm::HTML->parse_string
+       ($s => Whatpm::NanoDOM::Document->new, $onerror);
++  $time2 = time;
++  $time{parse} = $time2 - $time1;
+ 
+   print "#document\n";
+ 
+   my $out;
++  $time1 = time;
+   if ($mode eq '/html') {
+     $out = Whatpm::HTML->get_inner_html ($doc);
+   } else { # test
+     $out = test_serialize ($doc);
+   }
++  $time2 = time;
++  $time{serialize} = $time2 - $time1;
+   print STDOUT Encode::encode ('utf-8', $$out);
+   print STDOUT "\n";
+ 
+   if ($http->parameter ('dom5')) {
+     require Whatpm::ContentChecker;
+     print STDOUT "#domerrors\n";
+-    my $docel = $doc->document_element;
+-    my $docel_nsuri = $docel->namespace_uri;
+-    if (defined $docel_nsuri and 
+-        $docel_nsuri eq q<http://www.w3.org/1999/xhtml> and
+-        $docel->manakai_local_name eq 'html') {
+-      #
+-    } else {
+-      print STDOUT get_node_path ($docel) . ";element not allowed\n";
+-    }
+-    my $cc = Whatpm::ContentChecker->new;
+-    $cc->check_element ($docel, sub {
++    $time1 = time;
++    Whatpm::ContentChecker->check_document ($doc, sub {
+       my %opt = @_;
+       print STDOUT get_node_path ($opt{node}) . ';' . $opt{type} . "\n";
+     });
++    $time2 = time;
++    $time{check} = $time2 - $time1;
+   }
++
++  print STDOUT "#log\n";
++  print STDOUT "byte->char\t", $time{decode}, "s\n";
++  print STDOUT "html5->dom5\t", $time{parse}, "s\n";
++  print STDOUT "dom5->serialize\t", $time{serialize}, "s\n";
++  print STDOUT "dom5 check\t", $time{check}, "s\n" if defined $time{check};
+ } else {
+   print STDOUT "Status: 404 Not Found\nContent-Type: text/plain; charset=us-ascii\n\n404";
+ }
+@@ -146,4 +155,4 @@
+ 
+ =cut
+ 
+-## $Date: 2007/05/25 14:24:31 $
++## $Date: 2007/05/27 11:16:02 $
