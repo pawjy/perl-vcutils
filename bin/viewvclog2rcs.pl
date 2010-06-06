@@ -186,6 +186,12 @@ while (keys %$text_from) {
   last unless $any;
 }
 
+if (defined $rcs->{admin}->{head} and
+    $rcs->{deltatext}->{$rcs->{admin}->{head}} and
+    not defined $rcs->{deltatext}->{$rcs->{admin}->{head}}->{text}) {
+  $rcs->{deltatext}->{$rcs->{admin}->{head}}->{text} = $text->{$rcs->{admin}->{head}};
+}
+
 print $rcs->stringify;
 
 sub get_remote_entity ($) {
