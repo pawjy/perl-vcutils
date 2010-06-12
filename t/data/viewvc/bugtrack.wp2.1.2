@@ -1,0 +1,681 @@
+#?SuikaWikiConfig/2.0
+
+Plugin:
+  @Name: BugTrack
+  @Description:
+    @@@: SuikaWiki Bug Tracking System
+    @@lang:en
+  @License: %%Perl%%
+  @Author:
+    @@Name:
+      @@@@: Wakaba
+      @@@lang:ja
+      @@@script:Latn
+    @@Mail[list]: w@suika.fam.cx
+  @Date.RCS:
+    $Date: 2004/02/18 07:22:11 $
+  @RequiredPlugin[list]: 
+    WikiLinking
+    WikiResource
+  @Use:
+    my $WIKILINKING;
+    my $WIKIRESOURCE;
+
+PluginConst:
+  @NS_XHTML1:
+    http://www.w3.org/1999/xhtml
+  @WIKILINKING:
+    {($WIKILINKING ||= SuikaWiki::Plugin->module_package ('WikiLinking'))}
+  @WIKIRESOURCE:
+    {($WIKIRESOURCE ||= SuikaWiki::Plugin->module_package ('WikiResource'))}
+
+FormattingRule:
+  @Category[list]:
+    view
+    view-resource
+    form-input
+  @Name: bt--bug-list
+  @Description:
+    @@@: Bug list
+    @@lang: en
+  @Parameter:
+    @@Name: ns
+    @@Type: WikiName
+    @@Default: (auto)
+    @@Description:
+      @@@@: Bug track WikiPage
+      @@@lang: en
+  @Formatting:
+    __ATTRTEXT:%ns__;
+    my $ns = $o->{wiki}->name ($p->{ns} || $o->{wiki}->{var}->{page});
+    my $option_ns = $ns->clone;
+    $option_ns->append_component ('Options');
+    my @bugs = map {[$o->{wiki}->name ($_), $_->[$#$_-1] * 100 + $_->[$#$_]]}
+               grep {$_->[$#$_] =~ /^[0-9]+$/}
+               map {$o->{wiki}->{db}->keys ('content',
+                                            -ns => $_,
+                                            -type => 'key',
+                                            -recursive => 0)}
+               grep {$_->[$#$_] =~ /^[0-9]+$/}
+               $o->{wiki}->{db}->keys ('content',
+                                            -ns => $ns,
+                                            -type => 'ns',
+                                            -recursive => 0);
+    my $props = $WIKIRESOURCE->get (name => 'Plugin:BugTrack:Table:Row',
+                                    wiki => $o->{wiki}, o => $o);
+    my $fmt = SuikaWiki::Plugin->formatter ('bt__bug_table_header');
+    my $tbl = $p->{-parent}
+                ->append_new_node (type => '#element',
+                                   namespace_uri => $NS_XHTML1,
+                                   local_name => 'table');
+    $tbl->set_attribute (class => 'bt--bugtrack');
+    $tbl->set_attribute (summary => $WIKIRESOURCE->get_op
+                           ('BugTrack:Table:Summary', $o)->inner_text);
+    $fmt->replace ($props, param => $o,
+                   -parent => 
+            $tbl->append_new_node (type => '#element',
+                                   namespace_uri => $NS_XHTML1,
+                                   local_name => 'thead')
+                ->append_new_node (type => '#element',
+                                   namespace_uri => $NS_XHTML1,
+                                   local_name => 'tr'));
+    $tbl->append_text ("\n");
+    
+    $fmt = SuikaWiki::Plugin->formatter ('bt__bug_item');
+    my $tb = $tbl->append_new_node (type => '#element',
+                                   namespace_uri => $NS_XHTML1,
+                                   local_name => 'tbody');
+    my $weight = {
+	Priority	=> {high => 1, normal => 2, low => 3},
+	Status	=> {open => 1, reserved => 2, closed => 3},
+    };
+    for $_ (sort {
+	  	   $weight->{Status}->{$a->{prop}->{Status}||'open'}
+	  	   <=> $weight->{Status}->{$b->{prop}->{Status}||'open'}
+	  	|| $weight->{Priority}->{$a->{prop}->{Priority}||'normal'}
+	  	   <=> $weight->{Priority}->{$b->{prop}->{Priority}||'normal'}
+	  	|| $b->{lm} <=> $a->{lm}
+	  	|| $a->{prop}->{Category} cmp $b->{prop}->{Category}
+	  	|| $b->{bug_no} <=> $a->{bug_no}
+    } map {{
+	  	bug_ns => $ns,
+                bug_option_ns => $option_ns,
+	  	bug_page	=> $_->[0],
+	  	bug_no	=> $_->[1],
+	  	prop	=> __FUNCPACK__->get_bug_properties
+                             (page => $_->[0], o => $o),
+	  	lm	=> $o->{wiki}->{db}->get (lastmodified => $_->[0]),
+    }} @bugs) {
+      local $o->{bt__bug} = $_;
+      my @class;
+      ## TODO: ensure each class name is NMTOKEN
+      push @class, $o->{bt__bug}->{prop}->{Status}||'open';
+      push @class, $o->{bt__bug}->{prop}->{Priority}||'normal';
+      push @class, $o->{bt__bug}->{prop}->{Category};
+      my $tr = $tb->append_new_node
+                      (type => '#element',
+                       namespace_uri => $NS_XHTML1,
+                       local_name => 'tr');
+      $tr->set_attribute (class => join ' ', grep /^[\w_.+-]+$/, @class);
+      $fmt->replace ($props, param => $o, -parent => $tr);
+      $tb->append_text ("\n");
+    }
+
+Function:
+  @Name: get_bug_properties
+  @Description:
+    @@@: 
+      Returning a hash reference that has some bug properties,
+      taken from each bug WikiPages.
+    @@lang: en
+  @Main:
+    my (undef, %opt) = @_;
+## TODO: New style property should also be implemented
+    my $bug_info = $opt{o}->{wiki}->{db}->get (content => $opt{page});
+    my %bug_prop;
+    my $f = 0;
+	  for (split /\n/, $bug_info) {
+	    tr/\x0A\x0D//d;
+	    if (/^-\s*([0-9A-Za-z-]+)\s*:\s*(\S.*\S)/) {
+	      $bug_prop{$1} = $2;
+              $f = 1;
+	    } elsif (!/^-/) {
+	      last if $f;
+	    }
+	  }
+  \ \%bug_prop;
+
+FormattingRule:
+  @Category[list]:
+    bt--bug-item
+  @Name: -default
+  @Description:
+    @@@: Default formatting for bug list item information
+    @@lang: en
+  @Pre:
+    $p->{-cell_namespace_uri} = $NS_XHTML1;
+    $p->{-cell_local_name} = 'td';
+  @Post:
+        local $p->{-parent} = $o->{-result}
+                                ->append_new_node
+                                    (type => '#element',
+                                     namespace_uri => $p->{-cell_namespace_uri},
+                                     local_name => $p->{-cell_local_name});
+        $f->call ($rule_name, 'main', $p, $o, %opt);
+  @Formatting:
+     \ 
+  @Attribute:
+        if ($param_name eq '-boolean') {
+          $p->{$param_value} = 1;
+        } else {
+          if ($opt{-value_flag} and index ($opt{-value_flag}, 'p') > -1) {
+            $p->{-parse_flag}->{$param_name} = 1;
+          }
+          $p->{$param_name} = $param_value;
+        }
+
+FormattingRule:
+  @Category[list]:
+    bt--bug-table-header
+  @Name: -default
+  @Description:
+    @@@: Default formatting for bug list item information
+    @@lang: en
+  @Pre:
+    $p->{-cell_namespace_uri} = $NS_XHTML1;
+    $p->{-cell_local_name} = 'th';
+  @Post:
+    local $p->{-parent} = $o->{-result}
+                                ->append_new_node
+                                    (type => '#element',
+                                     namespace_uri => $p->{-cell_namespace_uri},
+                                     local_name => $p->{-cell_local_name});
+    $p->{-parent}->set_attribute (class => $rule_name);
+    $p->{-parent}->set_attribute (scope => 'col');
+    $f->call ($rule_name, 'main', $p, $o, %opt);
+  @Formatting:
+     \ 
+  @Attribute:
+        if ($param_name eq '-boolean') {
+          $p->{$param_value} = 1;
+        } else {
+          if ($opt{-value_flag} and index ($opt{-value_flag}, 'p') > -1) {
+            $p->{-parse_flag}->{$param_name} = 1;
+          }
+          $p->{$param_name} = $param_value;
+        }
+
+FormattingRule:
+  @Category[list]:
+    bt--bug-item
+  @Name: -undef
+  @Description:
+    @@@: Undefined rule indication
+    @@lang: en
+  @Formatting:
+    $p->{-parent}->append_text ("[undef: $f->{-category_name}/$rule_name]");
+
+FormattingRule:
+  @Category[list]:
+    bt--bug-table-header
+  @Name: -undef
+  @Description:
+    @@@: Column header for bug properties
+    @@lang: en
+  @Formatting:
+    $WIKIRESOURCE->get_op
+       ('Plugin:BugTrack:Column:'.$rule_name, $o, $p->{-parent});
+
+FormattingRule:
+  @Category[list]:
+    bt--bug-table-header
+    bt--bug-item
+  @Name: -bare-text
+  @Description:
+    @@@: Bare text out of rule - to be ignored
+    @@lang: en
+  @Formatting:
+    \ 
+
+FormattingRule[list]:
+  @Category[list]:
+    bt--bug-item
+  @Name: no
+  @Description:
+    @@@: Bug number
+    @@lang: en
+  @Formatting:
+    $WIKILINKING->to_wikipage_in_html ({
+      label => $WIKIRESOURCE->get (name => 'BugTrack:Item:Number:Label',
+                                   wiki => $o->{wiki}, o => $o),
+    } => {
+      base => $o->{bt__bug}->{bug_ns},
+      page_name_relative => $o->{bt__bug}->{bug_page},
+    }, {
+      o => $o,
+      parent => $p->{-parent},
+    });
+
+FormattingRule[list]:
+  @Category[list]:
+    bt--bug-item
+  @Name: subject
+  @Description:
+    @@@: Bug subject
+    @@lang: en
+  @Formatting:
+    $WIKILINKING->to_wikipage_in_html ({
+      label => $WIKIRESOURCE->get (name => 'BugTrack:Item:Subject:Label',
+                                   wiki => $o->{wiki}, o => $o),
+    } => {
+      base => $o->{bt__bug}->{bug_ns},
+      page_name_relative => $o->{bt__bug}->{bug_page},
+    }, {
+      o => $o,
+      parent => $p->{-parent},
+    });
+
+FormattingRule:
+  @Category[list]:
+    page-link
+  @Name: bt--property
+  @Parameter:
+    @@Name: default
+    @@Type: CDATA
+    @@Default: (none)
+    @@Default:
+      @@@: Default text
+      @@lang: en
+  @Parameter:
+    @@Name: name
+    @@Type: name
+    @@Default: #REQUIRED
+    @@Description:
+      @@@: Bug property name
+      @@lang: en
+  @Formatting:
+    __ATTRTEXT:%name__;
+    $p->{name} =~ tr/-/_/;
+    
+      exists $o->{bt__bug}->{prop}->{$p->{name}} ?
+        $p->{-parent}->append_text ($o->{bt__bug}->{prop}->{$p->{name}}) :
+      exists $o->{bt__bug}->{$p->{name}} ?
+        $p->{-parent}->append_text ($o->{bt__bug}->{$p->{name}}) :
+      do {__ATTRNODE:%default->{$p->{-parent}}__;};
+
+FormattingRule[list]:
+  @Category[list]:
+    bt--bug-item
+  @Name: status
+  @Description:
+    @@@: Bug status
+    @@lang: en
+  @Formatting:
+    $WIKIRESOURCE->get_op ('Status:'.($o->{bt__bug}->{prop}->{Status}
+                                        or '(default)'),
+                           $o, $p->{-parent},
+                           ns => $o->{bt__bug}->{bug_option_ns},
+                           default => $o->{bt__bug}->{prop}->{Status}
+                                      || '(default)');
+
+FormattingRule[list]:
+  @Category[list]:
+    bt--bug-item
+  @Name: priority
+  @Description:
+    @@@: Bug priority
+    @@lang: en
+  @Formatting:
+    $WIKIRESOURCE->get_op ('Priority:'.($o->{bt__bug}->{prop}->{Priority}
+                                        or '(default)'),
+                           $o, $p->{-parent},
+                           ns => $o->{bt__bug}->{bug_option_ns},
+                           default => $o->{bt__bug}->{prop}->{Priority}
+                                      || '(default)');
+
+FormattingRule[list]:
+  @Category[list]:
+    bt--bug-item
+  @Name: category
+  @Description:
+    @@@: Bug category
+    @@lang: en
+  @Formatting:
+    $WIKIRESOURCE->get_op ('Category:'.($o->{bt__bug}->{prop}->{Category}
+                                        or '(default)'),
+                           $o, $p->{-parent},
+                           ns => $o->{bt__bug}->{bug_option_ns},
+                           default => $o->{bt__bug}->{prop}->{Category}
+                                      || '(default)');
+
+FormattingRule[list]:
+  @Category[list]:
+    bt--bug-item
+  @Name: last-modified
+  @Description:
+    @@@: Bug last modified date-time
+    @@lang: en
+  @Formatting:
+    ## TODO: custom date format (Message::Field::Date)
+    my @time = gmtime $o->{bt__bug}->{lm};
+    $p->{-parent}->append_text
+      (sprintf '%04d-%02d-%02d %02d:%02d:%02d +00:00',
+       $time[5]+1900,$time[4]+1,@time[3,2,1,0]);
+
+FormattingRule:
+  @Category[list]:
+    view
+    view-resource
+    form-input
+  @Name: bt--create-new-bug
+  @Description:
+    @@@: Creating-new-bug-item form
+    @@lang: en
+  @Parameter:
+    @@Name: ns
+    @@Type: WikiName
+    @@Default: (auto)
+    @@Description:
+      @@@@: WikiPage name of bug tracking
+      @@@lang:en
+  @Formatting:
+    __ATTRTEXT:%ns__;
+    
+    my $page = $o->{wiki}->name ($p->{ns} || $o->{wiki}->{var}->{page});
+    SuikaWiki::Plugin->module_package ('WikiFormCore')
+                     ->make_form_in_html
+                         ($p->{-parent}, $p->{content} ||
+                                 $WIKIRESOURCE->get
+                                   (name => 'BugTrack:CreateForm:Content',
+                                    o => $o, wiki => $o->{wiki}),
+                          wiki => $o->{wiki}, o => $o,
+                          index => -1,
+                          output => {
+                            mode => 'bt--bug-create',
+                            page => $page,
+                          });
+
+Function:
+  @Name: get_new_bug_page
+  @Main:
+    my (undef, %opt) = @_;
+    my $max_ns = $opt{ns}->clone;
+    $max_ns->append_component ('1');
+    for (      grep {$_->[$#$_] =~ /^[0-9]+$/}
+               $opt{o}->{wiki}->{db}->keys ('content',
+                                            -ns => $opt{ns},
+                                            -type => 'ns',
+                                            -recursive => 0)) {
+      $max_ns = $_ if $_->[$#$_] > $max_ns->[$#$_];
+    }
+    my $max = ref $max_ns eq 'ARRAY' ? $opt{o}->{wiki}->name ($max_ns)
+                                     : $max_ns->clone;
+    $max->append_component ('0');
+    for (      grep {$_->[$#$_] =~ /^[0-9]+$/}
+               $opt{o}->{wiki}->{db}->keys ('content',
+                                            -ns => $max_ns,
+                                            -type => 'key',
+                                            -recursive => 0)) {
+      $max = $_ if $_->[$#$_] > $max->[$#$_];
+    }
+    $max->[$#$max]++;
+    $max->[$#$max-1]++, $max->[$#$max] = 1 if $max->[$#$max] > 100;
+    $opt{o}->{wiki}->name ($max);
+
+FormattingRule:
+  @Category[list]:
+    view
+    view-resource
+    form-input
+  @Name: bt--bug-root-page
+  @Description:
+    @@@: Root of bugtrack
+    @@lang: en
+  @Formatting:
+    __ATTRTEXT:%ns__;
+    my $ns = $o->{wiki}->name ($p->{ns} || $o->{wiki}->{var}->{page});
+    if ($#$ns > 1) {
+      delete $ns->[$#$ns] if $ns->[$#$ns] =~ /^[0-9]+$/;
+      delete $ns->[$#$ns] if $ns->[$#$ns] =~ /^[0-9]+$/;
+    }
+    $p->{-parent}->append_text ($ns->stringify (wiki => $o->{wiki}));
+
+FormattingRule:
+  @Category[list]:
+    view
+    view-resource
+    form-input
+  @Name: bt--if-one-of-bug
+  @Description:
+    @@@: If one of bug track item WikiPages
+    @@lang: en
+  @Formatting:
+    __ATTRTEXT:%ns__;
+    my $ns = $o->{wiki}->name ($p->{ns} || $o->{wiki}->{var}->{page});
+    if ($#$ns > 1 and
+        $ns->[$#$ns] =~ /^[0-9]+$/ and
+        $ns->[$#$ns - 1] =~ /^[0-9]+$/) {
+      __ATTRNODE:%true->{$p->{-parent}}__;
+    } else {
+      __ATTRNODE:%false->{$p->{-parent}}__;
+    }
+    
+
+ViewDefinition:
+  @Mode: bt--bug-create
+  @Condition:
+    @@output: http-cgi
+    @@http-method[list]:
+      POST
+  @Description:
+    @@@: Create a new bug WikiPage
+    @@lang:en
+  @method:
+    @@@:
+      my $wiki = $self->{view}->{wiki};
+      ## Open Database
+      $wiki->{var}->{db}->{read_only}->{content} = 0;
+      $wiki->{var}->{db}->{read_only}->{lastmodified} = 0;
+      $self->{view}->init_db;
+      
+      my $ns = $wiki->{var}->{page};
+      my $o = {
+        wiki => $wiki,
+      };
+      $o->{bt__bug} = {
+        bug_ns => $ns,
+        bug_page	=> __FUNCPACK__->get_new_bug_page
+                             (ns => $ns, o => $o),
+      };
+      
+      ## Generate new content
+      my @page = ('#?SuikaWiki/0.9', '');
+      for (qw/Subject Priority Status Category/) {
+        my $value = $o->{wiki}->{input}->parameter ('bt--' . lc $_)
+                  || $WIKIRESOURCE->get (name => 'BugTrack:'.$_.':Default',
+                                         o => $o, wiki => $o->{wiki});
+        push @page, '- ' . $_ . ': ' . $value;
+        $o->{bt__bug}->{prop}->{$_} = $value;
+      }
+      my @time = gmtime;
+      push @page, '- Creation-Date: ' .
+                  sprintf '%04d-%02d-%02d %02d:%02d:%02d +00:00',
+                          $time[5]+1900,$time[4]+1,@time[3,2,1,0];
+      push @page, '';
+      push @page, '[1] ' . $o->{wiki}->{input}->parameter ('body');
+      $wiki->{db}->set (content => $o->{bt__bug}->{bug_page}
+                                => join "\x0A", @page);
+      $wiki->{db}->set (lastmodified => $o->{bt__bug}->{bug_page}
+                                => time);
+
+      my $uri = $self->{view}->{wiki}->uri_reference
+                  (page => $o->{bt__bug}->{bug_page},
+                   up_to_date => 1);
+      
+      require SuikaWiki::Output::HTTP;
+      my $output = SuikaWiki::Output::HTTP->new (wiki => $self->{view}->{wiki});
+      $output->set_redirect (uri => $uri, status_code => 303);
+        ## Should we use 201 Created?
+      $output->output (output => 'http-cgi');
+    @@Name: main
+
+ViewFragment:
+  @Template[list]: links
+  @Description:
+    @@@: Web page to web page links - bug tracking system
+    @@lang:en
+  @Formatting:
+      %bt--if-one-of-bug (
+        true => {
+          %link-to-wikipage (
+            page => {%bt--bug-root-page;}p,
+            rel => top,
+            label => {%html-link (
+              description => {%page-name;}p,
+            );},
+          );
+        }p,
+      );
+
+Resource:
+  @BugTrack:Category:Default:
+    @@@: (default)
+    @@lang: en
+  @BugTrack:Category:Label:
+    @@@: Category
+    @@lang: en
+  @BugTrack:CreateForm:Content:
+    %line (content => {
+      %text (id=>bt--subject,label=>{%res (name => {BugTrack:Subject:Label});}p,default=>{%res (name => {BugTrack:Subject:Default});}p,size=>15);
+    }p); 
+    %line (content => {
+      %res (name => {BugTrack:Priority:Label});
+        %radio(id=>bt--priority,label=>{%res (name => {BugTrack:Priority:high});}p,value=>{high}); 
+        %radio(id=>bt--priority,default,label=>{%res (name => {BugTrack:Priority:normal});}p,value=>{normal}); 
+        %radio(id=>bt--priority,label=>{%res (name => {BugTrack:Priority:low});}p,value=>{low});
+    }p); 
+    %line (content => {
+      %res (name => {BugTrack:Status:Label});
+        %radio(id=>bt--status,default,label=>{%res (name => {BugTrack:Status:open});}p,value=>{open}); 
+        %radio(id=>bt--status,label=>{%res (name => {BugTrack:Status:reserved});}p,value=>{reserved}); 
+        %radio(id=>bt--status,label=>{%res (name => {BugTrack:Status:closed});}p,value=>{closed});
+    }p); 
+    %line (content => {
+      %text (id=>bt--category,label=>{%res (name => {BugTrack:Category:Label});}p,size=>10);
+    }p); 
+    %line (content => {
+      %textarea (
+        id => bt--body, size=>15,lines=>5,
+        label=>{%res (name => {BugTrack:CreateForm:MainText:Label});}p,
+      ); 
+      %submit (label => {%res (name => {Form:Label:Add});}p,
+               description => {%res (name => {Form:Label:Description});}p); 
+    }p);
+  @BugTrack:CreateForm:MainText:Label:
+    @@@: Bug description
+    @@lang: en
+  @BugTrack:Item:Number:Label:
+    %link-to-it (label => {%bt--property (name => bug-no);}p, default => {0});
+  @BugTrack:Item:Subject:Default:
+    @@@: No Title
+    @@lang: en
+  @BugTrack:Item:Subject:Label:
+    %link-to-it (label => {%bt--property (
+                   name => Subject,
+                   default => {%res (name => {BugTrack:Item:Subject:Default});}p,
+                 );}p);
+  @BugTrack:Priority:Default:
+    @@@: normal
+    @@lang: en
+  @BugTrack:Priority:Label:
+    @@@: Priority
+    @@lang: en
+  @BugTrack:Priority:high:
+    @@@: HIGH
+    @@lang: en
+  @BugTrack:Priority:low:
+    @@@: low
+    @@lang: en
+  @BugTrack:Priority:normal:
+    @@@: normal
+    @@lang: en
+  @BugTrack:Status:Default:
+    @@@: open
+    @@lang: en
+  @BugTrack:Status:Label:
+    @@@: Status
+    @@lang: en
+  @BugTrack:Status:closed:
+    @@@: closed
+    @@lang: en
+  @BugTrack:Status:open:
+    @@@: OPEN
+    @@lang: en
+  @BugTrack:Status:reserved:
+    @@@: reserved
+    @@lang: en
+  @BugTrack:Subject:Default:
+    @@@: New bug
+    @@lang: en
+  @BugTrack:Subject:Label:
+    @@@: Subject
+    @@lang: en
+  @BugTrack:Table:Summary:
+    @@@:
+      This table shows reported bugs.  Each row represent each bug,
+      each row in turn contains of bug number, status, priority,
+      subject and last-modified date-time.
+    @@lang: en
+  @Plugin:BugTrack:Column:category:
+    @@@: Category
+    @@lang: en
+  @Plugin:BugTrack:Column:last_modified:
+    @@@: Last Modified
+    @@lang: en
+  @Plugin:BugTrack:Column:no:
+    @@@: #
+    @@lang: en
+  @Plugin:BugTrack:Column:priority:
+    @@@: Priority
+    @@lang: en
+  @Plugin:BugTrack:Column:status:
+    @@@: Status
+    @@lang: en
+  @Plugin:BugTrack:Column:subject:
+    @@@: Subject
+    @@lang: en
+  @Plugin:BugTrack:Table:Row:
+    @@@: 
+      %no; %status; %priority; %category; %subject; %last-modified;
+    @@lang: en
+
+Parameter:
+  @Name: bt--subject
+  @Description:
+    @@@: Bug tracking system - subject
+    @@lang: en
+
+Parameter:
+  @Name: bt--category
+  @Description:
+    @@@: Bug tracking system - category
+    @@lang: en
+
+Parameter:
+  @Name: bt--priority
+  @Description:
+    @@@: Bug tracking system - priority
+    @@lang: en
+
+Parameter:
+  @Name: bt--status
+  @Description:
+    @@@: Bug tracking system - status
+    @@lang: en
+
+Parameter:
+  @Name: bt--body
+  @Description:
+    @@@: Bug tracking system - main description
+    @@lang: en
+

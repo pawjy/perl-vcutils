@@ -45,6 +45,8 @@ sub htunescape ($) {
   $s =~ s/&gt;/>/g;
   $s =~ s/&amp;/&/g;
   $s =~ s/&quot;/\x22/g;
+  $s =~ s/&#([0-9]+);/chr $1/ge;
+  $s =~ s/&#x([0-9A-Fa-f]+);/chr hex $1/ge;
   return $s;
 } # htunescape
 
