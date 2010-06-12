@@ -63,13 +63,13 @@ my $text_from = {};
 #}
 
 my $default_branch = 'MAIN';
-if ($ent->{s} =~ m[<[Pp]>\s*Default branch: ([\w_-]+)<(?>br|BR)>]gc) {
-  $default_branch = $1;
-
-  #if ($ent->{s} =~ m[\G\s*Current tag: ([\w_-]+)<(?>br|BR)>]gc) {
-  #  
-  #}
-}
+#if ($ent->{s} =~ m[<[Pp]>\s*Default branch: ([^<]+)<(?>br|BR)>]gc) {
+#  $default_branch = [split /,/, $1, 2]->[0];
+#
+#  #if ($ent->{s} =~ m[\G\s*Current tag: ([\w_-]+)<(?>br|BR)>]gc) {
+#  #  
+#  #}
+#}
 
 my $branches = {};
 my $branch_rev = {};
@@ -133,7 +133,7 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
         $rev =~ s/\.(\d+)\.\d+\z//;
         push @{$rcs->{admin}->{symbols} ||= []}, [$branch => "$rev.0.$1"];
       } else {
-        $rcs->{admin}->{head} ||= $rev;
+        $rcs->{admin}->{head} ||= $rev if $rev =~ /^\d+\.\d+$/;
       }
     }
     $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
@@ -148,7 +148,7 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
     while ($b =~ m!(?:><(?>b|B|strong)>|<[aA] (?:href|HREF)="[^"]+">)([^<>]+)</(?>[bBaA]|strong)>!gc) {
       my $rev = $branches->{$1} ? "$rev.0.".((++$branch_rev->{$rev})*2) : $rev;
       if ($1 eq 'HEAD') {
-        $rcs->{admin}->{head} = $rev;
+        $rcs->{admin}->{head} = $rev if $rev =~ /^\d+\.\d+$/;
         $rcs->{deltatext}->{$rev}->{text} = $text->{$rev};
       } else {
         push @{$rcs->{admin}->{symbols} ||= []}, [$1 => $rev];
@@ -186,6 +186,7 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
   $rcs->{delta}->{$rev}->{state} = 'Exp';
 } # REV
 
+$rcs->{admin}->{head} ||= '1.1';
 delete $text_from->{$rcs->{admin}->{head}};
 
 my %symbol;

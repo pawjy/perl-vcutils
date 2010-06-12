@@ -43,6 +43,20 @@ sub _viewcvs_0_9_2 : Test(1) {
   eq_or_diff $rcs, scalar $testdata_d->file ('Makefile,v')->slurp;
 }
 
+sub _viewcvs_0_9_2_initial : Test(1) {
+  ## <http://suika.fam.cx/gate/cvs/messaging/newsportal/doc/readme-english.txt>
+  ##
+  ## License: GPL.
+
+  my $testdata_d = $data_d->subdir ('viewcvs');
+  my $log_f = $testdata_d->file ('readme-english.txt');
+  my $rcs = `perl $v2r_f --log-uri $log_f --original-base-url http://suika.fam.cx/gate/cvs/*checkout*/messaging/newsportal/doc/readme-english.txt`;
+
+  ## The result is somewhat different from the original RCS file, but
+  ## it resembles enough practically.
+  eq_or_diff $rcs, scalar $testdata_d->file ('readme-english.txt,v')->slurp;
+}
+
 sub _viewvc_1_0_5_sfjp : Test(1) {
   ## <http://sourceforge.jp/cvs/view/gikonavi/gikonavi/Gesture.pas?r1=1.9&view=log>
   ##
