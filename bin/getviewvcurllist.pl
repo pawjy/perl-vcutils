@@ -7,14 +7,21 @@ use LWP::Simple;
 use Message::DOM::DOMImplementation;
 our $VERSION = '1.0';
 
+my $root;
+my $output_prefix;
 my @url;
 
 {
-  my $url = shift or die "Usage: $0 url\n";
-  push @url, $url;
+  $root = shift or die "Usage: $0 url\n";
+  push @url, $root;
+
+  if ($root =~ m[([^/]+)/$]) {
+    $output_prefix = $1 . '/';
+  }
 }
 
 my $files = {};
+my $dirs = {};
 
 my $checked_urls = {};
 while (@url) {
@@ -39,6 +46,7 @@ while (@url) {
       my $new_url = $url . $1;
       if ($2 eq '/') {
         push @url, $new_url . q</>;
+        $dirs->{$new_url . q</>} = 1;
       } else {
         $files->{$new_url} = 1;
       }
@@ -46,8 +54,18 @@ while (@url) {
   } # @$els
 } # @url
 
-my $pattern = qq[perl bin/viewvclog2rcs.pl --log-uri %s\nsleep 1\n];
-printf $pattern, $_ for sort { $a cmp $b } keys %$files;
+print "mkdir $output_prefix\n";
+
+my $d_pattern = qq[mkdir %s\n];
+printf $d_pattern, $_
+    for map { s/^\Q$root\E//o; $output_prefix . $_ }
+    sort { $a cmp $b } keys %$dirs;
+
+my $f_pattern = qq[perl bin/viewvclog2rcs.pl --log-uri %s > %s,v\nsleep 1\n];
+printf $f_pattern, $_->[0], $_->[1]
+    for map { my $v = $_; my $w = $v; $w =~ s/^\Q$root\E//o;
+              [$v, $output_prefix . $w] }
+    sort { $a cmp $b } keys %$files;
 
 =head1 LICENSE
 
