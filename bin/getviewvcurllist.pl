@@ -41,7 +41,7 @@ while (@url) {
   
   my $els = $doc->query_selector_all ('td a');
   for my $el (@$els) {
-    my $href = $el->href;
+    my $href = $el->href or next;
     if ($href =~ m[^\Q$url\E([^/?]+)(/|\?view=.+|)$]) {
       my $new_url = $url . $1;
       if ($2 eq '/') {
