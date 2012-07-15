@@ -1,0 +1,49 @@
+=head1 NAME
+
+Git::Hg::CommitMapping - Git/Mercurial commit/changeset mapping table parser for git-hg / hg-fast-export 
+
+=head1 SYNOPSIS
+
+  use Git::Hg::CommitMapping;
+  use Path::Class;
+  
+  $repo_root_d = dir ("path/to/git-hg/repo/local-copy");
+  $parsed = Git::Hg::CommitMapping->load_git_hg_mapping ($repo_root_d);
+  
+  $hg_changeset = $parsed->{git2hg}->{$git_commit};
+  $git_commit = $parsed->{hg2git}->{$hg_changeset};
+
+=head1 DESCRIPTION
+
+The C<Git::Hg::CommitMapping> module has a class method
+C<load_git_hg_mapping>, which reads C<git-hg> / C<hg-fast-export>'s
+Git-ized Mercurial repository's git/hg commit/changeset mapping table.
+
+The argument to the method must be a L<Path::Class::Dir> object
+identifying the Git repository created from a Mercurial repository.
+
+=head1 SEE ALSO
+
+git-hg, hg-fast-export.
+
+=head1 DEVELOPMENT
+
+Latest version of the module is available from Git repositories:
+<https://github.com/wakaba/perl-vcutils>,
+<http://suika.fam.cx/gate/git/wi/vc/vcutils.git/tree>.
+
+Tests are automatically run by Travis CI:
+<http://travis-ci.org/wakaba/perl-vcutils>.
+
+=head1 AUTHOR
+
+Wakaba <w@suika.fam.cx>.
+
+=head1 LICENSE
+
+Copyright 2012 Wakaba <w@suika.fam.cx>.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
