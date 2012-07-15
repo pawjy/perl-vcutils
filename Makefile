@@ -48,6 +48,7 @@ test-deps: pmb-install test-data
 
 test-data:
 	-cd t/data/git-hg && ln -s dot.git .git
+	-diff --version
 
 safetest:
 	$(PERL_ENV) $(PROVE) t/**.t
