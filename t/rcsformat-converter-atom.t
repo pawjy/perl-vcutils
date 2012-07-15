@@ -14,6 +14,8 @@ use RCSFormat::Converter::Atom;
 my $test_f = file (__FILE__)->dir->subdir ('data')->file ('parser.cgi,v');
 my $test_atom_f = file (__FILE__)->dir->subdir ('data')->file ('parser.cgi.atom');
 
+local $ENV{TZ} = 'JST-9';
+
 sub getrcs (;$) {
   return RCSFormat::File->new_from_stringref (\ scalar $test_f->slurp);
 } # getrcs

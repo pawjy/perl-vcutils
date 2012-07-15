@@ -13,6 +13,8 @@ my $test_f_diff = file (__FILE__)->dir->subdir ('data')->file ('parser.cgi.diff-
 my $test2_f = file (__FILE__)->dir->subdir ('data')->file ('wiki.cgi,v');
 my $test3_f = file (__FILE__)->dir->subdir ('data')->file ('ChangeLog,v');
 
+local $ENV{TZ} = 'JST-9';
+
 sub getrcs (;$) {
   if ($_[0] and $_[0] == 2) {
     return RCSFormat::File->new_from_stringref (\ scalar $test2_f->slurp);
