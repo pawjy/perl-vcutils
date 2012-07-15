@@ -44,7 +44,10 @@ PROVE = prove
 
 test: test-deps safetest
 
-test-deps: pmb-install
+test-deps: pmb-install test-data
+
+test-data:
+	cd t/data/git-hg && ln -s dot.git .git
 
 safetest:
 	$(PERL_ENV) $(PROVE) t/**.t
