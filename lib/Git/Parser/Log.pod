@@ -1,0 +1,39 @@
+=head1 NAME
+
+Git::Parser::Log - A "git log" parser
+
+=head1 SYNOPSIS
+
+  use Git::Parser::Log;
+  
+  $data = `git log --format=raw`;
+  $parsed = Git::Parser::Log->parse_format_raw ($data);
+
+=head1 DESCRIPTION
+
+The C<Git::Parser::Log> module has a class method,
+C<parse_format_raw>, which expects the output of C<git log
+--format=raw> command as the argument, parses the input and returns
+the parsed structure.
+
+=head1 DEVELOPMENT
+
+Latest version of the module is available from Git repositories:
+<https://github.com/wakaba/perl-vcutils>,
+<http://suika.fam.cx/gate/git/wi/vc/vcutils.git/tree>.
+
+Tests are automatically run by Travis CI:
+<http://travis-ci.org/wakaba/perl-vcutils>.
+
+=head1 AUTHOR
+
+Wakaba <w@suika.fam.cx>.
+
+=head1 LICENSE
+
+Copyright 2012 Wakaba <w@suika.fam.cx>.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
