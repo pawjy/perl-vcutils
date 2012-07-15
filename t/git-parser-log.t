@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Path::Class;
 use lib file (__FILE__)->dir->parent->subdir ('lib')->stringify;
-use Test::More tests => 1;
+use Test::More tests => 5;
 use Git::Parser::Log;
 
 my $data_f = file (__FILE__)->dir->subdir ('data')->file ('git-log-formatraw.txt');
@@ -91,6 +91,34 @@ is_deeply $parsed, {
                          }
   ]
 };
+
+{
+  my $git_svn_log = q{commit 3dacdd5fb1274551aced8c5f95e9af52b60aa029
+tree b9e58b76bc5e8757477418c34aac4279a9ec6bdd
+parent 684c8bdc2cc60550e4b1f8f161444ab8fc477ff3
+author ianh <ianh@aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1> 1155638417 +0000
+committer ianh <ianh@aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1> 1155638417 +0000
+
+    boolean not bool in IDL
+
+    git-svn-id: http://svn.whatwg.org/webforms@28 aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1
+
+commit 684c8bdc2cc60550e4b1f8f161444ab8fc477ff3
+tree 334f6ab9730dc4c11125d816079c115f29a69781
+parent 8b26162dfdb59374e4c3af7e2f95b6a4b69f63fc
+author ianh <ianh@aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1> 1155637304 +0000
+committer ianh <ianh@aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1> 1155637304 +0000
+
+    Hidden controls shouldn't be validated, duh.
+
+    git-svn-id: http://svn.whatwg.org/webforms@27 aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1
+};
+  my $parsed = Git::Parser::Log->parse_format_raw ($git_svn_log);
+  is $parsed->{commits}->[0]->{svn_repository}, q<http://svn.whatwg.org/webforms>;
+  is $parsed->{commits}->[0]->{svn_revision}, 28;
+  is $parsed->{commits}->[1]->{svn_repository}, q<http://svn.whatwg.org/webforms>;
+  is $parsed->{commits}->[1]->{svn_revision}, 27;
+}
 
 =head1 LICENSE
 

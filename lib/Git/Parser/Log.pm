@@ -11,7 +11,7 @@ sub parse_format_raw ($$) {
   };
   
   my $last_commit = {};
-  for (split /\x0D?\x0A/, $_[0]) {
+  for (split /\x0D?\x0A/, $_[0], -1) {
     if (/^commit ([0-9a-f]+)$/) {
       $last_commit = {commit => $1};
       push @{$parsed->{commits}}, $last_commit;
@@ -29,6 +29,13 @@ sub parse_format_raw ($$) {
         $last_commit->{body} .= "\n" . $1;
       } else {
         $last_commit->{body} = $1;
+      }
+    } else {
+      if (defined $last_commit->{body}) {
+        if ($last_commit->{body} =~ /(?:^|\n)git-svn-id: (.+?)\@([0-9]+) .+$/) {
+          $last_commit->{svn_repository} = $1;
+          $last_commit->{svn_revision} = $2;
+        }
       }
     }
   }
