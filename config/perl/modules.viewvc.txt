@@ -1,0 +1,7 @@
+File::Temp
+Getopt::Long
+IPC::Open2
+LWP::Simple
+LWP::UserAgent
+Path::Class
+Pod::Usage
