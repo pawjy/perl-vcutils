@@ -21,7 +21,7 @@ sub load_git_hg_mapping ($) {
   if (-f $marks_f) {
     for ($marks_f->slurp) {
       if (/:([0-9]+) ([0-9a-f]+)/) {
-        $marks->{$1} = $2;
+        $marks->{$1 - 1} = $2;
       }
     }
   }
