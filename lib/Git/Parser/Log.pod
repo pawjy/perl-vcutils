@@ -6,15 +6,15 @@ Git::Parser::Log - A "git log" parser
 
   use Git::Parser::Log;
   
-  $data = `git log --format=raw`;
+  $data = `git log --format=raw --raw`;
   $parsed = Git::Parser::Log->parse_format_raw ($data);
 
 =head1 DESCRIPTION
 
 The C<Git::Parser::Log> module has a class method,
 C<parse_format_raw>, which expects the output of C<git log
---format=raw> command as the argument, parses the input and returns
-the parsed structure.
+--format=raw> or C<git log --raw --format=raw> command as the
+argument, parses the input and returns the parsed structure.
 
 =head1 DEVELOPMENT
 

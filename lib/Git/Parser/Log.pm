@@ -1,7 +1,7 @@
 package Git::Parser::Log;
 use strict;
 use warnings;
-our $VERSION = '1.0';
+our $VERSION = '2.0';
 
 sub parse_format_raw ($$) {
   my $class = shift;
@@ -22,7 +22,7 @@ sub parse_format_raw ($$) {
         time => $4,
         tz => $5,
       };
-    } elsif (/^(\S+) (.+)$/) {
+    } elsif (/^([^:\s]\S*) (.+)$/) {
       $last_commit->{$1} = $2;
     } elsif (/^    (.*)/) {
       if (defined $last_commit->{body}) {
@@ -30,6 +30,16 @@ sub parse_format_raw ($$) {
       } else {
         $last_commit->{body} = $1;
       }
+    } elsif (/^:[0-9]+/) {
+      my ($old_mod, $new_mod, $old_commit, $new_commit, $type, $name) 
+          = split /\s+/, $_, 6;
+      $old_mod =~ s/^://;
+      $old_commit =~ s/\.\.\.$//;
+      $new_commit =~ s/\.\.\.$//;
+      $last_commit->{files}->{$name} =
+          {old_mode => $old_mod, new_mode => $new_mod,
+           old_commit => $old_commit, new_commit => $new_commit,
+           mod_type => $type};
     } else {
       if (defined $last_commit->{body}) {
         if ($last_commit->{body} =~ /(?:^|\n)git-svn-id: (.+?)\@([0-9]+) .+$/) {

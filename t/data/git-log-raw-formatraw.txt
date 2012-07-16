@@ -1,0 +1,23 @@
+commit 45a610a2f353a65abb57a97ffc3f6258dbdbc778
+tree ee9240b339d475a225931a02164d193e4c8f3199
+parent f1b00721364aec0c4cefe8c8d1bbbc5d9ee360f7
+author Wakaba <wakaba@lemon> 1342442647 +0900
+committer Wakaba <wakaba@lemon> 1342442647 +0900
+
+    fill git/hg gap
+
+:100644 100644 993c8bf... cd67c93... M	lib/Git/Hg/CommitMapping.pm
+:100644 100644 2f33149... 76d83a3... M	t/data/git-hg-map.json
+:100644 100644 5ec7449... 9426c21... M	t/git-hg-commitmapping.t
+
+commit f1b00721364aec0c4cefe8c8d1bbbc5d9ee360f7
+tree f503f0a4fb37b92729a7fec8d6b3d6766221aebf
+parent 2f935dc58ef4ba5b9635d572797ee37e7e2f694b
+author Wakaba <wakaba@lemon> 1342407988 +0900
+committer Wakaba <wakaba@lemon> 1342407988 +0900
+
+    commandline interface for hg/git commit map
+
+:000000 100644 0000000... 31c0056... A	bin/generate-hg2gitmap.pl
+:000000 100644 0000000... 2f33149... A	t/data/git-hg-map.json
+:000000 100644 0000000... 856d206... A	t/generate-hg2gitmap.t
