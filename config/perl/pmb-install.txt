@@ -23,6 +23,8 @@ Path::Class~0.26
 inc::latest~0.4001
 JSON~2.53
 Pod::Cache~1.51
+JSON::XS~2.32
+common::sense~3.6
 Exporter::Lite~0.02
 Test::Builder~0.98
 Test::Differences~0.61
