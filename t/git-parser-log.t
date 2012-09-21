@@ -18,7 +18,7 @@ is_deeply $parsed, {
                                             'tz' => '+0000',
                                             'mail' => 'w@suika.fam.cx'
                                           },
-                           'parent' => 'fc72a3fd895fc74e9f58da314df4bb864e14a075',
+                           'parent' => ['fc72a3fd895fc74e9f58da314df4bb864e14a075'],
                            'tree' => 'f8e7b11644011f7e2009ad77261581b7ab867d09',
                            'author' => {
                                          'time' => '1187090567',
@@ -45,7 +45,7 @@ is_deeply $parsed, {
                                             'tz' => '+0000',
                                             'mail' => 'w@suika.fam.cx'
                                           },
-                           'parent' => 'abbe65cb82aba0809cd7e213251b9ea475281fbb',
+                           'parent' => ['abbe65cb82aba0809cd7e213251b9ea475281fbb'],
                            'tree' => '589098247e322133196a2af6bb0164abeb43bc2a',
                            'author' => {
                                          'time' => '1187085154',
@@ -63,7 +63,7 @@ is_deeply $parsed, {
                                             'tz' => '+0000',
                                             'mail' => 'w@suika.fam.cx'
                                           },
-                           'parent' => 'd5848510bb5f72cd3cc5fd15a009317c0f59b1bc',
+                           'parent' => ['d5848510bb5f72cd3cc5fd15a009317c0f59b1bc'],
                            'tree' => '8025037985400053e42330fa0e92e812e1001efd',
                            'author' => {
                                          'time' => '1075017312',
@@ -134,7 +134,7 @@ committer ianh <ianh@aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1> 1155637304 +0000
                                             'tz' => '+0900',
                                             'mail' => 'wakaba@lemon'
                                           },
-                           'parent' => 'f1b00721364aec0c4cefe8c8d1bbbc5d9ee360f7',
+                           'parent' => ['f1b00721364aec0c4cefe8c8d1bbbc5d9ee360f7'],
                            'tree' => 'ee9240b339d475a225931a02164d193e4c8f3199',
                            'files' => {
                                         't/git-hg-commitmapping.t' => {
@@ -175,7 +175,7 @@ committer ianh <ianh@aaf4ba16-0b0e-0410-8dd5-8fac43db0bd1> 1155637304 +0000
                                             'tz' => '+0900',
                                             'mail' => 'wakaba@lemon'
                                           },
-                           'parent' => '2f935dc58ef4ba5b9635d572797ee37e7e2f694b',
+                           'parent' => ['2f935dc58ef4ba5b9635d572797ee37e7e2f694b'],
                            'tree' => 'f503f0a4fb37b92729a7fec8d6b3d6766221aebf',
                            'files' => {
                                         'bin/generate-hg2gitmap.pl' => {

@@ -23,7 +23,11 @@ sub parse_format_raw ($$) {
         tz => $5,
       };
     } elsif (/^([^:\s]\S*) (.+)$/) {
-      $last_commit->{$1} = $2;
+      if ($1 eq 'parent') {
+        push @{$last_commit->{$1} ||= []}, $2;
+      } else {
+        $last_commit->{$1} = $2;
+      }
     } elsif (/^    (.*)/) {
       if (defined $last_commit->{body}) {
         $last_commit->{body} .= "\n" . $1;

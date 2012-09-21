@@ -1,0 +1,9 @@
+commit 1c5aa54af0918987a1d64574444e2a3c08f09d24
+tree d3cad731c46daaf1556d61df3b97c7336c33e4f6
+parent fc06877246b4fb7ec905819a5513a95ae50abbbe
+parent a7e519957514fd47d486d8950c38c0039f2c5f8d
+author Wakaba <wakaba@lemon> 1345282921 +0900
+committer Wakaba <wakaba@lemon> 1345282921 +0900
+
+    Merge branch 'master' of github.com:wakaba/manakai
+
