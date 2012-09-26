@@ -431,7 +431,7 @@ a269 3
 terminate:
 	*bp = '\0';
 	return len;
-d276 6
+d275 6
 @
 
 
@@ -702,12 +702,12 @@ a186 6
 		*bp = '\0';
 	}
 	return t_len;
-a192 6
+a191 6
+}
 
 int
 snprintb(char *buf, size_t buflen, const char *bitfmt, uint64_t val)
 {
 	return snprintb_m(buf, buflen, bitfmt, val, 0);
-}
 @
 
