@@ -7,3 +7,6 @@
 [submodule "modules/perl-json-functions-xs"]
 	path = modules/perl-json-functions-xs
 	url = git://github.com/wakaba/perl-json-functions-xs
+[submodule "t_deps/modules/test-x1"]
+	path = t_deps/modules/test-x1
+	url = git://github.com/wakaba/perl-test-x1
