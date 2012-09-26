@@ -118,7 +118,7 @@ test {
     my $temp_d = dir(tempdir(CLEANUP => 1));
     system "cd $temp_d && git init && echo 'hoge:\n\techo 1234 > foo.txt' > Makefile && git add Makefile && git commit -m New";
     my $rev = `cd $temp_d && git rev-parse HEAD`;
-    chomp $rev;
+    $rev =~ s/\s+$//;
 
     system "cd $temp_d && git checkout -b hoge";
 
