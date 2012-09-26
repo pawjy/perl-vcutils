@@ -7,7 +7,6 @@ use AnyEvent;
 use AnyEvent::Util;
 use Encode;
 use Digest::SHA1 qw(sha1_hex);
-use Time::HiRes qw(time);
 
 my $DEBUG = $ENV{AEGR_DEBUG};
 

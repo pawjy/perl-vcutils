@@ -4,4 +4,3 @@ Digest::SHA1
 Encode
 File::Temp
 Path::Class
-Time::HiRes
