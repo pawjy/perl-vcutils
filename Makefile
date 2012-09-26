@@ -11,6 +11,7 @@ all:
 
 # ------ Setup ------
 
+GIT = git
 WGET = wget
 PERL = perl
 PERL_VERSION = latest
@@ -37,6 +38,9 @@ generatepm: %: Makefile-setupenv
 	    PMB_PMTAR_REPO_URL=$(PMB_PMTAR_REPO_URL) \
 	    PMB_PMPP_REPO_URL=$(PMB_PMPP_REPO_URL)
 
+git-submodules:
+	$(GIT) submodule update --init
+
 # ------ Test ------
 
 PERL_ENV = PATH=$(PERL_PATH):$(PATH) PERL5LIB=$(shell cat config/perl/libs.txt)
@@ -44,7 +48,7 @@ PROVE = prove
 
 test: test-deps safetest
 
-test-deps: pmb-install test-data
+test-deps: git-submodules pmb-install test-data
 
 test-data:
 	-cd t/data/git-hg && ln -s dot.git .git
