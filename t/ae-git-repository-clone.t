@@ -40,7 +40,7 @@ test {
             ok -f $d->file('Makefile');
             ok -f $d->file('aaa');
             my $rev3 = `cd \Q$d\E && git rev-parse HEAD`;
-            chomp $rev3;
+            $rev3 =~ s/\s+$//;
             is $rev3, $rev2;
             done $c;
             undef $c;
@@ -71,7 +71,7 @@ test {
             ok -f $d->file('Makefile');
             ok !-f $d->file('aaa');
             my $rev3 = `cd \Q$d\E && git rev-parse HEAD`;
-            chomp $rev3;
+            $rev3 =~ s/\s+$//;
             is $rev3, $rev;
             done $c;
             undef $c;
@@ -104,7 +104,7 @@ test {
             ok -f $d->file('Makefile');
             ok -f $d->file('aaa');
             my $rev3 = `cd \Q$d\E && git rev-parse HEAD`;
-            chomp $rev3;
+            $rev3 =~ s/\s+$//;
             is $rev3, $rev2;
             done $c;
             undef $c;
@@ -137,7 +137,7 @@ test {
             ok -f $d->file('Makefile');
             ok !-f $d->file('aaa');
             my $rev3 = `cd \Q$d\E && git rev-parse HEAD`;
-            chomp $rev3;
+            $rev3 =~ s/\s+$//;
             is $rev3, $rev;
             done $c;
             undef $c;
@@ -171,7 +171,7 @@ test {
             ok -f $d->file('Makefile');
             ok !-f $d->file('aaa');
             my $rev3 = `cd \Q$d\E && git rev-parse HEAD`;
-            chomp $rev3;
+            $rev3 =~ s/\s+$//;
             is $rev3, $rev;
             done $c;
             undef $c;
