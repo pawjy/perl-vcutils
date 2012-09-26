@@ -4,6 +4,7 @@ rootdir=`dirname $0`/..
 tempfile=`perl -MFile::Temp -e 'print File::Temp->new->filename'`
 
 perl $rootdir/bin/gitlog2json.pl < $rootdir/t/data/git-log-formatraw.txt > $tempfile
+#diff -u $tempfile $rootdir/t/data/git-log-formatraw.json
 if diff -u $tempfile $rootdir/t/data/git-log-formatraw.json -q; then
   echo "ok 1"
 else
