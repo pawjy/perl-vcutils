@@ -6,6 +6,7 @@ pod2htmi.tmp
 pod2htmd.tmp
 /Makefile.setupenv
 /config/perl/libs.txt
+/config/perl/modules.txt
 /local/
 /perl
 /prove
