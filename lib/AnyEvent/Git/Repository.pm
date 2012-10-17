@@ -136,9 +136,9 @@ sub clone_as_cv {
             $rev = 'master' unless defined $rev;
             $self->git_as_cv(['checkout', $rev])->cb(sub {
                 $self->git_as_cv(['remote', 'set-url', 'origin', $self->url])->cb(sub {
-                    $self->git_as_cv(['submodule', 'update', '--init'])->cb(sub {
+                    #$self->git_as_cv(['submodule', 'update', '--init'])->cb(sub {
                         $cv->send;
-                    });
+                    #});
                 });
             });
         });
