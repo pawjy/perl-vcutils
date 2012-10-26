@@ -1,0 +1,103 @@
+=head1 NAME
+
+Test::Git::EditRepository - Editing Git repository in test scripts
+
+=head1 SYNOPSIS
+
+  use Test::Git::EditRepository;
+  
+  $d = create_git_repository;
+  
+  create_git_files $d,
+      {name => 'hoge.txt', data => 'Hello, world!'},
+      {name => 'config/setup.sh', data => "#!/bin/sh\ntrue"};
+  
+  git_commit $d;
+  
+  $rev = get_git_revision $d;
+  
+  git_checkout $d, $rev;
+
+=head1 DESCRIPTION
+
+The C<Test::Git::EditRepository> module exports functions that are
+useful to construct Git repository in test scripts.
+
+=head1 FUNCTIONS
+
+Using the module exports following functions:
+
+=over 4
+
+=item $d = create_git_repository
+
+Create an empty Git repository in the temporary directory.  The
+directory will be removed when the program exits.
+
+The function returns the L<Path::Class::Dir> object representing the
+path to the directory of the Git repository.
+
+=item create_git_files $d, @file
+
+Create files in the Git repository.  This function takes one or more
+arguments.  The first argument must be the L<Path::Class::Dir> object
+representing the Git repository.  The remaining arguments must be hash
+references representing files in the directory tree of the repository.
+
+The hash reference specified as arguments must contain C<name>
+argument, which represents relative path to the file to be created.
+It must be a valid relative path in the Git repository.  Directories
+are created if necessary.  If there is already a file with same name,
+it is overridden by new file.  The hash reference may also contain
+C<data> argument, which represents the content of the file.  It must
+be a string, either bytes or characters.  If the file content is
+characters (i.e. utf8-flagged), it is saved in utf8 in the file.
+
+The function also run C<git add> command for created files.  You might
+then want to invoke C<git_commit> command.
+
+=item $result = git_commit $d, message => MESSAGE
+
+Run the C<git commit> command for the Git repository.  The first
+argument must be the L<Path::Class::Dir> object representing the path
+to the repository.  Additional options can be specified as name-value
+pairs.  If the C<message> option is specified, its value is used as
+the commit message (i.e. C<-m> option to the C<git commit> command).
+Otherwise random string is used as commit message.
+
+The function returns whether the commit succeeded or not.
+
+=item $result = git_checkout $d, $ref
+
+Run the C<git checkout> command for the Git repository.  The first
+argument must be the L<Path::Class::Dir> object representing the path
+to the repository.  The second argument must be a valid reference
+denoting the commit object (e.g. commit SHA-1 hash or branch name).
+
+The function returns whether the checkout succeeded or not.
+
+=back
+
+=head1 DEPENDENCY
+
+The module depends on L<Path::Class> and L<Exporter::Lite>.
+
+The module invokes the C<git> command on the system.
+
+=head1 DEVELOPMENT
+
+The latest version of the module is available from GitHub
+<https://github.com/wakaba/perl-vcutils>.
+
+=head1 AUTHOR
+
+Wakaba <wakabatan@hatena.ne.jp>.
+
+=head1 LICENSE
+
+Copyright 2012 Hatena <http://www.hatena.ne.jp/>.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
