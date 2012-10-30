@@ -136,9 +136,15 @@ sub clone_as_cv {
             $self->git_as_cv(['remote', 'set-url', 'origin', $self->url])->cb(sub {
                 if (defined $branch) {
                     if (defined $rev) {
-                        $self->git_as_cv(['branch', '-D', $branch])->cb(sub {
-                            $self->git_as_cv(['checkout', '-b', $branch, $rev])->cb(sub {
-                                $cv->send;
+                        $self->git_as_cv(['checkout', $rev])->cb(sub {
+                            $self->git_as_cv(['branch', '-D', $branch])->cb(sub {
+                                $self->git_as_cv(['checkout', '-b', $branch, $rev])->cb(sub {
+                                    $self->git_as_cv(['config', '--add', 'branch.' . $branch . '.remote', 'origin'])->cb(sub {
+                                        $self->git_as_cv(['config', '--add', 'branch.' . $branch . '.merge', 'refs/heads/' . $branch])->cb(sub {
+                                            $cv->send;
+                                        });
+                                    });
+                                });
                             });
                         });
                     } else {
