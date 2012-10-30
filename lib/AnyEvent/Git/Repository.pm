@@ -132,17 +132,37 @@ sub clone_as_cv {
     $self->prepare_cached_repo_d_as_cv->cb(sub {
         my $clone_cv = $self->git_as_cv(['clone', $self->cached_repo_d => $self->temp_repo_d->stringify], d => $self->cached_repo_d)->cb(sub {
             my $rev = $self->revision;
-            $rev = $self->branch unless defined $rev;
-            $rev = 'master' unless defined $rev;
-            $self->git_as_cv(['checkout', $rev])->cb(sub {
-                $self->git_as_cv(['remote', 'set-url', 'origin', $self->url])->cb(sub {
-                    #$self->git_as_cv(['submodule', 'update', '--init'])->cb(sub {
+            my $branch = $self->branch;
+            $self->git_as_cv(['remote', 'set-url', 'origin', $self->url])->cb(sub {
+                if (defined $branch) {
+                    if (defined $rev) {
+                        $self->git_as_cv(['branch', '-D', $branch])->cb(sub {
+                            $self->git_as_cv(['checkout', '-b', $branch, $rev])->cb(sub {
+                                $cv->send;
+                            });
+                        });
+                    } else {
+                        $self->git_as_cv(['branch', '-D', $branch])->cb(sub {
+                            $self->git_as_cv(['checkout', '-b', $branch, 'origin/' . $branch])->cb(sub {
+                                $cv->send;
+                            });
+                        });
+                    }
+                } else {
+                    if (defined $rev) {
+                        $self->git_as_cv(['checkout', $rev])->cb(sub {
+                            $cv->send;
+                        });
+                    } else {
                         $cv->send;
-                    #});
-                });
+                    }
+                }
             });
         });
     });
+
+    # XXX If failed, ...
+
     return $cv;
 }
 
