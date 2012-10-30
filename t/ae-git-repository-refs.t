@@ -91,11 +91,11 @@ test {
     my $temp_d = dir(tempdir(CLEANUP => 1));
     system "cd $temp_d && git init && echo 'hoge:\n\techo 1234 > foo.txt' > Makefile && git add Makefile && git commit -m New";
     my $rev = `cd $temp_d && git rev-parse HEAD`;
-    chomp $rev;
+    $rev =~ s/\s+$//;
 
     system "cd $temp_d && touch aaa && git add aaa && git commit -m aaa && git tag abc/de";
     my $rev2 = `cd $temp_d && git rev-parse HEAD`;
-    chomp $rev2;
+    $rev2 =~ s/\s+$//;
 
     my $cached_d = dir(tempdir(CLEANUP => 1));
 
@@ -116,11 +116,11 @@ test {
     my $temp_d = dir(tempdir(CLEANUP => 1));
     system "cd $temp_d && git init && echo 'hoge:\n\techo 1234 > foo.txt' > Makefile && git add Makefile && git commit -m New";
     my $rev = `cd $temp_d && git rev-parse HEAD`;
-    chomp $rev;
+    $rev =~ s/\s+$//;
 
     system "cd $temp_d && touch aaa && git add aaa && git commit -m aaa && git tag abc/de";
     my $rev2 = `cd $temp_d && git rev-parse HEAD`;
-    chomp $rev2;
+    $rev2 =~ s/\s+$//;
 
     my $cached_d = dir(tempdir(CLEANUP => 1));
 
