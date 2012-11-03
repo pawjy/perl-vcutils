@@ -100,6 +100,7 @@ sub git_as_cv {
     $cmd = ['sh', '-c', 'cd ' . (quotemeta $d) . ' && git ' . join ' ', map { quotemeta } @$cmd];
     warn join ' ', @$cmd, "\n" if $DEBUG;
     return run_cmd $cmd, 
+        ($args{stdin} ? ('<' => $args{stdin}) : ()),
         '>' => $args{onstdout} || sub {
             $onmessage->($_[0]) if defined $_[0];
         },
@@ -112,14 +113,32 @@ sub git_as_cv {
 sub prepare_cached_repo_d_as_cv {
     my $self = shift;
     my $cv1 = AE::cv;
+    if ($self->{prepare_cv}) {
+        push @{$self->{onprepare} ||= []}, sub {
+            $self->git_as_cv(['fetch', 'origin'], d => $self->cached_repo_d)->cb(sub {
+                $cv1->send;
+            });
+        };
+        return $cv1;
+    }
+    my $cv2 = $self->{prepare_cv} = AE::cv;
+    $cv2->cb(sub {
+        for (@{$self->{onprepare} or []}) {
+            $_->();
+        }
+        delete $self->{prepare_cv};
+        delete $self->{onprepare};
+    });
     $self->has_cached_repo_d_as_cv->cb(sub {
         if ($_[0]->recv) {
             $self->git_as_cv(['fetch', 'origin'], d => $self->cached_repo_d)->cb(sub {
                 $cv1->send;
+                $cv2->send;
             });
         } else {
             $self->git_as_cv(['clone', '--mirror', $self->url => $self->cached_repo_d])->cb(sub {
                 $cv1->send;
+                $cv2->send;
             });
         }
     });
@@ -169,6 +188,34 @@ sub clone_as_cv {
 
     # XXX If failed, ...
 
+    return $cv;
+}
+
+sub get_object_type_as_cv {
+    my ($self, $obj) = @_;
+    my $cv = AE::cv;
+    $self->prepare_cached_repo_d_as_cv->cb(sub {
+        my $result;
+        $self->git_as_cv(
+            ['cat-file', '--batch-check'],
+            d => $self->cached_repo_d,
+            onstdout => \$result,
+            stdin => \"$obj\n",
+        )->cb(sub {
+            if (defined $result) {
+                my ($sha1, $type, $size) = split /\s/, $result;
+                if (defined $sha1) {
+                    if ($type eq 'missing') {
+                        $cv->send(undef);
+                    } else {
+                        $cv->send({sha => $sha1, type => $type, size => $size});
+                    }
+                    return;
+                }
+            }
+            $cv->send(undef);
+        });
+    });
     return $cv;
 }
 

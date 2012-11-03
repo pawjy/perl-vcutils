@@ -1,0 +1,54 @@
+=head1 NAME
+
+AnyEvent::Git::Repository - Non-blocking Git repository accessor
+
+=head1 SYNOPSIS
+
+XXX
+
+=head1 DESCRIPTION
+
+XXX
+
+=head1 METHODS
+
+XXX
+
+=over 4
+
+=item $cv = $repo->get_object_type_as_cv($ref)
+
+Detect the type of the specified Git object.  This method is
+corresponding to the C<git cat-file --batch-check> command.
+
+There must be an argument, which identifies the Git object.  It may be
+any string that is resolved into an object by Git, including commit
+SHA-1 hashes and branch names.
+
+The method returns a condvar, which will receive the type of the
+object as a hash reference.  The hash reference contains following
+key-value pairs: C<sha> is the SHA-1 hash of the specified object (in
+full form); C<type> represets the type of the object, either C<blob>,
+C<tree>, or C<commit>; and C<size> is the size of the object.  If the
+string identifies no object in the repository, the C<undef> value is
+returned instead of the hash reference.
+
+This method can be used to normalize commit SHA-1 hash value or to
+convert branch names into their referencing SHA-1 hash values.
+
+=back
+
+=head1 AUTHOR
+
+Wakaba <wakaba@suikawiki.org>.
+
+=head1 LICENSE
+
+Copyright 2012 Hatena <http://www.hatena.ne.jp/>.
+
+Copyright 2012 Wakaba <wakaba@suikawiki.org>.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

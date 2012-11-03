@@ -17,6 +17,7 @@ use AnyEvent;
 use File::Temp qw(tempdir);
 use Path::Class;
 use AnyEvent::Git::Repository;
+use Test::Git::EditRepository;
 
 test {
     my $c = shift;
@@ -235,5 +236,104 @@ test {
         } $c;
     });
 } n => 1, name => 'commit info list - commit not found';
+
+test {
+    my $c = shift;
+
+    my $repo_d = create_git_repository;
+    create_git_files $repo_d, {name => 'abc'};
+    git_commit $repo_d;
+    my $rev = get_git_revision $repo_d;
+
+    my $cached_d = dir(tempdir(CLEANUP => 1));
+    my $repo = AnyEvent::Git::Repository->new_from_url_and_cached_repo_set_d($repo_d->stringify, $cached_d);
+    #$repo->onmessage(sub { warn $_[0] });
+
+    test {
+        my $cv = AE::cv;
+        $cv->begin;
+        
+        $cv->begin;
+        $repo->get_object_type_as_cv('HEAD')->cb(sub {
+            my $info = $_[0]->recv;
+            test {
+                is $info->{sha}, $rev, 'HEAD';
+                is $info->{type}, 'commit';
+                ok $info->{size};
+                $cv->end;
+            } $c;
+        });
+        
+        $cv->begin;
+        $repo->get_object_type_as_cv('master')->cb(sub {
+            my $info = $_[0]->recv;
+            test {
+                is $info->{sha}, $rev, 'master';
+                is $info->{type}, 'commit';
+                ok $info->{size};
+                $cv->end;
+            } $c;
+        });
+        
+        $cv->begin;
+        $repo->get_object_type_as_cv($rev)->cb(sub {
+            my $info = $_[0]->recv;
+            test {
+                is $info->{sha}, $rev, 'SHA-1';
+                is $info->{type}, 'commit';
+                ok $info->{size};
+                $cv->end;
+            } $c;
+        });
+        
+        $cv->begin;
+        $repo->get_object_type_as_cv("$rev\n")->cb(sub {
+            my $info = $_[0]->recv;
+            test {
+                is $info->{sha}, $rev, 'SHA-1 with newline';
+                is $info->{type}, 'commit';
+                ok $info->{size};
+                $cv->end;
+            } $c;
+        });
+
+        $cv->begin;
+        $repo->get_object_type_as_cv(substr $rev, 0, 6)->cb(sub {
+            my $info = $_[0]->recv;
+            test {
+                is $info->{sha}, $rev, 'abbreved SHA-1';
+                is $info->{type}, 'commit';
+                ok $info->{size};
+                $cv->end;
+            } $c;
+        });
+        
+        $cv->begin;
+        $repo->get_object_type_as_cv($rev . 'abc')->cb(sub {
+            my $info = $_[0]->recv;
+            test {
+                is $info, undef, 'SHA-1 followed by invalid';
+                $cv->end;
+            } $c;
+        });
+        
+        $cv->begin;
+        $repo->get_object_type_as_cv('abc')->cb(sub {
+            my $info = $_[0]->recv;
+            test {
+                is $info, undef, 'invalid';
+                $cv->end;
+            } $c;
+        });
+
+        $cv->end;
+        $cv->cb(sub {
+            test {
+                done $c;
+                undef $c;
+            } $c;
+        });
+    } $c;
+} n => 17, name => 'get_object_type_as_cv';
 
 run_tests;
