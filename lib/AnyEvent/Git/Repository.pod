@@ -36,6 +36,16 @@ returned instead of the hash reference.
 This method can be used to normalize commit SHA-1 hash value or to
 convert branch names into their referencing SHA-1 hash values.
 
+=item $cv = $repo->current_revision_as_cv
+
+Ask the current C<HEAD>'s commit SHA-1 hash value of the temporarily
+cloned copy of the Git repository, if any.
+
+The method returns a condvar, which will receive the commit's SHA-1
+hash value, if there is the cloned repository, or the C<undef> value
+otherwise, It might or might not be equal to the value of the C<<
+$repo->revision >>.
+
 =back
 
 =head1 AUTHOR

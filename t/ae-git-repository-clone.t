@@ -17,6 +17,7 @@ use AnyEvent;
 use File::Temp qw(tempdir);
 use Path::Class;
 use AnyEvent::Git::Repository;
+use Test::Git::EditRepository;
 
 test {
     my $c = shift;
@@ -48,11 +49,17 @@ test {
             is $remote_branch, "refs/heads/master\n";
             my $remote = `cd \Q$d\E && git config branch.master.remote`;
             is $remote, "origin\n";
-            done $c;
-            undef $c;
+            $action->current_revision_as_cv->cb(sub {
+                my $currev = $_[0]->recv;
+                test {
+                    is $currev, $rev3;
+                    done $c;
+                    undef $c;
+                } $c;
+            });
         } $c;
     });
-} n => 6, name => 'default';
+} n => 7, name => 'default';
 
 test {
     my $c = shift;
@@ -260,10 +267,32 @@ test {
             is $remote_branch2, "";
             my $remote2 = `cd \Q$d\E && git config branch.hoge.remote`;
             is $remote2, "";
+            $action->current_revision_as_cv->cb(sub {
+                my $currev = $_[0]->recv;
+                test {
+                    is $currev, $rev3;
+                    done $c;
+                    undef $c;
+                } $c;
+            });
+        } $c;
+    });
+} n => 9, name => 'branch rev specified - master';
+
+test {
+    my $c = shift;
+
+    my $repo_d = create_git_repository;
+    my $cached_d = dir(tempdir(CLEANUP => 1));
+    my $repo = AnyEvent::Git::Repository->new_from_url_and_cached_repo_set_d($repo_d->stringify, $cached_d);
+    $repo->current_revision_as_cv->cb(sub {
+        my $currev = $_[0]->recv;
+        test {
+            is $currev, undef;
             done $c;
             undef $c;
         } $c;
     });
-} n => 8, name => 'branch rev specified - master';
+} n => 1, name => 'current revision not clonsed';
 
 run_tests;

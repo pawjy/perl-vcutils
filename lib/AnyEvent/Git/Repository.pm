@@ -291,4 +291,19 @@ sub get_commit_info_list_as_cv {
     return $cv;
 }
 
+sub current_revision_as_cv {
+    my $self = shift;
+    my $cv = AE::cv;
+    my $result = '';
+    $self->git_as_cv(
+        ['rev-parse', 'HEAD'],
+        onstdout => \$result,
+        d => $self->temp_repo_d,
+    )->cb(sub {
+        chomp $result;
+        $cv->send($result || undef);
+    });
+    return $cv;
+}
+
 1;
