@@ -12,16 +12,17 @@ use warnings;
 use Path::Class;
 use lib file (__FILE__)->dir->parent->subdir ('lib')->stringify;
 use lib glob file (__FILE__)->dir->parent->subdir ('modules', '*', 'lib')->stringify;
+use Encode;
 use Git::Parser::Log;
 use JSON::Functions::XS qw(perl2json_bytes_for_record);
 
 local $/ = undef;
-my $parsed = Git::Parser::Log->parse_format_raw (<>);
+my $parsed = Git::Parser::Log->parse_format_raw (decode 'utf-8', <>);
 print perl2json_bytes_for_record $parsed;
 
 =head1 LICENSE
 
-Copyright 2012 Wakaba <w@suika.fam.cx>.
+Copyright 2012-2014 Wakaba <wakaba@suikawiki.org>.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
