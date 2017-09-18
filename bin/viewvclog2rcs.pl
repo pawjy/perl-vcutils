@@ -85,9 +85,10 @@ pos ($ent->{s}) = 0;
 REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)>|/>\s*<a name="rev)!gc) {
   my $rev = '';
   if ($ent->{s} =~ m!Revision!gc and
-      $ent->{s} =~ m!<[aA] (?>href|HREF)="([^"]+)"[^<>]*>(?:<[bB]>)?([0-9.]+|view)(?:</[bB]>)?</[aA]>!gc) {
+      ($ent->{s} =~ m!<[aA] (?>href|HREF)="([^"]+)"[^<>]*>(?:<[bB]>)?([0-9.]+|view)(?:</[bB]>)?</[aA]>!gc or
+       $ent->{s} =~ m!()<b>([0-9.]+)</b>: <a href="([^"]+)" class="download-link">download</a>!gc)) {
     $rev = $2;
-    my $uri = htunescape $1;
+    my $uri = htunescape (defined $3 ? $3 : $1);
     if ($rev eq 'view' and $uri =~ /\?revision=([0-9.]+)\b/) {
       $rev = $1;
     }
