@@ -5,3 +5,4 @@ LWP::Simple
 LWP::UserAgent
 Path::Class
 Pod::Usage
+LWP::Protocol::https

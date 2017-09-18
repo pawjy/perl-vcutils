@@ -243,6 +243,7 @@ sub get_remote_entity ($) {
     my $uri = $dom->create_uri_reference ($request_uri);
     unless ({
              http => 1,
+             https => 1,
              file => 1,
             }->{lc $uri->uri_scheme}) {
       return {uri => $request_uri, request_uri => $request_uri,
@@ -252,10 +253,6 @@ sub get_remote_entity ($) {
     require Message::Util::HostPermit;
     my $host_permit = new Message::Util::HostPermit;
     $host_permit->add_rule (<<EOH);
-Allow host=suika port=80
-Deny host=suika
-Allow host=suika.fam.cx port=80
-Deny host=suika.fam.cx
 Deny host=localhost
 Deny host=*.localdomain
 Deny ipv4=0.0.0.0/8
@@ -272,7 +269,8 @@ Deny ipv4=255.255.255.255/32
 Deny ipv6=0::0/0
 Allow host=*
 EOH
-    if (lc $uri->uri_scheme eq 'http') {
+    if (lc $uri->uri_scheme eq 'http' or
+        lc $uri->uri_scheme eq 'https') {
       unless ($host_permit->check ($uri->uri_host, $uri->uri_port || 80)) {
         return {uri => $request_uri, request_uri => $request_uri,
                 error_status_text => 'Connection to the host is forbidden'};
@@ -285,7 +283,7 @@ EOH
     $ua->{wdcc_host_permit} = $host_permit;
     $ua->agent ('Mozilla'); ## TODO: for now.
     $ua->parse_head (0);
-    $ua->protocols_allowed ([qw/http file/]);
+    $ua->protocols_allowed ([qw/http https file/]);
     $ua->max_size (1000_000);
     my $req = HTTP::Request->new (GET => $request_uri);
   warn "<$request_uri>...\n";
@@ -348,7 +346,7 @@ sub redirect_ok {
 
 =head1 LICENSE
 
-Copyright 2007-2010 Wakaba <w@suika.fam.cx>.  All rights reserved.
+Copyright 2007-2017 Wakaba <wakaba@suikawiki.org>.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
