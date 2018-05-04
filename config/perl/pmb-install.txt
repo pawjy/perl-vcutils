@@ -42,3 +42,4 @@ Algorithm::Diff~1.1902
 List::Rubyish~0.03
 Carp~1.26
 Time::HiRes~1.9725
+Path::Tiny

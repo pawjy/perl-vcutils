@@ -1,4 +1,5 @@
 Path::Class
+Path::Tiny
 Test::Class
 Test::Differences
 Test::More

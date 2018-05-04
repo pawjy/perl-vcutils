@@ -94,9 +94,9 @@ sub temp_repo_d {
 
 sub git_as_cv {
     my ($self, $cmd, %args) = @_;
-    $self->print_message('$ ' . join ' ', 'git', @$cmd);
     my $onmessage = $self->onmessage;
     my $d = $args{d} || $self->temp_repo_d;
+    $self->print_message($d . '$ ' . join ' ', 'git', @$cmd);
     $cmd = ['sh', '-c', 'cd ' . (quotemeta $d) . ' && git ' . join ' ', map { quotemeta } @$cmd];
     warn join ' ', @$cmd, "\n" if $DEBUG;
     return run_cmd $cmd, 

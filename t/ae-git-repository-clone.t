@@ -1,15 +1,7 @@
 use strict;
-BEGIN {
-    my $file_name = __FILE__; $file_name =~ s{[^/\\]+$}{}; $file_name ||= '.';
-    $file_name .= '/../config/perl/libs.txt';
-    if (-f $file_name) {
-        open my $file, '<', $file_name or die "$0: $file_name: $!";
-        unshift @INC, split /:/, <$file>;
-    }
-    $file_name =~ s{/config/perl/libs.txt$}{/t_deps/modules/*/lib};
-    unshift @INC, glob $file_name;
-}
 use warnings;
+use Path::Tiny;
+use lib glob path (__FILE__)->parent->parent->child ('t_deps/modules/*/lib');
 use Test::More;
 use Test::Differences;
 use Test::X1;
@@ -55,6 +47,7 @@ test {
                     is $currev, $rev3;
                     done $c;
                     undef $c;
+                    undef $action;
                 } $c;
             });
         } $c;
@@ -248,6 +241,9 @@ test {
     my $action = AnyEvent::Git::Repository->new_from_url_and_cached_repo_set_d($temp_d->stringify, $cached_d);
     $action->branch('master');
     $action->revision($rev);
+    #$action->onmessage (sub {
+    #  warn "MESSAGE: $_[0]\n";
+    #});
     $action->clone_as_cv->cb(sub {
         my $branches = $_[0]->recv;
         test {
@@ -273,6 +269,7 @@ test {
                     is $currev, $rev3;
                     done $c;
                     undef $c;
+                    undef $action;
                 } $c;
             });
         } $c;
