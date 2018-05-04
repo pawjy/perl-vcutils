@@ -1,7 +1,7 @@
 package Git::Parser::Log;
 use strict;
 use warnings;
-our $VERSION = '2.0';
+our $VERSION = '3.0';
 
 sub parse_format_raw ($$) {
   my $class = shift;
@@ -15,7 +15,7 @@ sub parse_format_raw ($$) {
     if (/^commit ([0-9a-f]+)$/) {
       $last_commit = {commit => $1};
       push @{$parsed->{commits}}, $last_commit;
-    } elsif (/^(author|committer) (.+?) <([^<>]+)> ([0-9]+) ([+-][0-9]{4})$/) {
+    } elsif (/^(author|committer) (.+?) <([^<>]*)> ([0-9]+) ([+-][0-9]{4})$/) {
       $last_commit->{$1} = {
         name => $2,
         mail => $3,
@@ -61,7 +61,7 @@ sub parse_format_raw ($$) {
 
 =head1 LICENSE
 
-Copyright 2012 Wakaba <w@suika.fam.cx>.
+Copyright 2012-2018 Wakaba <wakaba@suikawiki.org>.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
