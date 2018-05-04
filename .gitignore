@@ -11,3 +11,6 @@ pod2htmd.tmp
 /perl
 /prove
 /t/data/git-hg/dot.git/dot.git
+/plackup
+/cin
+/deps

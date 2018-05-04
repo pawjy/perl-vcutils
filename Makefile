@@ -1,65 +1,51 @@
-# Running tests:
-#     $ make test
-# Install required Perl modules into ./local/
-#     $ make pmb-install
-# Update list of required Perl modules:
-#     1. Edit config/perl/modules.txt
-#     2. Run "make pmb-update"
-#     3. Commit modified files
 
 all:
 
+WGET = wget
 CURL = curl
+GIT = git
 
-updatenightly:
+updatenightly: local/bin/pmbp.pl
+	$(CURL) -s -S -L -f https://gist.githubusercontent.com/wakaba/34a71d3137a52abb562d/raw/gistfile1.txt | sh
+	$(GIT) add modules t_deps/modules
+	perl local/bin/pmbp.pl --update
+	$(GIT) add config
 	$(CURL) -sSLf https://raw.githubusercontent.com/wakaba/ciconfig/master/ciconfig | RUN_GIT=1 REMOVE_UNUSED=1 perl
 
-# ------ Setup ------
+## ------ Setup ------
 
-GIT = git
-WGET = wget
-PERL = perl
-PERL_VERSION = latest
-PERL_PATH = $(abspath local/perlbrew/perls/perl-$(PERL_VERSION)/bin)
-REMOTEDEV_HOST = 
-REMOTEDEV_PERL_VERSION = $(PERL_VERSION)
-
-PMB_PMTAR_REPO_URL = 
-PMB_PMPP_REPO_URL = 
-
-Makefile-setupenv: Makefile.setupenv
-	$(MAKE) --makefile Makefile.setupenv setupenv-update \
-	    SETUPENV_MIN_REVISION=20120334
-
-Makefile.setupenv:
-	$(WGET) -O $@ https://raw.github.com/wakaba/perl-setupenv/master/Makefile.setupenv
-
-lperl lprove local-perl perl-version perl-exec \
-pmb-update pmb-install \
-generatepm: %: Makefile-setupenv
-	$(MAKE) --makefile Makefile.setupenv $@ \
-            REMOTEDEV_HOST=$(REMOTEDEV_HOST) \
-            REMOTEDEV_PERL_VERSION=$(REMOTEDEV_PERL_VERSION) \
-	    PMB_PMTAR_REPO_URL=$(PMB_PMTAR_REPO_URL) \
-	    PMB_PMPP_REPO_URL=$(PMB_PMPP_REPO_URL)
+deps: git-submodules pmbp-install
 
 git-submodules:
 	$(GIT) submodule update --init
 
-# ------ Test ------
+PMBP_OPTIONS=
 
-PERL_ENV = PATH=$(PERL_PATH):$(PATH) PERL5LIB=$(shell cat config/perl/libs.txt)
-PROVE = prove
+local/bin/pmbp.pl:
+	mkdir -p local/bin
+	$(CURL) -s -S -L -f https://raw.githubusercontent.com/wakaba/perl-setupenv/master/bin/pmbp.pl > $@
+pmbp-upgrade: local/bin/pmbp.pl
+	perl local/bin/pmbp.pl $(PMBP_OPTIONS) --update-pmbp-pl
+pmbp-update: git-submodules pmbp-upgrade
+	perl local/bin/pmbp.pl $(PMBP_OPTIONS) --update
+pmbp-install: pmbp-upgrade
+	perl local/bin/pmbp.pl $(PMBP_OPTIONS) --install \
+            --create-perl-command-shortcut @perl \
+            --create-perl-command-shortcut @prove
 
-test: test-deps safetest
+## ------ Tests ------
 
-test-deps: git-submodules pmb-install test-data
+PROVE = ./prove
+
+test: test-deps test-main
+
+test-deps: deps test-data
 
 test-data:
 	-cd t/data/git-hg && ln -s dot.git .git
 	-diff --version
 
-safetest:
-	$(PERL_ENV) $(PROVE) t/**.t
+test-main:
+	$(PROVE) t/*.t
 
-always:
+## License: Public Domain.
