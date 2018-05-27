@@ -22,8 +22,8 @@ HTTP::Daemon~6.01
 HTTP::Date~6.02
 HTTP::Negotiate~6.01
 HTTP::Request~6.16
-HTTP::Status~6.16
-IO::File~1.39
+HTTP::Response~6.16
+IO::Dir~1.39
 IO::HTML~1.001
 IO::Socket::SSL~2.056
 JSON~2.97001
