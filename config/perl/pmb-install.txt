@@ -19,9 +19,8 @@ HTML::Tagset~3.20
 HTTP::Cookies~6.04
 HTTP::Daemon~6.01
 HTTP::Date~6.02
-HTTP::Headers::Util~6.18
+HTTP::Headers~6.18
 HTTP::Negotiate~6.01
-HTTP::Response~6.18
 IO::File~1.39
 IO::HTML~1.001
 IO::Socket::SSL~2.056
@@ -36,7 +35,6 @@ List::Rubyish~0.03
 MRO::Compat~0.13
 Module::Runtime~0.016
 Mozilla::CA~20180117
-Net::HTTP~6.18
 Net::HTTPS~6.18
 Net::SSLeay~1.85
 Path::Class~0.37
@@ -48,7 +46,7 @@ Term::ANSIColor~4.06
 Test~1.26
 Test::Class~0.50
 Test::Differences~0.64
-Test::Simple~1.302136
+Test::Simple~1.302138
 Text::Diff~1.45
 Time::Local~1.28
 Try::Tiny~0.30
