@@ -21,7 +21,8 @@ HTTP::Daemon~6.01
 HTTP::Date~6.02
 HTTP::Headers~6.18
 HTTP::Negotiate~6.01
-IO::Dir~1.39
+HTTP::Request::Common~6.18
+IO::File~1.39
 IO::HTML~1.001
 IO::Socket::SSL~2.060
 JSON~2.97001
@@ -52,6 +53,7 @@ Time::Local~1.28
 Try::Tiny~0.30
 Types::Serialiser~1.0
 URI~1.74
+URI::Escape~3.31
 WWW::RobotRules~6.02
 XSLoader~0.24
 common::sense~3.74
