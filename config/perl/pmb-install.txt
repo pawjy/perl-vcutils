@@ -1,6 +1,6 @@
 
 Algorithm::Diff~1.1903
-AnyEvent::Util
+AnyEvent~7.14
 Capture::Tiny~0.48
 Carp~1.50
 Data::Dumper~2.173
@@ -35,7 +35,7 @@ List::Rubyish~0.03
 MRO::Compat~0.13
 Module::Runtime~0.016
 Mozilla::CA~20180117
-Net::HTTP~6.18
+Net::HTTPS~6.18
 Net::SSLeay~1.85
 Path::Class~0.37
 Path::Tiny~0.108
@@ -44,9 +44,9 @@ Pod::Usage~1.69
 Scalar::Util~1.50
 Term::ANSIColor~4.06
 Test~1.26
+Test::Builder~1.302140
 Test::Class~0.50
 Test::Differences~0.64
-Test::Simple~1.302140
 Text::Diff~1.45
 Time::Local~1.28
 Try::Tiny~0.30
