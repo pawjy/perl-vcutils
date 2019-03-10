@@ -57,8 +57,7 @@ desc
 
 1.5
 log
-@
-Implement snprintb_m(3) to provide multi-line bit/bit-field decode.
+@Implement snprintb_m(3) to provide multi-line bit/bit-field decode.
 Discussed on tech-kern.
 @
 text
@@ -349,8 +348,7 @@ snprintb(char *buf, size_t buflen, const char *bitfmt, uint64_t val)
 
 1.4
 log
-@
-fix -Wsign-compare issues
+@fix -Wsign-compare issues
 @
 text
 @d1 1
@@ -437,8 +435,7 @@ d275 6
 
 1.3
 log
-@
-Include sys/param.h in the kernel to make the vax properly pick up
+@Include sys/param.h in the kernel to make the vax properly pick up
 memset.  Otherwise vax/macros.h doesn't get included and the usual
 lossage ensues.
 (I bet you saw that one coming)
@@ -467,8 +464,7 @@ a155 1
 
 1.2
 log
-@
-We don't need this for _STANDALONE, and it needs snprintf to work.
+@We don't need this for _STANDALONE, and it needs snprintf to work.
 @
 text
 @d1 1
@@ -486,8 +482,7 @@ __KERNEL_RCSID(0, "$NetBSD: snprintb.c,v 1.2 2008/12/17 16:02:27 christos Exp $"
 
 1.1
 log
-@
-share with kernel; replaces bitmask_snprintf which was very broken:
+@share with kernel; replaces bitmask_snprintf which was very broken:
 - subtracted one from len without checking if len was 0
 - checked for a minimum buffer size
 - arguments order was inconsistent with other printf like functions
@@ -535,8 +530,7 @@ d193 1
 
 1.4.2.1
 log
-@
-Sync with HEAD.
+@Sync with HEAD.
 
 Commit is split, to avoid a "too many arguments" protocol error.
 @
