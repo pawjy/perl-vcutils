@@ -125,9 +125,9 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
 
   $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
 
-  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>Branch:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>\s*Branch(?:es|):((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
-    while ($b =~ m!(?:><(?>b|B|strong)>|<[bB]><[Aa] (?>href|HREF)="[^"]+">)([^<>]+)</(?>[bBaA]|strong)>!gc) {
+    while ($b =~ m!(?:><(?:b|B|strong)>|(?:<[bB]>|)<[Aa] (?>href|HREF)="[^"]+">)([^<>]+)</(?>[bBaA]|strong)>!gc) {
       my $branch = $1;
       if ($branch ne $default_branch) {
         my $rev = $rev;
@@ -140,11 +140,11 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
     $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
   }
 
-  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>Branch point]gc) {
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>\s*Branch point]gc) {
     $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
   }
 
-  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>CVS Tags:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>\s*CVS [Tt]ags:((?>(?!<(?>[bhBH][rR]|pre|PRE)).)+)]gcs) {
     my $b = $1;
     while ($b =~ m!(?:><(?>b|B|strong)>|<[aA] (?:href|HREF)="[^"]+">)([^<>]+)</(?>[bBaA]|strong)>!gc) {
       my $rev = $branches->{$1} ? "$rev.0.".((++$branch_rev->{$rev})*2) : $rev;
@@ -164,7 +164,11 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
     $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
   }
 
-  if ($ent->{s} =~ m!\G<(?>br|BR)(?> /)?>Changes since <(?>b|B|strong)>([0-9.]+):!gc) {
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>\s*Diff to:]gcs) {
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
+  }
+
+  if ($ent->{s} =~ m!\G<(?>br|BR)(?> /)?>\s*Changes since (?:<(?>b|B|strong)>|revision\s+)([0-9.]+):!gc) {
     my $from_rev = $1;
     if ($rev =~ /\A[0-9]+\.[0-9]+\z/) {
       $rcs->{delta}->{$rev}->{next} = $from_rev;
@@ -178,8 +182,10 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
     }
   }
 
-  if ($ent->{s} =~ m!<(?>pre|PRE)(?> class="vc_log")?>(.*?)</(?>pre|PRE)>!gcs) {
-    $rcs->{deltatext}->{$rev}->{log} = htunescape ($1);
+  if ($ent->{s} =~ m!<(?>pre|PRE)(?> class="(?:vc_|)log")?>(.*?)</(?>pre|PRE)>!gcs) {
+    my $x = $1;
+    $x =~ s/^\x0D?\x0A//;
+    $rcs->{deltatext}->{$rev}->{log} = htunescape ($x);
   } else {
     $rcs->{deltatext}->{$rev}->{log} = '';
   }
@@ -195,7 +201,6 @@ for (@{$rcs->{admin}->{symbols} || []}) {
   $symbol{$_->[0]} = $_->[1];
 }
 $rcs->{admin}->{symbols} = [map {[$_ => $symbol{$_}]} keys %symbol];
-
 
 require File::Temp;
 require IPC::Open2;
