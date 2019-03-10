@@ -84,33 +84,43 @@ pos ($ent->{s}) = 0;
 
 REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)>|/>\s*<a name="rev)!gc) {
   my $rev = '';
-  if ($ent->{s} =~ m!Revision!gc and
-      ($ent->{s} =~ m!<[aA] (?>href|HREF)="([^"]+)"[^<>]*>(?:<[bB]>)?([0-9.]+|view)(?:</[bB]>)?</[aA]>!gc or
-       $ent->{s} =~ m!()<b>([0-9.]+)</b>: <a href="([^"]+)" class="download-link">download</a>!gc)) {
+
+  #warn substr $ent->{s}, pos $ent->{s}, 100;
+  
+  if ($ent->{s} =~ m[\G(?:(?!<[Hh][Rr])[\s\S])*?Revision]gc and
+      ($ent->{s} =~ m[\G(?:(?!<[Hh][Rr])[\s\S])*?<[aA] (?>href|HREF)="([^"]+)"[^<>]*>(?:<[bB]>)?([0-9.]+|view)(?:</[bB]>)?</[aA]>]gc or
+       $ent->{s} =~ m[\G(?:(?!<[Hh][Rr])[\s\S])*?()<b>([0-9.]+)</b>(?: <i>\(vendor branch\)</i>|)(?:: <a href="([^"]+)" class="download-link">download</a>|)]gc)) {
     $rev = $2;
-    my $uri = htunescape (defined $3 ? $3 : $1);
-    if ($rev eq 'view' and $uri =~ /\?revision=([0-9.]+)\b/) {
-      $rev = $1;
-    }
-    $uri =~ s[&content-type=text/(?>x-cvsweb|vnd\.viewcvs)-markup$][&content-type=text/plain];
-    $uri =~ s[&view=markup$][&content-type=text/plain&view=co];
-
-    if (defined $original_base_url) {
-      $uri = $dom->create_uri_reference ($uri)
-          ->get_relative_reference ($original_base_url)->uri_reference;
-    }
-
-    $uri = $dom->create_uri_reference ($uri)
-        ->get_absolute_reference ($log_uri)->uri_reference;
-
-    my $revent = get_remote_entity ($uri);
-    if (defined $revent->{s}) {
-      $text->{$rev} = $revent->{s};
+    if (not defined $3 and $1 eq '') {
+      $rcs->{delta}->{$rev}->{state} = 'dead';
     } else {
-      warn "<$uri>: $revent->{error_status_text}";
-    }
+      my $uri = htunescape (defined $3 ? $3 : $1);
+      if ($rev eq 'view' and $uri =~ /\?revision=([0-9.]+)\b/) {
+        $rev = $1;
+      }
+      $uri =~ s[&content-type=text/(?>x-cvsweb|vnd\.viewcvs)-markup$][&content-type=text/plain];
+      $uri =~ s[&view=markup$][&content-type=text/plain&view=co];
 
-    #$rcs->{admin}->{head} ||= $rev;      
+      if (defined $original_base_url) {
+        $uri = $dom->create_uri_reference ($uri)
+                   ->get_relative_reference ($original_base_url)
+                   ->uri_reference;
+      }
+
+      $uri = $dom->create_uri_reference ($uri)
+                 ->get_absolute_reference ($log_uri)
+                 ->uri_reference;
+
+      my $revent = get_remote_entity ($uri);
+      if (defined $revent->{s}) {
+        $text->{$rev} = $revent->{s};
+      } else {
+        warn "<$uri>: $revent->{error_status_text}";
+      }
+
+      #$rcs->{admin}->{head} ||= $rev;
+      $rcs->{delta}->{$rev}->{state} = 'Exp';
+    }
   }
 
   if ($ent->{s} =~ m!<(?>i|I|em)>\w+ (\w+)\s*(\d+)\s*(\d+):(\d+):(\d+) (\d+) UTC</(?>i|I|em)>\s*\([^()]+\)\s*by <(?>i|I|em)>([^<>]+)</(?>i|I|em)>!gc) {
@@ -168,6 +178,10 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
     $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
   }
 
+  if ($ent->{s} =~ m[\G<(?>br|BR)(?> /)?>\s*<b><i>FILE REMOVED</i></b>]gcs) {
+    $ent->{s} =~ m[(?=<(?>br|BR|pre|PRE)\b)]gc;
+  }
+
   if ($ent->{s} =~ m!\G<(?>br|BR)(?> /)?>\s*Changes since (?:<(?>b|B|strong)>|revision\s+)([0-9.]+):!gc) {
     my $from_rev = $1;
     if ($rev =~ /\A[0-9]+\.[0-9]+\z/) {
@@ -189,8 +203,6 @@ REV: while ($ent->{s} =~ m!<(?>hr|HR) (?>(?>size|SIZE)="?1"? (?>noshade|NOSHADE)
   } else {
     $rcs->{deltatext}->{$rev}->{log} = '';
   }
-
-  $rcs->{delta}->{$rev}->{state} = 'Exp';
 } # REV
 
 $rcs->{admin}->{head} ||= '1.1';
@@ -202,21 +214,29 @@ for (@{$rcs->{admin}->{symbols} || []}) {
 }
 $rcs->{admin}->{symbols} = [map {[$_ => $symbol{$_}]} keys %symbol];
 
+{
+  my $head_rev = $rcs->{admin}->{head};
+  my $prev_rev = $rcs->{delta}->{$head_rev}->{next};
+  if ($rcs->{delta}->{$head_rev}->{state} eq 'dead' and
+      $rcs->{delta}->{$prev_rev}->{state} eq 'Exp' and
+      not defined $text->{$head_rev} and
+      defined $text->{$prev_rev}) {
+    $rcs->{deltatext}->{$head_rev}->{text} = $text->{$prev_rev};
+  }
+}
+
 require File::Temp;
 require IPC::Open2;
-while (keys %$text_from) {
-  my $rev = each %$text_from;
-  my $any;
-  if (defined $text->{$text_from->{$rev}}) {
-    $any = 1;
-    my $from_file = new File::Temp;
+my $DEBUG = $ENV{DEBUG};
+for my $rev (keys %$text_from) {
+  next unless defined $text->{$text_from->{$rev}};
+  
+    my $from_file = new File::Temp (UNLINK => !$DEBUG);
     binmode $from_file;
     $from_file->print ($text->{$text_from->{$rev}});
-    my $to_file = new File::Temp;
+    my $to_file = new File::Temp (UNLINK => !$DEBUG);
     binmode $to_file;
     $to_file->print ($text->{$rev});
-    my (undef, $diff_filemame) = File::Temp::tempfile
-        ('DIFFXXXX', DIR => File::Temp::tempdir (), OPEN => 0);
     IPC::Open2::open2 (my $diffin, my $diffout,
                        $diff_command, @{$diff_options},
                        $from_file->filename => $to_file->filename)
@@ -224,9 +244,10 @@ while (keys %$text_from) {
     binmode $diffin;
     local $/ = undef;
     $rcs->{deltatext}->{$rev}->{text} = <$diffin>;
-    delete $text_from->{$rev};
-  }
-  last unless $any;
+    if ($DEBUG) {
+      warn "old ($text_from->{$rev}): $from_file\n";
+      warn "new ($rev): $to_file\n";
+    }
 }
 
 if (defined $rcs->{admin}->{head} and
