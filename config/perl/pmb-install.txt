@@ -24,7 +24,7 @@ HTTP::Cookies~6.04
 HTTP::Daemon~6.04
 HTTP::Date~6.02
 HTTP::Negotiate~6.01
-HTTP::Request::Common~6.18
+HTTP::Request~6.18
 HTTP::Status~6.18
 IO::File~1.39
 IO::HTML~1.001
@@ -33,7 +33,6 @@ JSON~4.02
 JSON::XS~4.02
 LWP::MediaTypes~6.04
 LWP::Protocol::https~6.07
-LWP::Simple~6.38
 LWP::UserAgent~6.38
 List::MoreUtils~0.428
 List::MoreUtils::XS~0.428
@@ -43,7 +42,6 @@ Module::Build::Tiny~0.039
 Module::Runtime~0.016
 Mozilla::CA~20180117
 Net::HTTP~6.18
-Net::HTTPS~6.18
 Net::SSLeay~1.85
 Path::Class~0.37
 Path::Tiny~0.108
@@ -53,10 +51,10 @@ Scalar::Util~1.50
 TAP::Harness::Env~3.42
 Term::ANSIColor~4.06
 Test~1.26
+Test::Builder~1.302162
 Test::Class~0.50
 Test::Differences~0.67
-Test::Needs~0.002005
-Test::Simple~1.302162
+Test::Needs~0.002006
 Text::Diff~1.45
 Time::Local~1.28
 Try::Tiny~0.30
