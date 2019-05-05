@@ -18,11 +18,13 @@ File::Temp~0.2309
 Filter::Util::Call~1.59
 Getopt::Long~2.5
 HTML::Entities~3.69
+HTML::HeadParser~3.71
 HTML::Tagset~3.20
 HTTP::Cookies~6.04
 HTTP::Daemon~6.04
 HTTP::Date~6.02
 HTTP::Negotiate~6.01
+HTTP::Request::Common~6.18
 HTTP::Response~6.18
 IO::File~1.39
 IO::HTML~1.001
@@ -31,7 +33,6 @@ JSON~4.02
 JSON::XS~4.02
 LWP::MediaTypes~6.04
 LWP::Protocol::https~6.07
-LWP::Simple~6.38
 LWP::UserAgent~6.38
 List::MoreUtils~0.428
 List::MoreUtils::XS~0.428
@@ -59,6 +60,7 @@ Time::Local~1.28
 Try::Tiny~0.30
 Types::Serialiser~1.0
 URI~1.76
+URI::Escape~3.31
 WWW::RobotRules~6.02
 XSLoader~0.24
 common::sense~3.74
