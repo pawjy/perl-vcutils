@@ -1,6 +1,6 @@
 
 Algorithm::Diff~1.1903
-AnyEvent::Util
+AnyEvent~7.15
 Capture::Tiny~0.48
 Carp~1.50
 Data::Dumper~2.173
@@ -18,7 +18,6 @@ File::Temp~0.2309
 Filter::Util::Call~1.59
 Getopt::Long~2.5
 HTML::Entities~3.69
-HTML::HeadParser~3.71
 HTML::Tagset~3.20
 HTTP::Cookies~6.04
 HTTP::Daemon~6.04
@@ -53,8 +52,8 @@ Term::ANSIColor~4.06
 Test~1.26
 Test::Class~0.50
 Test::Differences~0.67
-Test::More~1.302164
 Test::Needs~0.002006
+Test::Simple~1.302164
 Text::Diff~1.45
 Time::Local~1.28
 Try::Tiny~0.30
