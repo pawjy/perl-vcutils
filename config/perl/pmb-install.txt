@@ -17,7 +17,7 @@ File::Listing~6.04
 File::Temp~0.2309
 Filter::Util::Call~1.59
 Getopt::Long~2.5
-HTML::Entities~3.69
+HTML::HeadParser~3.71
 HTML::Tagset~3.20
 HTTP::Cookies~6.04
 HTTP::Daemon~6.04
@@ -31,7 +31,6 @@ JSON~4.02
 JSON::XS~4.02
 LWP::MediaTypes~6.04
 LWP::Protocol::https~6.07
-LWP::Simple~6.39
 LWP::UserAgent~6.39
 List::MoreUtils~0.428
 List::MoreUtils::XS~0.428
@@ -40,7 +39,6 @@ MRO::Compat~0.13
 Module::Build::Tiny~0.039
 Module::Runtime~0.016
 Mozilla::CA~20180117
-Net::HTTP~6.19
 Net::HTTPS~6.19
 Net::SSLeay~1.88
 Path::Class~0.37
@@ -53,8 +51,8 @@ Term::ANSIColor~4.06
 Test~1.26
 Test::Class~0.50
 Test::Differences~0.67
-Test::More~1.302164
 Test::Needs~0.002006
+Test::Simple~1.302164
 Text::Diff~1.45
 Time::Local~1.28
 Try::Tiny~0.30
