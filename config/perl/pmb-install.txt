@@ -1,6 +1,6 @@
 
 Algorithm::Diff~1.1903
-AnyEvent~7.17
+AnyEvent::Util
 Capture::Tiny~0.48
 Carp~1.50
 Data::Dumper~2.173
@@ -24,7 +24,6 @@ HTTP::Daemon~6.06
 HTTP::Date~6.02
 HTTP::Headers~6.18
 HTTP::Negotiate~6.01
-HTTP::Status~6.18
 IO::File~1.39
 IO::HTML~1.001
 IO::Socket::IP~0.39
@@ -53,8 +52,8 @@ Term::ANSIColor~4.06
 Test~1.26
 Test::Class~0.50
 Test::Differences~0.67
-Test::More~1.302168
 Test::Needs~0.002006
+Test::Simple~1.302168
 Text::Diff~1.45
 Time::Local~1.28
 Try::Tiny~0.30
