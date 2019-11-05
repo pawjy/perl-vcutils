@@ -24,6 +24,7 @@ HTTP::Daemon~6.06
 HTTP::Date~6.02
 HTTP::Headers~6.18
 HTTP::Negotiate~6.01
+HTTP::Status~6.18
 IO::File~1.39
 IO::HTML~1.001
 IO::Socket::IP~0.39
@@ -41,6 +42,7 @@ Module::Build::Tiny~0.039
 Module::Runtime~0.016
 Mozilla::CA~20180117
 Net::HTTP~6.19
+Net::HTTPS~6.19
 Net::SSLeay~1.88
 Path::Class~0.37
 Path::Tiny~0.108
