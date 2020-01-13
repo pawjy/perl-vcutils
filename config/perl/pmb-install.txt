@@ -1,6 +1,6 @@
 
 Algorithm::Diff~1.1903
-AnyEvent~7.17
+AnyEvent::Util
 Capture::Tiny~0.48
 Carp~1.50
 Data::Dumper~2.173
@@ -18,7 +18,6 @@ File::Temp~0.2309
 Filter::Util::Call~1.59
 Getopt::Long~2.51
 HTML::Entities~3.69
-HTML::HeadParser~3.71
 HTML::Tagset~3.20
 HTTP::Cookies~6.08
 HTTP::Daemon~6.06
@@ -43,26 +42,26 @@ Module::Build::Tiny~0.039
 Module::Runtime~0.016
 Mozilla::CA~20180117
 Net::HTTP~6.19
+Net::HTTPS~6.19
 Net::SSLeay~1.88
 Path::Class~0.37
-Path::Tiny~0.108
+Path::Tiny~0.110
 Pod::Text~4.14
 Pod::Usage~1.69
 Scalar::Util~1.53
 TAP::Harness::Env~3.42
 Term::ANSIColor~5.00
 Test~1.26
-Test::Builder~1.302170
 Test::Class~0.50
 Test::Differences~0.67
 Test::Needs~0.002006
+Test::Simple~1.302170
 Text::Diff~1.45
 Time::Local~1.28
 Time::Zone~2.24
 Try::Tiny~0.30
 Types::Serialiser~1.0
 URI~1.76
-URI::Escape~3.31
 WWW::RobotRules~6.02
 XSLoader~0.24
 common::sense~3.74
