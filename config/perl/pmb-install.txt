@@ -1,6 +1,6 @@
 
 Algorithm::Diff~1.1903
-AnyEvent::Util
+AnyEvent~7.17
 Capture::Tiny~0.48
 Carp~1.50
 Data::Dumper~2.173
@@ -18,13 +18,15 @@ File::Temp~0.2309
 Filter::Util::Call~1.59
 Getopt::Long~2.51
 HTML::Entities~3.69
+HTML::HeadParser~3.71
 HTML::Tagset~3.20
 HTTP::Cookies~6.08
 HTTP::Daemon~6.06
 HTTP::Date~6.05
-HTTP::Headers::Util~6.18
+HTTP::Headers~6.18
 HTTP::Negotiate~6.01
-IO::File~1.41
+HTTP::Response~6.18
+IO::Dir~1.41
 IO::HTML~1.001
 IO::Socket::IP~0.39
 IO::Socket::SSL~2.066
@@ -32,6 +34,7 @@ JSON~4.02
 JSON::XS~4.02
 LWP::MediaTypes~6.04
 LWP::Protocol::https~6.07
+LWP::Simple~6.43
 LWP::UserAgent~6.43
 List::MoreUtils~0.428
 List::MoreUtils::XS~0.428
@@ -41,6 +44,7 @@ Module::Build::Tiny~0.039
 Module::Runtime~0.016
 Mozilla::CA~20180117
 Net::HTTP~6.19
+Net::HTTPS~6.19
 Net::SSLeay~1.88
 Path::Class~0.37
 Path::Tiny~0.112
@@ -50,10 +54,10 @@ Scalar::Util~1.54
 TAP::Harness::Env~3.42
 Term::ANSIColor~5.01
 Test~1.26
+Test::Builder~1.302171
 Test::Class~0.50
 Test::Differences~0.67
 Test::Needs~0.002006
-Test::Simple~1.302171
 Text::Diff~1.45
 Time::Local~1.30
 Time::Zone~2.24
