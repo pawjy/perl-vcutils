@@ -1,15 +1,16 @@
 
 Algorithm::Diff~1.1903
-AnyEvent~7.17
+AnyEvent::Util
 Capture::Tiny~0.48
 Carp~1.50
+Clone~0.45
 Data::Dumper~2.173
 Digest::SHA1~2.13
-Encode~3.05
+Encode~3.06
 Encode::Locale~1.05
 Exporter~5.74
 Exporter::Lite~0.08
-Exporter::Tiny~1.002001
+Exporter::Tiny~1.002002
 ExtUtils::Config~0.008
 ExtUtils::Helpers~0.026
 ExtUtils::InstallPaths~0.012
@@ -24,7 +25,8 @@ HTTP::Cookies~6.08
 HTTP::Daemon~6.06
 HTTP::Date~6.05
 HTTP::Negotiate~6.01
-HTTP::Request::Common~6.22
+HTTP::Response~6.24
+HTTP::Status~6.24
 IO::Dir~1.41
 IO::HTML~1.001
 IO::Socket::IP~0.39
@@ -33,7 +35,7 @@ JSON~4.02
 JSON::XS~4.02
 LWP::MediaTypes~6.04
 LWP::Protocol::https~6.07
-LWP::UserAgent~6.43
+LWP::UserAgent~6.44
 List::MoreUtils~0.428
 List::MoreUtils::XS~0.428
 List::Rubyish~0.03
@@ -44,14 +46,14 @@ Mozilla::CA~20180117
 Net::HTTP~6.19
 Net::SSLeay~1.88
 Path::Class~0.37
-Path::Tiny~0.112
+Path::Tiny~0.114
 Pod::Text~4.14
 Pod::Usage~1.70
-Scalar::Util~1.54
+Scalar::Util~1.55
 TAP::Harness::Env~3.42
 Term::ANSIColor~5.01
 Test~1.26
-Test::Builder~1.302174
+Test::Builder~1.302175
 Test::Class~0.50
 Test::Differences~0.67
 Test::Needs~0.002006
