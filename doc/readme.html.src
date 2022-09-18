@@ -94,13 +94,18 @@ standalone files.</span>
 repository:</span>
 
 <p><code>$ <kbd>git clone
-https://suika.suikawiki.org/gate/git/bare/vc/vcutils.git</kbd></code>
+<!--https://suika.suikawiki.org/gate/git/bare/vc/vcutils.git-->https://github.com/pawjy/perl-vcutils</kbd></code>
 
 <p data-lang-container>
 
-<span lang=en>There is also <a
-href="https://suika.suikawiki.org/gate/git/wi/vc/vcutils.git/">a Web interface
+<span lang=en>There is also <!--<a
+href="https://suika.suikawiki.org/gate/git/wi/vc/vcutils.git/">--><a href=https://github.com/pawjy/perl-vcutils>a Web interface
 to the repository</a>; files can also be retrieved from there.</span>
+
+<!--
+R4.9.18: moved from <https://github.com/wakaba/perl-vcutils>
+to <https://github.com/pawjy/perl-vcutils>.
+-->
 
 <p data-lang-container>
 
