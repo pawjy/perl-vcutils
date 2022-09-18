@@ -1,12 +1,13 @@
-POD2HTML = pod2html --css "http://suika.fam.cx/www/style/html/pod.css" \
-  --htmlroot "../lib/"
+P2H = ../local/p2h
 
-all: splitrcs.html knitmodule.html viewvclog2rcs.html rcs2atom.html
+all: build
 
-%.html: %.pl
-	$(POD2HTML) $< > $@
+build: splitrcs.html knitmodule.html viewvclog2rcs.html rcs2atom.html
 
-viewvclog2rcs.html: %.html: %.pod
-	$(POD2HTML) $< > $@
+%.html: %.pl $(P2H)
+	$(P2H) vcutils $< > $@
+
+viewvclog2rcs.html: %.html: %.pod $(P2H)
+	$(P2H) vcutils $< > $@
 
 ## License: Public Domain.

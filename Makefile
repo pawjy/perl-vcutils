@@ -33,6 +33,27 @@ pmbp-install: pmbp-upgrade
             --create-perl-command-shortcut @perl \
             --create-perl-command-shortcut @prove
 
+P2H = local/p2h
+HARUSAME = local/harusame
+
+$(HARUSAME):
+	$(CURL) -sSLf https://raw.githubusercontent.com/wakaba/harusame/master/harusame > $@
+	chmod u+x $@
+
+build: $(P2H) $(HARUSAME) build-main
+
+build-main:
+	cd bin && $(MAKE) build
+	cd doc && $(MAKE) build
+	cd lib && $(MAKE) build
+
+$(P2H): local
+	$(CURL) -sSfL https://raw.githubusercontent.com/manakai/manakai.github.io/master/p2h > $@
+	chmod u+x $@
+
+local:
+	mkdir -p local
+
 ## ------ Tests ------
 
 PROVE = ./prove

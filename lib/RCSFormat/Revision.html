@@ -1,116 +1,94 @@
-<?xml version="1.0" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title>RCSFormat::Revision - Object Oriented Interface to a Revision in RCS File</title>
-<link rel="stylesheet" href="http://suika.fam.cx/www/style/html/pod.css" type="text/css" />
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
-</head>
 
-<body>
+      <!DOCTYPE HTML>
+      <html lang=en>
+        <meta charset=utf-8>
+        <title>vcutils</title>
+        <link rel=stylesheet href="https://manakai.github.io/css/pod.css">
+        <meta name=viewport content="width=device-width">
+
+        <h1><a href="../" rel=top>vcutils</a></h1>
+
+        
 
 
-<!-- INDEX BEGIN -->
-<div name="index">
-<p><a name="__index__"></a></p>
 
-<ul>
 
-	<li><a href="#name">NAME</a></li>
-	<li><a href="#synopsis">SYNOPSIS</a></li>
-	<li><a href="#description">DESCRIPTION</a></li>
-	<li><a href="#methods">METHODS</a></li>
-	<li><a href="#see_also">SEE ALSO</a></li>
-	<li><a href="#author">AUTHOR</a></li>
-	<li><a href="#license">LICENSE</a></li>
-</ul>
 
-<hr name="index" />
-</div>
-<!-- INDEX END -->
+<hgroup><h1><code>RCSFormat::Revision</code></h1><h2>Object Oriented Interface to a Revision in RCS File</h2></hgroup><section id="SYNOPSIS"><h1>SYNOPSIS</h1>
 
-<p>
-</p>
-<h1><a name="name">NAME</a></h1>
-<p>RCSFormat::Revision - Object Oriented Interface to a Revision in RCS File</p>
-<p>
-</p>
-<hr />
-<h1><a name="synopsis">SYNOPSIS</a></h1>
-<pre>
-  use RCSFormat::File;
+<pre><code>  use RCSFormat::File;
   
   $rcs = RCSFormat::File-&gt;...;
   $rev = $rcs-&gt;get_revision_by_number ('1.2');
   
-  print $rev-&gt;author, &quot;\n&quot;;
-  print localtime $rev-&gt;time_as_epoch, &quot;\n&quot;;
-  print $rev-&gt;data;</pre>
-<p>
-</p>
-<hr />
-<h1><a name="description">DESCRIPTION</a></h1>
-<p>The module <code>RCSFormat::Revision</code> represents a revision encoded in an
-RCS file.  In conjunction with <a href="../RCSFormat/File.html">the RCSFormat::File manpage</a>, it provides an
-objected-oriented interface to RCS files.  They are built on the top
-of <em>RCSFormat</em>'s low-level encapsulation of RCS files.</p>
-<p>
-</p>
-<hr />
-<h1><a name="methods">METHODS</a></h1>
+  print $rev-&gt;author, "\n";
+  print localtime $rev-&gt;time_as_epoch, "\n";
+  print $rev-&gt;data;</code></pre>
+
+</section><section id="DESCRIPTION"><h1>DESCRIPTION</h1>
+
+<p>The module <code>RCSFormat::Revision</code> represents a revision encoded in an RCS file. In conjunction with <a href="../RCSFormat/File" class="podlinkpod">RCSFormat::File</a>, it provides an objected-oriented interface to RCS files. They are built on the top of <a href="../RCSFormat" class="podlinkpod">RCSFormat</a>'s low-level encapsulation of RCS files.</p>
+
+</section><section id="METHODS"><h1>METHODS</h1>
+
 <dl>
-<dt><strong><a name="number" class="item">$number = $rev-&gt;number</a></strong></dt>
+<dt id="$number_=_$rev->number"><code>$number = $rev-&gt;<strong id="member-number">number</strong></code></dt>
 
 <dd>
 <p>Returns the revision number of the revision.</p>
-</dd>
-<dt><strong><a name="date_as_epoch" class="item">$number = $rev-&gt;date_as_epoch</a></strong></dt>
+
+</dd><dt id="$number_=_$rev->date_as_epoch"><code>$number = $rev-&gt;<strong id="member-date_as_epoch">date_as_epoch</strong></code></dt>
 
 <dd>
 <p>Returns the date of the revision, in Unix time_t format.</p>
-</dd>
-<dt><strong><a name="date_as_rcs_formatted" class="item">$number = $rev-&gt;date_as_rcs_formatted</a></strong></dt>
+
+</dd><dt id="$number_=_$rev->date_as_rcs_formatted"><code>$number = $rev-&gt;<strong id="member-date_as_rcs_formatted">date_as_rcs_formatted</strong></code></dt>
 
 <dd>
-<p>Returns the date of the revision, in the format used by RCS's $Date:$
-keyword substitutions.</p>
-</dd>
-<dt><strong><a name="log" class="item">$bytes = $rev-&gt;log</a></strong></dt>
+<p>Returns the date of the revision, in the format used by RCS's $Date:$ keyword substitutions.</p>
+
+</dd><dt id="$bytes_=_$rev->log"><code>$bytes = $rev-&gt;<strong id="member-log">log</strong></code></dt>
 
 <dd>
 <p>Returns the commig log of the revision.</p>
-</dd>
-<dt><strong><a name="data" class="item">$bytes = $rev-&gt;data</a></strong></dt>
+
+</dd><dt id="$bytes_=_$rev->data"><code>$bytes = $rev-&gt;<strong id="member-data">data</strong></code></dt>
 
 <dd>
-<p>Returns the file data of the revision.  Although the data that is
-included in the RCS file for this revision might only be delta from
-another revision, this method always returns the complete file data of
-the revision.</p>
-<p>BUG: Keyword substitutions are always happen.  Binary data are not
-supported yet.</p>
+<p>Returns the file data of the revision. Although the data that is included in the RCS file for this revision might only be delta from another revision, this method always returns the complete file data of the revision.</p>
+
+<p>BUG: Keyword substitutions are always happen. Binary data are not supported yet.</p>
 </dd>
 </dl>
-<p>
-</p>
-<hr />
-<h1><a name="see_also">SEE ALSO</a></h1>
-<p><em>RCSFormat</em>.</p>
-<p><a href="../RCSFormat/File.html">the RCSFormat::File manpage</a>.</p>
-<p>
-</p>
-<hr />
-<h1><a name="author">AUTHOR</a></h1>
-<p>Wakaba &lt;<a href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>&gt;.</p>
-<p>
-</p>
-<hr />
-<h1><a name="license">LICENSE</a></h1>
-<p>Copyright 2010 Wakaba &lt;<a href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>&gt;.  All rights reserved.</p>
-<p>This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.</p>
 
-</body>
+</section><section id="SEE_ALSO"><h1>SEE ALSO</h1>
 
-</html>
+<p><a href="../RCSFormat" class="podlinkpod">RCSFormat</a>.</p>
+
+<p><a href="../RCSFormat/File" class="podlinkpod">RCSFormat::File</a>.</p>
+
+</section><section id="AUTHOR"><h1>AUTHOR</h1>
+
+<p>Wakaba &lt;w@suika.fam.cx&gt;.</p>
+
+</section><section id="LICENSE"><h1>LICENSE</h1>
+
+<p>Copyright 2010 Wakaba &lt;w@suika.fam.cx&gt;. All rights reserved.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+
+
+</section>
+
+        <sw-ads normal></sw-ads>
+        <script src="https://manakai.github.io/js/global.js" async></script>
+
+        <footer>
+          <ul>
+          <li><a href="../" rel=top>Top</a>
+          </ul>
+        </footer>
+        <sw-ads-notes></sw-ads-notes>
+    

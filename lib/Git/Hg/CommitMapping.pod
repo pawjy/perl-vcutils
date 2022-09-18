@@ -30,18 +30,18 @@ git-hg, hg-fast-export.
 
 Latest version of the module is available from Git repositories:
 <https://github.com/wakaba/perl-vcutils>,
-<http://suika.fam.cx/gate/git/wi/vc/vcutils.git/tree>.
+<https://suika.suikawiki.org/gate/git/wi/vc/vcutils.git/tree>.
 
 Tests are automatically run by Travis CI:
 <http://travis-ci.org/wakaba/perl-vcutils>.
 
 =head1 AUTHOR
 
-Wakaba <w@suika.fam.cx>.
+Wakaba <wakaba@suikawiki.org>.
 
 =head1 LICENSE
 
-Copyright 2012 Wakaba <w@suika.fam.cx>.
+Copyright 2012 Wakaba <wakaba@suikawiki.org>.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

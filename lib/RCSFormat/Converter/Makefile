@@ -1,9 +1,10 @@
-POD2HTML = pod2html --css "http://suika.fam.cx/www/style/html/pod.css" \
-  --htmlroot "../.."
+P2H = ../../../local/p2h
 
-all: Atom.html
+all: build
 
-%.html: %.pod
-	$(POD2HTML) $< > $@
+build: Atom.html
+
+%.html: %.pod $(P2H)
+	$(P2H) vcutils $< > $@
 
 ## License: Public Domain.

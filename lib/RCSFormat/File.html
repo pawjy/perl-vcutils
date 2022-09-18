@@ -1,154 +1,115 @@
-<?xml version="1.0" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title>RCSFormat::File - Object Oriented Interface to an RCS File</title>
-<link rel="stylesheet" href="http://suika.fam.cx/www/style/html/pod.css" type="text/css" />
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
-</head>
 
-<body>
+      <!DOCTYPE HTML>
+      <html lang=en>
+        <meta charset=utf-8>
+        <title>vcutils</title>
+        <link rel=stylesheet href="https://manakai.github.io/css/pod.css">
+        <meta name=viewport content="width=device-width">
+
+        <h1><a href="../" rel=top>vcutils</a></h1>
+
+        
 
 
-<!-- INDEX BEGIN -->
-<div name="index">
-<p><a name="__index__"></a></p>
 
-<ul>
 
-	<li><a href="#name">NAME</a></li>
-	<li><a href="#synopsis">SYNOPSIS</a></li>
-	<li><a href="#description">DESCRIPTION</a></li>
-	<li><a href="#methods">METHODS</a></li>
-	<li><a href="#see_also">SEE ALSO</a></li>
-	<li><a href="#author">AUTHOR</a></li>
-	<li><a href="#license">LICENSE</a></li>
-</ul>
 
-<hr name="index" />
-</div>
-<!-- INDEX END -->
+<hgroup><h1><code>RCSFormat::File</code></h1><h2>Object Oriented Interface to an RCS File</h2></hgroup><section id="SYNOPSIS"><h1>SYNOPSIS</h1>
 
-<p>
-</p>
-<h1><a name="name">NAME</a></h1>
-<p>RCSFormat::File - Object Oriented Interface to an RCS File</p>
-<p>
-</p>
-<hr />
-<h1><a name="synopsis">SYNOPSIS</a></h1>
-<pre>
-  use RCSFormat::File;
+<pre><code>  use RCSFormat::File;
   
   $rcs = RCSFormat::File-&gt;new_from_string_ref (\$rcs_file_content);
   
-  $rcs-&gt;revision_numbers-&gt;each (sub { print &quot;Revision $_\n&quot; });
+  $rcs-&gt;revision_numbers-&gt;each (sub { print "Revision $_\n" });
   
   $rev1 = $rcs-&gt;get_revision_by_number ('1.2');
   $rev2 = $rcs-&gt;get_revision_by_number ('1.5');
   
-  $diff = $rcs-&gt;get_unified_diff_between ($rev1 =&gt; $rev2);</pre>
-<p>
-</p>
-<hr />
-<h1><a name="description">DESCRIPTION</a></h1>
-<p>The module <code>RCSFormat::File</code> provides an object-oriented interface to
-RCS files, in conjunction with <a href="../RCSFormat/Revision.html">the RCSFormat::Revision manpage</a> representing
-revisions encoded in RCS files.  They are built on the top of
-<em>RCSFormat</em>'s low-level encapsulation of RCS files.</p>
-<p>
-</p>
-<hr />
-<h1><a name="methods">METHODS</a></h1>
+  $diff = $rcs-&gt;get_unified_diff_between ($rev1 =&gt; $rev2);</code></pre>
+
+</section><section id="DESCRIPTION"><h1>DESCRIPTION</h1>
+
+<p>The module <code>RCSFormat::File</code> provides an object-oriented interface to RCS files, in conjunction with <a href="../RCSFormat/Revision" class="podlinkpod">RCSFormat::Revision</a> representing revisions encoded in RCS files. They are built on the top of <a href="../RCSFormat" class="podlinkpod">RCSFormat</a>'s low-level encapsulation of RCS files.</p>
+
+</section><section id="METHODS"><h1>METHODS</h1>
+
 <dl>
-<dt><strong><a name="new_from_stringref" class="item">$file = RCSFormat::File-&gt;new_from_stringref (\$rcs_file_content)</a></strong></dt>
+<dt id="$file_=_RCSFormat::File->new_from_stringref_(\$rcs_file_content)"><code>$file = RCSFormat::File-&gt;<strong id="member-new_from_stringref">new_from_stringref</strong> (\$rcs_file_content)</code></dt>
 
 <dd>
 <p>Returns a new instance of <code>RCSFormat::File</code> with the given RCS file.</p>
-</dd>
-<dt><strong><a name="file_name" class="item">[$value =] $file-&gt;file_name ([$new_value])</a></strong></dt>
+
+</dd><dt id="[$value_=]_$file->file_name_([$new_value])"><code>[$value =] $file-&gt;<strong id="member-file_name">file_name</strong> ([$new_value])</code></dt>
 
 <dd>
-<p>Gets or sets the name of the RCS file represented by the object.  Note
-that the RCS file itself does not encode its own file name.  The file
-name set by this method is used when a unified diff is generated.</p>
-</dd>
-<dt><strong><a name="revision_numbers" class="item">$list = $file-&gt;revision_numbers</a></strong></dt>
+<p>Gets or sets the name of the RCS file represented by the object. Note that the RCS file itself does not encode its own file name. The file name set by this method is used when a unified diff is generated.</p>
+
+</dd><dt id="$list_=_$file->revision_numbers"><code>$list = $file-&gt;<strong id="member-revision_numbers">revision_numbers</strong></code></dt>
 
 <dd>
-<p>Returns the list of revision numbers.  The returned list is an
-instance of <a href="../List/Rubyish.html">the List::Rubyish manpage</a>.  Revision numbers are sorted in some
-stable order.</p>
-</dd>
-<dt><strong><a name="revision_numbers_sorted_by_date" class="item">$list = $file-&gt;revision_numbers_sorted_by_date</a></strong></dt>
+<p>Returns the list of revision numbers. The returned list is an instance of <a href="../List/Rubyish" class="podlinkpod">List::Rubyish</a>. Revision numbers are sorted in some stable order.</p>
+
+</dd><dt id="$list_=_$file->revision_numbers_sorted_by_date"><code>$list = $file-&gt;<strong id="member-revision_numbers_sorted_by_date">revision_numbers_sorted_by_date</strong></code></dt>
 
 <dd>
-<p>Return the list of revision numbers, like the <a href="#revision_numbers"><code>revision_numbers</code></a>
-method.  This method returns the nubmers sorted by the date of the
-revisions, in descending order.</p>
-</dd>
-<dt><strong><a name="get_revision_by_number" class="item">$rev = $file-&gt;get_revision_by_number ($revision_number)</a></strong></dt>
+<p>Return the list of revision numbers, like the <code>revision_numbers</code> method. This method returns the nubmers sorted by the date of the revisions, in descending order.</p>
+
+</dd><dt id="$rev_=_$file->get_revision_by_number_($revision_number)"><code>$rev = $file-&gt;<strong id="member-get_revision_by_number">get_revision_by_number</strong> ($revision_number)</code></dt>
 
 <dd>
-<p>Return the object representing a specific revision identified by the
-argument.  The object is an instance of <a href="../RCSFormat/Revision.html">the RCSFormat::Revision manpage</a>.  If
-there is no revision specified by the argument, an <code>undef</code> value is
-returned instead.</p>
-</dd>
-<dt><strong><a name="find_route_to_revision" class="item">$arrayref = $file-&gt;find_route_to_revision ($revision_number)</a></strong></dt>
+<p>Return the object representing a specific revision identified by the argument. The object is an instance of <a href="../RCSFormat/Revision" class="podlinkpod">RCSFormat::Revision</a>. If there is no revision specified by the argument, an <code>undef</code> value is returned instead.</p>
+
+</dd><dt id="$arrayref_=_$file->find_route_to_revision_($revision_number)"><code>$arrayref = $file-&gt;<strong id="member-find_route_to_revision">find_route_to_revision</strong> ($revision_number)</code></dt>
 
 <dd>
-<p>In RCS file, only a revision encodes the data in the original byte
-stream - data of all the other revisions are only encoded in delta
-from another revision's data, which might also be delta.</p>
-<p>This method returns the &quot;route&quot; to the specified revision, along which
-you have to travel to obtain the original data.  The returned value is
-a reference to array containing a series of revision numbers.  The
-first item in the array is the entry point; its data is encoded in the
-RCS file in the original form.  Subsequent revisions are deltas from
-previous revisions in the array.  The last item in the array is always
-equal to the revision number given as the argument.</p>
-<p>If the specified revision is not found in the RCS file, the method
-returns a reference to the empty array.</p>
-</dd>
-<dt><strong><a name="get_prev_revision_number_of" class="item">$revision_number = $file-&gt;get_prev_revision_number_of ($revision_number)</a></strong></dt>
+<p>In RCS file, only a revision encodes the data in the original byte stream - data of all the other revisions are only encoded in delta from another revision's data, which might also be delta.</p>
+
+<p>This method returns the "route" to the specified revision, along which you have to travel to obtain the original data. The returned value is a reference to array containing a series of revision numbers. The first item in the array is the entry point; its data is encoded in the RCS file in the original form. Subsequent revisions are deltas from previous revisions in the array. The last item in the array is always equal to the revision number given as the argument.</p>
+
+<p>If the specified revision is not found in the RCS file, the method returns a reference to the empty array.</p>
+
+</dd><dt id="$revision_number_=_$file->get_prev_revision_number_of_($revision_number)"><code>$revision_number = $file-&gt;<strong id="member-get_prev_revision_number_of">get_prev_revision_number_of</strong> ($revision_number)</code></dt>
 
 <dd>
-<p>Returns the revision number of the revision specified by the argument.
-For example, '1.3' would be returned if the argument is '1.4'.</p>
-<p>If the speicified revision is the first revision, or if the specified
-revision is not found in the RCS file, the method returns an <code>undef</code>
-value.</p>
-</dd>
-<dt><strong><a name="get_unified_diff_between" class="item">$diff = $file-&gt;get_unified_diff_between ($rev1, $rev2)</a></strong></dt>
+<p>Returns the revision number of the revision specified by the argument. For example, '1.3' would be returned if the argument is '1.4'.</p>
+
+<p>If the speicified revision is the first revision, or if the specified revision is not found in the RCS file, the method returns an <code>undef</code> value.</p>
+
+</dd><dt id="$diff_=_$file->get_unified_diff_between_($rev1,_$rev2)"><code>$diff = $file-&gt;<strong id="member-get_unified_diff_between">get_unified_diff_between</strong> ($rev1, $rev2)</code></dt>
 
 <dd>
-<p>Returns the unified diff from revision $rev1 to revision $rev2.  Both
-$rev1 and $rev2 have to be <a href="../RCSFormat/Revision.html">the RCSFormat::Revision manpage</a> objects or <code>undef</code>.
-If <code>undef</code> is specified, a diff between empty data and the other
-revision is returned.</p>
+<p>Returns the unified diff from revision $rev1 to revision $rev2. Both $rev1 and $rev2 have to be <a href="../RCSFormat/Revision" class="podlinkpod">RCSFormat::Revision</a> objects or <code>undef</code>. If <code>undef</code> is specified, a diff between empty data and the other revision is returned.</p>
 </dd>
 </dl>
-<p>
-</p>
-<hr />
-<h1><a name="see_also">SEE ALSO</a></h1>
-<p><em>RCSFormat</em>.</p>
-<p><a href="../RCSFormat/Revision.html">the RCSFormat::Revision manpage</a>.</p>
-<p>
-</p>
-<hr />
-<h1><a name="author">AUTHOR</a></h1>
-<p>Wakaba &lt;<a href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>&gt;.</p>
-<p>
-</p>
-<hr />
-<h1><a name="license">LICENSE</a></h1>
-<p>Copyright 2010 Wakaba &lt;<a href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>&gt;.  All rights reserved.</p>
-<p>This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.</p>
 
-</body>
+</section><section id="SEE_ALSO"><h1>SEE ALSO</h1>
 
-</html>
+<p><a href="../RCSFormat" class="podlinkpod">RCSFormat</a>.</p>
+
+<p><a href="../RCSFormat/Revision" class="podlinkpod">RCSFormat::Revision</a>.</p>
+
+</section><section id="AUTHOR"><h1>AUTHOR</h1>
+
+<p>Wakaba &lt;w@suika.fam.cx&gt;.</p>
+
+</section><section id="LICENSE"><h1>LICENSE</h1>
+
+<p>Copyright 2010 Wakaba &lt;w@suika.fam.cx&gt;. All rights reserved.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+
+
+</section>
+
+        <sw-ads normal></sw-ads>
+        <script src="https://manakai.github.io/js/global.js" async></script>
+
+        <footer>
+          <ul>
+          <li><a href="../" rel=top>Top</a>
+          </ul>
+        </footer>
+        <sw-ads-notes></sw-ads-notes>
+    

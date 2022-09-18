@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
 <html lang=mul>
 <title data-lang-content=title>vcutils</title>
-<link rel=stylesheet href="http://suika.fam.cx/www/style/html/xhtml">
+<link rel=stylesheet href="https://suika.suikawiki.org/www/style/html/xhtml">
 <link rel=author href="#author">
 <link rel=license href="#license">
 <link rel=alternate hreflang=en href=readme.en>
 <link rel=alternate hreflang=ja href=readme.ja>
-<link rel=alternate type="application/atom+xml" href="http://suika.fam.cx/gate/git/wi/vc/vcutils.git/atom">
+<link rel=alternate type="application/atom+xml" href="https://suika.suikawiki.org/gate/git/wi/vc/vcutils.git/atom">
 
 <h1 id=title data-lang-container>
   <span lang=en>vcutils &mdash; Utilities and Perl modules for
@@ -94,19 +94,19 @@ standalone files.</span>
 repository:</span>
 
 <p><code>$ <kbd>git clone
-http://suika.fam.cx/gate/git/bare/vc/vcutils.git</kbd></code>
+https://suika.suikawiki.org/gate/git/bare/vc/vcutils.git</kbd></code>
 
 <p data-lang-container>
 
 <span lang=en>There is also <a
-href="http://suika.fam.cx/gate/git/wi/vc/vcutils.git/">a Web interface
+href="https://suika.suikawiki.org/gate/git/wi/vc/vcutils.git/">a Web interface
 to the repository</a>; files can also be retrieved from there.</span>
 
 <p data-lang-container>
 
 <span lang=en>Some of scripts and modules depends on <a
-href="http://suika.fam.cx/www/manakai-core/doc/web/">manakai</a> and
-<a href="http://suika.fam.cx/www/charclass/readme">charclass</a>
+href="https://suika.suikawiki.org/www/manakai-core/doc/web/">manakai</a> and
+<a href="https://suika.suikawiki.org/www/charclass/readme">charclass</a>
 modules, which are both git submodules such that they can be retrieved
 by:</span>
 
@@ -115,11 +115,11 @@ by:</span>
 <p data-lang-container>
 
 <span lang=en>Some of scripts and modules depends on Perl modules <a
-href="http://search.cpan.org/dist/List-Rubyish"><code>List::Rubyish</code></a>,
+href="https://search.cpan.org/dist/List-Rubyish"><code>List::Rubyish</code></a>,
 <a
-href="http://search.cpan.org/dist/Path-Class"><code>Path::Class</code></a>,
+href="https://search.cpan.org/dist/Path-Class"><code>Path::Class</code></a>,
 and <a
-href="http://search.cpan.org/dist/Time-Local"><code>Time::Local</code></a>.</span>
+href="https://search.cpan.org/dist/Time-Local"><code>Time::Local</code></a>.</span>
 
 </div>
 
@@ -133,9 +133,9 @@ href="http://search.cpan.org/dist/Time-Local"><code>Time::Local</code></a>.</spa
 
 </h2>
 
-<p><a href="http://suika.fam.cx/~wakaba/who?" rel=author lang=ja>わかば 
+<p><a href="https://suika.suikawiki.org/~wakaba/who?" rel=author lang=ja>わかば 
 (Wakaba)</a> <code class=mail>&lt;<a
-href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>></code>
+href="mailto:wakaba@suikawiki.org">wakaba@suikawiki.org</a>></code>
 
 </div>
 
@@ -150,7 +150,7 @@ href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>></code>
 </h2>
 
 <p>Copyright 2004‐2010 Wakaba <code class=mail>&lt;<a
-href="mailto:w@suika.fam.cx">w@suika.fam.cx</a>></code>.  All rights
+href="mailto:wakaba@suikawiki.org">wakaba@suikawiki.org</a>></code>.  All rights
 reserved.
 
 <p>This program is free software; you can redistribute it and/or
