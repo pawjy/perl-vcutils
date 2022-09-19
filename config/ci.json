@@ -1,6 +1,7 @@
 {
   "github": {
     "pmbp": "5.8+",
+    "build": ["make test-deps-gha"],
     "merger": true,
     "gaa": true
   }

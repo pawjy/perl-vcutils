@@ -62,6 +62,10 @@ test: test-deps test-main
 
 test-deps: deps test-data
 
+test-deps-gha:
+	git config --global user.email "test@actions.github.test"',
+	git config --global user.name "GHA Test"';
+
 test-data:
 	-cd t/data/git-hg && ln -s dot.git .git
 	-diff --version

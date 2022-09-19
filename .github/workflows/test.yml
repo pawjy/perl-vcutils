@@ -63,6 +63,9 @@
                "run" : "mkdir -p $CIRCLE_ARTIFACTS"
             },
             {
+               "run" : "make test-deps-gha"
+            },
+            {
                "run" : "make test-deps"
             },
             {
