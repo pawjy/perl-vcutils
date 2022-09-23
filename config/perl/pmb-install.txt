@@ -1,6 +1,6 @@
 
 Algorithm::Diff~1.201
-AnyEvent::Util
+AnyEvent~7.17
 Capture::Tiny~0.48
 Carp~1.50
 Data::Dumper~2.183
@@ -15,13 +15,14 @@ File::Temp~0.2311
 Filter::Util::Call~1.64
 Getopt::Long~2.52
 HTML::Entities~3.78
+HTML::HeadParser~3.78
 HTML::Tagset~3.20
 HTTP::Cookies~6.10
 HTTP::Date~6.05
+HTTP::Headers~6.37
 HTTP::Negotiate~6.01
-HTTP::Request::Common~6.37
-HTTP::Response~6.37
-IO::File~1.48
+HTTP::Status~6.37
+IO::Dir~1.49
 IO::HTML~1.004
 IO::Socket::SSL~2.075
 JSON~4.09
@@ -48,12 +49,13 @@ Term::ANSIColor~5.01
 Test~1.26
 Test::Class~0.52
 Test::Differences~0.69
-Test::Simple~1.302191
+Test::More~1.302191
 Text::Diff~1.45
 Time::Local~1.30
 Time::Zone~2.24
 Try::Tiny~0.31
 Types::Serialiser~1.01
 URI~5.12
+URI::Escape~5.12
 WWW::RobotRules~6.02
 common::sense~3.75
