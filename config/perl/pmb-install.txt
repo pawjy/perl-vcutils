@@ -1,6 +1,6 @@
 
 Algorithm::Diff~1.201
-AnyEvent~7.17
+AnyEvent::Util
 Capture::Tiny~0.48
 Carp~1.50
 Data::Dumper~2.183
@@ -15,22 +15,19 @@ File::Temp~0.2311
 Filter::Util::Call~1.64
 Getopt::Long~2.52
 HTML::Entities~3.79
-HTML::HeadParser~3.79
 HTML::Tagset~3.20
 HTTP::Cookies~6.10
 HTTP::Date~6.05
 HTTP::Headers~6.42
 HTTP::Negotiate~6.01
-HTTP::Request~6.42
 IO::Dir~1.49
 IO::HTML~1.004
 IO::Socket::SSL~2.075
 JSON~4.10
 JSON::XS~4.03
 LWP::MediaTypes~6.04
+LWP::Protocol::http~6.67
 LWP::Protocol::https~6.10
-LWP::Simple~6.67
-LWP::UserAgent~6.67
 List::MoreUtils~0.430
 List::MoreUtils::XS~0.430
 List::Rubyish~0.03
@@ -38,7 +35,7 @@ MRO::Compat~0.15
 Module::Build~0.4231
 Module::Runtime~0.016
 Mozilla::CA~20211001
-Net::HTTP~6.22
+Net::HTTPS~6.22
 Net::SSLeay~1.92
 Path::Class~0.37
 Path::Tiny~0.130
@@ -49,13 +46,12 @@ Term::ANSIColor~5.01
 Test~1.26
 Test::Class~0.52
 Test::Differences~0.69
-Test::More~1.302191
+Test::Simple~1.302191
 Text::Diff~1.45
 Time::Local~1.30
 Time::Zone~2.24
 Try::Tiny~0.31
 Types::Serialiser~1.01
 URI~5.16
-URI::Escape~5.16
 WWW::RobotRules~6.02
 common::sense~3.75
