@@ -19,10 +19,10 @@ HTML::HeadParser~3.79
 HTML::Tagset~3.20
 HTTP::Cookies~6.10
 HTTP::Date~6.05
+HTTP::Headers~6.43
 HTTP::Negotiate~6.01
-HTTP::Request::Common~6.43
 HTTP::Response~6.43
-IO::Dir~1.49
+IO::File~1.48
 IO::HTML~1.004
 IO::Socket::SSL~2.075
 JSON~4.10
@@ -39,6 +39,7 @@ Module::Build~0.4231
 Module::Runtime~0.016
 Mozilla::CA~20211001
 Net::HTTP~6.22
+Net::HTTPS~6.22
 Net::SSLeay~1.92
 Path::Class~0.37
 Path::Tiny~0.130
@@ -56,6 +57,5 @@ Time::Zone~2.24
 Try::Tiny~0.31
 Types::Serialiser~1.01
 URI~5.16
-URI::Escape~5.16
 WWW::RobotRules~6.02
 common::sense~3.75
